@@ -1,13 +1,12 @@
-import strategy from '@riderize/passport-strava-oauth2';
+import strategy from "@riderize/passport-strava-oauth2";
 
 const StravaStrategy = strategy.Strategy;
 
-export const stravaStrategy = new StravaStrategy({
+export const stravaStrategy = new StravaStrategy(
+  {
     clientID: "xxx",
     clientSecret: "xxx",
-    callbackURL: "xxx"
+    callbackURL: "xxx",
   },
-  function(accessToken, refreshToken, profile, done) {
-   
-  }
+  function (accessToken, refreshToken, profile, done) {}
 );

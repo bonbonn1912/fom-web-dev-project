@@ -2,20 +2,14 @@ import session from "express-session";
 import passport from "passport";
 
 const sessionConfig = session({
-    secret: "mysecret"
-})
+  secret: "mysecret",
+});
 
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+passport.deserializeUser(function (user, done) {
+  done(null, "user");
+});
 
-passport.serializeUser(function(user, done) {
-    done(null, user);
- });
- passport.deserializeUser(function(user, done) {
-   
-        done(null, "user")
-  
- });
-
- export {
-    sessionConfig
- }
-
+export { sessionConfig };
