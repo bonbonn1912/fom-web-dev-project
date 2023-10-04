@@ -3,16 +3,25 @@ import { IRegisterUser, IAccount } from "../../types/user";
 import { findUser, insertUser } from "../../handlers/database/postgres";
 import bcrypt from "bcrypt";
 import { localStrategy } from "../../handlers/strategies/local";
-import { stravaLoginStrategy, stravaRegisterStrategy } from "../../handlers/strategies/strava";
+import {
+  stravaLoginStrategy,
+  stravaRegisterStrategy,
+} from "../../handlers/strategies/strava";
+import {
+  googleRegisterStrategy,
+  googleLoginStrategy,
+} from "../../handlers/strategies/google";
 import passport from "passport";
 import { AccountType } from "@prisma/client";
 
 passport.use("local", localStrategy);
 passport.use("stravaLogin", stravaLoginStrategy);
-passport.use("stravaRegister", stravaRegisterStrategy)
+passport.use("stravaRegister", stravaRegisterStrategy);
+passport.use("googleRegister", googleRegisterStrategy);
+passport.use("googleLogin", googleLoginStrategy);
 
 export const registerUser = async (req: Request, res: Response) => {
-  const accountType = AccountType.LOCAL// 1 Local, 2 Strava, 3 Google
+  const accountType = AccountType.LOCAL; // 1 Local, 2 Strava, 3 Google
   const { username, mail, password } = req.body as IRegisterUser;
   try {
     const user = await findUser(username, mail);
@@ -45,19 +54,19 @@ export const loginUser = async (
 ) => {
   passport.authenticate("local", (err: any, user: any, info: any) => {
     if (err) {
-        console.log(err)
+      console.log(err);
       return next(err);
     }
     if (!user) {
-      switch(info.message){
-        case "1": 
-        return res.status(401).json({ message: "Incorrect Password" });
+      switch (info.message) {
+        case "1":
+          return res.status(401).json({ message: "Incorrect Password" });
         case "2":
-        return res.status(401).json({ message: "This User does not exist" });
+          return res.status(401).json({ message: "This User does not exist" });
       }
     }
     return res.redirect("/?result=success");
-   // return res.status(200).json({ message: "Authentication successful", user });
+    // return res.status(200).json({ message: "Authentication successful", user });
   })(req, res, next);
 };
 
@@ -68,16 +77,16 @@ export const loginStravaUser = async (
 ) => {
   passport.authenticate("stravaLogin", (err: any, user: any, info: any) => {
     if (err) {
-      console.log(err)
+      console.log(err);
       return next(err);
     }
     if (!user) {
-      switch(info.message){
-        case "1": 
-        return res.status(401).json({ message: "User does not exist" });
+      switch (info.message) {
+        case "1":
+          return res.status(401).json({ message: "User does not exist" });
       }
     }
-    return res.redirect("/?result=success");
+    return res.redirect("/?type=local&result=success");
   })(req, res, next);
 };
 
@@ -88,19 +97,65 @@ export const registerStravaUser = async (
 ) => {
   passport.authenticate("stravaRegister", (err: any, user: any, info: any) => {
     if (err) {
-      console.log(err)
+      console.log(err);
       return next(err);
     }
     if (!user) {
-      switch(info.message){
-        case "1": 
-        return res.redirect("/?result=fail,userexits,uselogin")
+      switch (info.message) {
+        case "1":
+          return res.redirect("/?type=strava&result=fail,userexits,uselogin");
       }
     }
-    return res.redirect("/?result=success,nowlogin");
+    return res.redirect("/?type=strava&result=success,nowlogin");
   })(req, res, next);
 };
 
+export const registerGoogleUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  passport.authenticate(
+    "googleRegister",
+    { scope: ["profile"] },
+    (err: any, user: any, info: any) => {
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+      if (!user) {
+        switch (info.message) {
+          case "1":
+            return res.redirect("/?type=google&result=fail,userexits,uselogin");
+        }
+      }
+      return res.redirect("/?type=google&result=success,nowlogin");
+    }
+  )(req, res, next);
+};
 
-
-
+export const loginGoogleUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  passport.authenticate(
+    "googleLogin",
+    { scope: ["profile"] },
+    (err: any, user: any, info: any) => {
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+      if (!user) {
+        switch (info.message) {
+          case "1":
+            return res.redirect(
+              "/?type=google&result=fail,user-doest-not-exist-use-register"
+            );
+        }
+      }
+      return res.redirect("/?type=google&result=success,nowlogin");
+    }
+  )(req, res, next);
+};

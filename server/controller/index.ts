@@ -1,5 +1,3 @@
-import { registerUser } from './AuthController/auth'
+import { registerUser } from "./AuthController/auth";
 
-export {
-    registerUser,
-}
+export { registerUser };

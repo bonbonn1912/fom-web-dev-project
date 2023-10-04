@@ -18,7 +18,7 @@ export const localStrategy = new LocalStrategy(
       if(!isPasswordMatch){
         return done(null, false, { message: "1" });
       }
-      console.log("login successfull")
+      console.log("local login successfull")
       return done(null, user);
     } catch {}
   }

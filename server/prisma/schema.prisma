@@ -12,7 +12,7 @@ datasource db {
 
 model Account {
   accountId       Int       @id @default(autoincrement())
-  username     String   @unique @db.VarChar(255)
+  username     String  @db.VarChar(255)
   displayName String  @db.VarChar(255) // Für Strava & Google Accounts. Bei Local Accounts wird der Username verwendet
   email        String?   @unique @db.VarChar(255) // Nur bei lokal registrierten Accounts. Strava gibt keine Email zurück
   registeredAt DateTime? @default(now()) @db.Timestamp(6)
