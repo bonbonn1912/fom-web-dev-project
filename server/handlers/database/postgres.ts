@@ -1,6 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, AccountType } from "@prisma/client";
 const prisma = new PrismaClient();
-import { IAccount, ICredentials } from "../../types/user";
+import {  IAccount, ICredentials } from "../../types/user";
+import { tokenResponse } from "../../types/strava";
 
 const findUser = (username: string, email: string) => {
   return new Promise(async (resolve, reject) => {
@@ -44,15 +45,17 @@ const getUserAndCredentials = (email: string) => {
     });
   };
 
-const insertUser = (username: string, email: string, password: string) => {
+const insertUser = (username: string,display_name: string, email: string, password: string, accountType: AccountType) => {
   return new Promise(async (resolve, reject) => {
     try {
       const createdAccount = await prisma.account.create({
         data: {
           username: username,
           email: email,
+          displayName: display_name,
           setup: false, // -> werte müssen noch in die config
           isAdmin: false, // -> ebenfalls
+          accountType: accountType
         },
       }) as IAccount;
       const credentials = await prisma.credentials.create({
@@ -68,4 +71,21 @@ const insertUser = (username: string, email: string, password: string) => {
   });
 };
 
-export { findUser, insertUser, getUserAndCredentials };
+const insertStravaToken = async (accountId: number, tokenData: tokenResponse) =>{
+  return new Promise(async (resolve, reject) => {
+    try {
+      const stravaEntry = await prisma.strava.create({
+        data: {
+          accountId: accountId,
+          ...tokenData
+        },
+      });
+     resolve(stravaEntry)
+    } catch(error) {
+      reject(error)
+    }
+  });
+}
+
+
+export { findUser, insertUser, getUserAndCredentials, insertStravaToken };

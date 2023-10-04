@@ -1,10 +1,8 @@
 import { Router } from "express";
 import { registerUser } from "../controller";
 import passport from "passport";
-import { localStrategy } from "../handlers/strategies/local";
-import { stravaStrategy } from "../handlers/strategies/strava";
 import { sessionConfig } from "../handlers/strategies/session";
-import { loginUser } from "../controller/AuthController/auth";
+import { loginStravaUser, loginUser, registerStravaUser } from "../controller/AuthController/auth";
 
 
 const authRouter = Router();
@@ -18,8 +16,9 @@ authRouter.use(passport.session())
 authRouter.post("/auth/register", registerUser);
 authRouter.post("/auth/local",loginUser);
 
-// TODO den Teil noch in einen controller moven
-passport.use('strava', stravaStrategy)
-authRouter.get('/auth/strava', passport.authenticate('strava', {scope: ["activity:read_all,profile:read_all"]}));
+authRouter.get('/auth/reg/strava', registerStravaUser);
+authRouter.get('/auth/reg/strava/callback', registerStravaUser);
 
+authRouter.get('/auth/log/strava',loginStravaUser);
+authRouter.get('/auth/log/strava/callback',loginStravaUser);
 export default authRouter;

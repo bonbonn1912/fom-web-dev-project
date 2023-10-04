@@ -26,3 +26,9 @@ export interface ICreatedUserPromise {
     account: IAccount ,
     credentials: ICredentials
 }
+
+export enum AccountType {
+    LOCAL,
+    STRAVA,
+    GOOGLE
+}
