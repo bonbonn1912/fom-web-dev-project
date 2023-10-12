@@ -18,8 +18,8 @@ const LoginForm = () => {
   };
 
   return (
-    <div id="LoginFormWrapper" className="w-[500px] h-full py-5 md:w-full bg-slate-200 rounded-xl">
-      <div className="flex justify-center w-full">
+    <div id="LoginFormWrapper" className="w-[500px] h-full py-5 bg-slate-200 rounded-xl">
+      <div className="flex justify-center">
         <MdDirectionsBike size={90} />
       </div>
       <div className="flex justify-center w-full text-5xl font-bold font-baloo">

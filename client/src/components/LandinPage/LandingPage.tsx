@@ -11,7 +11,7 @@ const LandingPage = () => {
       </div>
       <div
     id="rightWrapper"
-    className="w-full h-[700px] md:w-[500px] md:h-[700px] lg:mr-40 lg:p-5 flex justify-center pt-3 md:pt-0"
+    className="h-[700px] md:w-[500px] md:h-[700px] lg:mr-24 lg:p-5 flex justify-center pt-3 md:pt-0"
   >
     <LoginForm />
   </div>
