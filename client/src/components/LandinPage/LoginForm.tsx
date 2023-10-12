@@ -18,7 +18,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div id="LoginFormWrapper" className="w-11/12 h-full py-5 md:w-full bg-slate-200 rounded-xl">
+    <div id="LoginFormWrapper" className="w-[500px] h-full py-5 md:w-full bg-slate-200 rounded-xl">
       <div className="flex justify-center w-full">
         <MdDirectionsBike size={90} />
       </div>
