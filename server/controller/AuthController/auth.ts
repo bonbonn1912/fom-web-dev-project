@@ -36,14 +36,13 @@ export const registerUser = async (req: Request, res: Response) => {
         accountType
       )) as IAccount;
       if (account !== null) {
-        res.status(200).json({ user: account.accountId });
+        return res.redirect("/");
       }
     } else {
-      console.log("user found");
-      res.status(400).json({ reason: "user already exists" });
+     return res.redirect("/register?error")
     }
   } catch (err) {
-    res.status(400).json({ reason: err });
+    return res.redirect("/register?error")
   }
 };
 
@@ -52,42 +51,17 @@ export const loginUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  passport.authenticate("local", (err: any, user: any, info: any) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    if (!user) {
-      switch (info.message) {
-        case "1":
-          return res.status(401).json({ message: "Incorrect Password" });
-        case "2":
-          return res.status(401).json({ message: "This User does not exist" });
-      }
-    }
-    return res.redirect("/?result=success");
-    // return res.status(200).json({ message: "Authentication successful", user });
-  })(req, res, next);
+  passport.authenticate("local",{
+    successRedirect: "/dashboard", 
+    failureRedirect: "/",
+})(req, res, next)
 };
 
-export const loginStravaUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  passport.authenticate("stravaLogin", (err: any, user: any, info: any) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    if (!user) {
-      switch (info.message) {
-        case "1":
-          return res.status(401).json({ message: "User does not exist" });
-      }
-    }
-    return res.redirect("/?type=local&result=success");
-  })(req, res, next);
+export const loginStravaUser = async (req: Request,res: Response,next: NextFunction) => {
+  passport.authenticate("stravaLogin",{
+    successRedirect: "/dashboard", 
+    failureRedirect: "/",
+})(req, res, next)
 };
 
 export const registerStravaUser = async (
@@ -95,43 +69,50 @@ export const registerStravaUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  passport.authenticate("stravaRegister", (err: any, user: any, info: any) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    if (!user) {
-      switch (info.message) {
-        case "1":
-          return res.redirect("/?type=strava&result=fail,userexits,uselogin");
+  passport.authenticate("stravaRegister",{
+    successRedirect: "/dashboard", 
+    failureRedirect: "/",
+})(req, res, next)
+};
+
+export const validateLocalUser = async (
+  req: Request, 
+  res: Response,
+  next: NextFunction) =>{
+    let isUsername = req.body.hasOwnProperty("username")
+    let isEmail = req.body.hasOwnProperty("mail")
+    if(isUsername){
+      let user = await findUser(req.body.username, "")
+      if(user == null){
+        res.status(204).send()
+        return;
+      }else{
+        res.status(200).send()
+        return;
       }
     }
-    return res.redirect("/?type=strava&result=success,nowlogin");
-  })(req, res, next);
-};
+    if(isEmail){
+      let user = await findUser("", req.body.mail)
+      if(user == null){
+        res.status(204).send()
+        return;
+      }else{
+        res.status(200).send()
+        return;
+      }
+    }
+  }
+
 
 export const registerGoogleUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  passport.authenticate(
-    "googleRegister",
-    { scope: ["profile"] },
-    (err: any, user: any, info: any) => {
-      if (err) {
-        console.log(err);
-        return next(err);
-      }
-      if (!user) {
-        switch (info.message) {
-          case "1":
-            return res.redirect("/?type=google&result=fail,userexits,uselogin");
-        }
-      }
-      return res.redirect("/?type=google&result=success,nowlogin");
-    }
-  )(req, res, next);
+  passport.authenticate("googleRegister",{
+    successRedirect: "/dashboard", 
+    failureRedirect: "/",
+})(req, res, next)
 };
 
 export const loginGoogleUser = async (
@@ -139,23 +120,8 @@ export const loginGoogleUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  passport.authenticate(
-    "googleLogin",
-    { scope: ["profile"] },
-    (err: any, user: any, info: any) => {
-      if (err) {
-        console.log(err);
-        return next(err);
-      }
-      if (!user) {
-        switch (info.message) {
-          case "1":
-            return res.redirect(
-              "/?type=google&result=fail,user-doest-not-exist-use-register"
-            );
-        }
-      }
-      return res.redirect("/?type=google&result=success,nowlogin");
-    }
-  )(req, res, next);
+  passport.authenticate("googleLogin",{
+    successRedirect: "/dashboard", 
+    failureRedirect: "/",
+})(req, res, next)
 };
