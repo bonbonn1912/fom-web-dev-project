@@ -45,7 +45,6 @@ export const stravaRegisterStrategy = new StravaStrategy(
         expires_at: Date.now() + 3600 * 60, // Timestamp bis wann token gültig ist
       };
       await insertStravaToken(newUser.accountId, tokenData);
-      console.log("Strava user created");
       return done(null, newUser);
     }
   }

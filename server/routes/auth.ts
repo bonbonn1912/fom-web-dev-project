@@ -8,6 +8,7 @@ import {
   registerStravaUser,
   registerGoogleUser,
   loginGoogleUser,
+  validateLocalUser,
 } from "../controller/AuthController/auth";
 
 const authRouter = Router();
@@ -16,6 +17,23 @@ authRouter.use(sessionConfig);
 
 authRouter.use(passport.initialize());
 authRouter.use(passport.session());
+
+authRouter.get("/auth/status", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.json({ auth: req.user });
+  } else {
+    return res.json({ auth: req.isAuthenticated() });
+  } 
+});
+
+authRouter.get('/logout', function(req, res, next){
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+});
+
+authRouter.post("/auth/validate", validateLocalUser )
 
 authRouter.post("/auth/register", registerUser);
 authRouter.post("/auth/local", loginUser);

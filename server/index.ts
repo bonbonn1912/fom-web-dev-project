@@ -13,10 +13,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(authRouter);
-
 app.get("/*", (req: Request, res: Response) => {
   res.sendFile(CONFIG.INDEX_PATH);
 });
+
 
 app.listen(CONFIG.PORT, () =>
   console.log("Server listening on Port:" + CONFIG.PORT)

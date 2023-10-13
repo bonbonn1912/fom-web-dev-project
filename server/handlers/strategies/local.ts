@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 
 export const localStrategy = new LocalStrategy(
-  { usernameField: "email", passwordField: "password" },
+  { usernameField: "mail", passwordField: "password" },
   async (email, password, done) => {
     try {
       const user = await getUserAndCredentials(email);
@@ -18,7 +18,6 @@ export const localStrategy = new LocalStrategy(
       if(!isPasswordMatch){
         return done(null, false, { message: "1" });
       }
-      console.log("local login successfull")
       return done(null, user);
     } catch {}
   }

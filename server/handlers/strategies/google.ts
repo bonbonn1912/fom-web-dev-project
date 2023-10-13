@@ -12,6 +12,7 @@ export const googleRegisterStrategy = new StravaStrategy(
     clientID: CONFIG.GOOGLE_CLIENT_ID,
     clientSecret: CONFIG.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:5000/auth/reg/google/callback",
+    scope: ['profile', 'email'],
     passReqToCallback: true,
   },
   async (req, accessToken, refreshToken, profile, done) => {
@@ -33,7 +34,6 @@ export const googleRegisterStrategy = new StravaStrategy(
       accountType
     )) as IAccount;
     if (newUser) {
-      console.log("Google User");
       return done(null, newUser);
     }
   }
@@ -44,6 +44,7 @@ export const googleLoginStrategy = new StravaStrategy(
     clientID: CONFIG.GOOGLE_CLIENT_ID,
     clientSecret: CONFIG.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:5000/auth/log/google/callback", //TODO In config
+    scope: ['profile', 'email'],
     passReqToCallback: true,
   },
   async (req, accessToken, refreshToken, profile, done) => {
@@ -51,7 +52,6 @@ export const googleLoginStrategy = new StravaStrategy(
     const { id, displayName } = profile as IGoogleUser;
 
     const user = await findUser(id, "NOT_VALID_EMAIL");
-    console.log(user);
     if (user != null) {
       return done(null, user); // Login erfolgreich
     }
