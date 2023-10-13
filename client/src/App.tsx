@@ -29,7 +29,7 @@ const App = () => {
           />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/dashboard"
+            path="/dashboard/*"
             element={
               <ProtectedWrapper
                 authElement={<Dashboard />}

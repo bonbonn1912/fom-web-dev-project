@@ -20,6 +20,8 @@ import {
 // @ts-ignore
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import bicycle from '../../assets/bicycle.png'
+import Workout from '../Workout/Workout';
+import Profile from '../Profile/Profile';
 // @ts-ignore
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
@@ -42,9 +44,9 @@ const Dashboard = () => {
   const [navigation, setNavigation] = useState([
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
     { name: 'Workouts', href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
-    { name: 'Material', href: '#', icon: FolderIcon, current: false },
-    { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-    { name: 'AI (Beta)', href: '#', icon: DocumentDuplicateIcon, current: false },
+    { name: 'Equipement', href: '/dashboard/equip', icon: CalendarIcon, current: false },
+    { name: 'AI (Beta)', href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
+    { name: 'Profile', href: '/dashboard/profile', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
   
   ]);
   const handleNavClick = (index: any) => {
@@ -286,8 +288,13 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <main className="py-10">
+          <main className="py-2">
             <div className="px-4 sm:px-6 lg:px-8">
+              <Routes>
+                <Route path="/workouts" element={ <Workout/>}/>
+                <Route path="/profile" element={<Profile/>}/>
+              </Routes>
+                               
                 </div>
           </main>
         </div>
