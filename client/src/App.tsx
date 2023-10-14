@@ -1,36 +1,47 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import "./App.css"; // Stile können mit TailwindCSS-Klassen angepasst werden
+import Login from "./Pages/LandingPage/Login";
+import Register from "./Pages/LandingPage/Register";
+import NotFound from "./Pages/NotFound/404";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import { AuthProvider } from "./Pages/Auth/authContext";
 
-function App() {
-  const ping = () =>{
-    fetch("/api/ping").then(res => res.json()).then(res => console.log(res))
-  } 
- 
+import ProtectedWrapper from "./Pages/Auth/ProtectedRoute";
+
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className='text-5xl'>Vite + React</h1>
-      <div className="card">
-        <button onClick={ping}>
-          count is Disabled
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedWrapper
+                authElement={<Navigate to="/dashboard" replace />}
+                altElement={<Login/>}
+              />
+            }
+          />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/dashboard/*"
+            element={
+              <ProtectedWrapper
+                authElement={<Dashboard />}
+                altElement={<Navigate to="/" replace />}
+              />
+            }
+          />
+          <Route path="*" element={<NotFound />}></Route>
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+};
 
-export default App
+export default App;

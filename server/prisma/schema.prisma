@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  accountId       Int       @id @default(autoincrement())
+  username     String  @db.VarChar(255)
+  displayName String  @db.VarChar(255) // Für Strava & Google Accounts. Bei Local Accounts wird der Username verwendet
+  email        String?   @unique @db.VarChar(255) // Nur bei lokal registrierten Accounts. Strava gibt keine Email zurück
+  registeredAt DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime? @default(now()) @db.Timestamp(6)
+  setup    Boolean
+  isAdmin      Boolean
+  description  String?   @db.VarChar(500)
+  accountType AccountType
+  credentials Credentials?
+  reset Reset[]
+  strava Strava?
+}
+
+model Strava {
+    stravaId   Int       @id @default(autoincrement())
+    accountId  Int  @unique
+    userId       Account      @relation(fields: [accountId], references: [accountId]) // FK auf Account
+    token_type String @db.VarChar(50)
+    access_token String @db.VarChar(255)
+    expires_at BigInt
+    expires_in Int
+    refresh_token String @db.VarChar(255)
+}
+
+enum AccountType {
+  LOCAL
+  STRAVA
+  GOOGLE
+}
+
+model Credentials {
+  credentialId   Int       @id @default(autoincrement())
+  accountId  Int  @unique
+  userId       Account      @relation(fields: [accountId], references: [accountId]) // FK auf Account
+  password     String?    @db.VarChar(80) // Nur bei lokal registrierten Accounts
+  updatedAt   DateTime  @updatedAt
+}
+
+model Reset {
+  resetId     Int @id @default(autoincrement())
+  accountId Int 
+  userId Account @relation(fields: [accountId], references: [accountId])
+  code String @db.VarChar(50)
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt DateTime? @default(now()) @db.Timestamp(6)
+  validUntil DateTime?
+  isActive Boolean
+}
