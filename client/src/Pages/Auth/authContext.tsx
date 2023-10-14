@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -14,7 +15,7 @@ const AuthContext = React.createContext<AuthContextProps | undefined>(
 
 const AuthProvider = (props: props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const login = () => {
     setIsAuthenticated(true);
   };
@@ -36,9 +37,9 @@ const AuthProvider = (props: props) => {
     }; 
 
     checkAuth();
-  }, []);  
+  }, []);   
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner width={64} height={64}/>;
   } else { 
     return (
       <AuthContext.Provider value={{ isAuthenticated, login, logout }}>

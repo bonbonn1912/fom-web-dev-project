@@ -19,11 +19,14 @@ authRouter.use(passport.initialize());
 authRouter.use(passport.session());
 
 authRouter.get("/auth/status", (req, res) => {
-  if (req.isAuthenticated()) {
-    return res.json({ auth: req.user });
-  } else {
-    return res.json({ auth: req.isAuthenticated() });
-  } 
+  setTimeout(() =>{
+    if (req.isAuthenticated()) {
+      return res.json({ auth: req.user });
+    } else {
+      return res.json({ auth: req.isAuthenticated() });
+    } 
+  },300)
+ 
 });
 
 authRouter.get('/logout', function(req, res, next){
