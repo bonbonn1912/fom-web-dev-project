@@ -1,9 +1,16 @@
+
 import bicycle from "../../assets/bicycle.png";
 import Google from "../../components/fields/Google";
 import Strava from "../../components/fields/Strava";
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { initLanguage } from "../../helper/i18n";
 //TODO Forget Password
 const Login = () => {
-
+const { t, i18n } = useTranslation();
+useEffect(() => {
+ initLanguage(i18n);
+}, []);
   return (
     <>
       <div className="flex flex-1 h-full">
@@ -12,15 +19,15 @@ const Login = () => {
             <div>
               <img className="w-auto h-14" src={bicycle} alt="Your Company" />
               <h2 className="mt-4 text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                Sign in to your account
+                {t('language_landing_page_sign_in_message')}
               </h2>
               <p className="mt-2 text-sm leading-6 text-gray-500">
-                Not a member?{" "}
+              {t('language_landing_page_not_a_member')}{" "}
                 <a
                   href="/register"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
-                  Sign Up
+                  {t('language_landing_page_sign_up')}
                 </a>
               </p>
             </div>
@@ -33,7 +40,7 @@ const Login = () => {
                       htmlFor="email"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Email address
+                       {t('language_landing_page_email_input')}
                     </label>
                     <div className="mt-2">
                       <input
@@ -52,7 +59,7 @@ const Login = () => {
                       htmlFor="password"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Password
+                     {t('language_landing_page_password_input')}
                     </label>
                     <div className="mt-2">
                       <input
@@ -78,7 +85,7 @@ const Login = () => {
                         htmlFor="remember-me"
                         className="block ml-3 text-sm leading-6 text-gray-700"
                       >
-                        Remember me
+                         {t('language_landing_page_remember_me')}
                       </label>
                     </div>
 
@@ -87,7 +94,7 @@ const Login = () => {
                         href="#"
                         className="font-semibold text-indigo-600 hover:text-indigo-500"
                       >
-                        Forgot password?
+                          {t('language_landing_page_forgot_password')}
                       </a>
                     </div>
                   </div>
@@ -97,7 +104,7 @@ const Login = () => {
                       type="submit"
                       className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Sign in
+                        {t('language_landing_page_sign_in_button')}
                     </button>
                   </div>
                 </form>
@@ -113,7 +120,7 @@ const Login = () => {
                   </div>
                   <div className="relative flex justify-center text-sm font-medium leading-6">
                     <span className="px-6 text-gray-900 bg-white">
-                      Or continue with
+                    {t('language_landing_page_continue_with')}
                     </span>
                   </div>
                 </div>

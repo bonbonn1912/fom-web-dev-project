@@ -4,10 +4,17 @@ import Strava from "../../components/fields/Strava";
 import { useState } from "react";
 import { getRingColor } from "../../helper/getRingColor";
 import { validateInput } from "../../helper/validate";
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import { initLanguage } from "../../helper/i18n";
 //import Modal from "./SuccessModal";
 //TODO Validate Input (16)
 //TODO Remeberme Functionality
 const Register = () => {
+  const { t, i18n } = useTranslation();
+useEffect(() => {
+ initLanguage(i18n);
+}, []);
   const [username, setUsername] = useState("");
   const [mail, setMail] = useState("");
   const [usernameRingColorClass, setUsernameRingColorClass] = useState("ring-gray-300");
@@ -52,15 +59,15 @@ const Register = () => {
             <div>
               <img className="w-auto h-14" src={bicycle} alt="Logo" />
               <h2 className="mt-4 text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                Register Your Account
+                {t('language_register_page_sign_up_message')}
               </h2>
               <p className="mt-2 text-sm leading-6 text-gray-500">
-                Already have an accout?{" "}
+              {t('language_register_page_already_a_member')}{" "}
                 <a
                   href="/"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
-                  Sign In
+                   {t('language_register_page_sign_in')}
                 </a>
               </p>
             </div>
@@ -78,7 +85,7 @@ const Register = () => {
                         htmlFor="first_name"
                         className="block text-sm font-medium leading-6 text-gray-900"
                       >
-                        Username
+                          {t('language_register_page_username_input')}
                       </label>
                       <div className="mt-2">
                         <input
@@ -97,7 +104,7 @@ const Register = () => {
                       htmlFor="email"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Email address
+                      {t('language_register_page_email_input')}
                     </label>
                     <div className="mt-2">
                       <input
@@ -117,7 +124,7 @@ const Register = () => {
                       htmlFor="password"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Password
+                      {t('language_register_page_password_input')}
                     </label>
                     <div className="mt-2">
                       <input
@@ -136,7 +143,7 @@ const Register = () => {
                       type="submit"
                       className="mt-8 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Register
+                       {t('language_register_page_sign_up_button')}
                     </button>
                   </div>
                 </form>
@@ -152,7 +159,7 @@ const Register = () => {
                   </div>
                   <div className="relative flex justify-center text-sm font-medium leading-6">
                     <span className="px-6 text-gray-900 bg-white">
-                      Or continue with
+                    {t('language_register_page_continue_with')}
                     </span>
                   </div>
                 </div>

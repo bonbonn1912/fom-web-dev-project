@@ -1,6 +1,7 @@
 
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { useState } from "react";
+
+//@ts-ignore
 import {
   ChartBarSquareIcon,
   Cog6ToothIcon,
@@ -10,18 +11,19 @@ import {
   SignalIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+//@ts-ignore
 import { Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import Settings from "./Settings";
-import Connection from "./Connection";
+import Connection from "./Connection"; 
 
 const secondaryNavigation = [
   { name: "Account", current: true },
   { name: "Connections", current: false },
 ];
-
+/*
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
-}
+} */
 
 const Profile = () => {
     const [profile, setProfile] = useState(true)
@@ -45,10 +47,10 @@ const Profile = () => {
           <main>
             <header className="border-b border-gray/5">
               {/* Secondary navigation */}
-              <nav className="flex overflow-x-auto py-4">
+              <nav className="flex py-4 overflow-x-auto">
                 <ul
                   role="list"
-                  className="flex min-w-full flex-none gap-x-6 px-4 text-sm font-semibold leading-6 text-gray-400 sm:px-6 lg:px-8"
+                  className="flex flex-none min-w-full px-4 text-sm font-semibold leading-6 text-gray-400 gap-x-6 sm:px-6 lg:px-8"
                 >
                   {navigation.map((item, index) => (
                     <li key={item.name}>

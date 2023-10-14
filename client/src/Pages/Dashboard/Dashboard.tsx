@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 // @ts-ignore
 import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 // @ts-ignore
 import {
   Bars3Icon,
@@ -10,7 +10,6 @@ import {
   CalendarIcon,
   // @ts-ignore
   ChartPieIcon,
-  Cog6ToothIcon,
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
@@ -22,15 +21,15 @@ import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import bicycle from '../../assets/bicycle.png'
 import Workout from '../Workout/Workout';
 import Profile from '../Profile/Profile';
+import ProfileDropDown from './ProfileDropDown';
+import LanSettings from './LanSettings';
+import { useTranslation } from 'react-i18next';
+import { initLanguage } from '../../helper/i18n';
 // @ts-ignore
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
   { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
   { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '/logout' },
 ]
 
 function classNames(...classes: any) {
@@ -39,14 +38,26 @@ function classNames(...classes: any) {
 
 const Dashboard = () => {
     const location = useLocation();
+    const { t, i18n } = useTranslation();
+
+    useEffect(() => {
+      initLanguage(i18n);
+     setNavigation([
+      { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
+      { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
+      { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
+      { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
+      { name: t("language_dashboard_profile"), href: '/dashboard/profile', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
     
+    ])
+     }, [i18n.language]);
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [navigation, setNavigation] = useState([
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
-    { name: 'Workouts', href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
-    { name: 'Equipement', href: '/dashboard/equip', icon: CalendarIcon, current: false },
-    { name: 'AI (Beta)', href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
-    { name: 'Profile', href: '/dashboard/profile', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
+    { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
+    { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
+    { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
+    { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
+    { name: t("language_dashboard_profile"), href: '/dashboard/profile', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
   
   ]);
   const handleNavClick = (index: any) => {
@@ -139,19 +150,8 @@ const Dashboard = () => {
                             ))}
                           </ul>
                         </li>
+                        <LanSettings/>
                        
-                        <li className="mt-auto">
-                          <a
-                            href="#"
-                            className="flex p-2 -mx-2 text-sm font-semibold leading-6 text-gray-700 rounded-md group gap-x-3 hover:bg-gray-50 hover:text-indigo-600"
-                          >
-                            <Cog6ToothIcon
-                              className="w-6 h-6 text-gray-400 shrink-0 group-hover:text-indigo-600"
-                              aria-hidden="true"
-                            />
-                            Settings
-                          </a>
-                        </li>
                       </ul>
                     </nav>
                   </div>
@@ -201,18 +201,7 @@ const Dashboard = () => {
                   </ul>
                 </li>
                
-                <li className="mt-auto">
-                  <a
-                    href="#"
-                    className="flex p-2 -mx-2 text-sm font-semibold leading-6 text-gray-700 rounded-md group gap-x-3 hover:bg-gray-50 hover:text-indigo-600"
-                  >
-                    <Cog6ToothIcon
-                      className="w-6 h-6 text-gray-400 shrink-0 group-hover:text-indigo-600"
-                      aria-hidden="true"
-                    />
-                    Settings
-                  </a>
-                </li>
+               <LanSettings/>
               </ul>
             </nav>
           </div>
@@ -242,49 +231,7 @@ const Dashboard = () => {
                 <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true" />
 
                 {/* Profile dropdown */}
-                <Menu as="div" className="relative">
-                  <Menu.Button className="-m-1.5 flex items-center p-1.5">
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="w-8 h-8 rounded-full bg-gray-50"
-                      src="https://media.licdn.com/dms/image/C4E03AQHLakW1Ph60yg/profile-displayphoto-shrink_800_800/0/1639846294158?e=1702512000&v=beta&t=WJ6tOb6IGL9K9AFGSJJa1Jx_PGSsSVXVIV1ILKWC1jQ"
-                      alt=""
-                    />
-                    <span className="hidden lg:flex lg:items-center">
-                      <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        Dominik Wolf
-                      </span>
-                      <ChevronDownIcon className="w-5 h-5 ml-2 text-gray-400" aria-hidden="true" />
-                    </span>
-                  </Menu.Button>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                      {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <a
-                              href={item.href}
-                              className={classNames(
-                                active ? 'bg-gray-50' : '',
-                                'block px-3 py-1 text-sm leading-6 text-gray-900'
-                              )}
-                            >
-                              {item.name}
-                            </a>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                <ProfileDropDown/>
               </div>
             </div>
           </div>
