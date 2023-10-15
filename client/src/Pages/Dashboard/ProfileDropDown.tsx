@@ -1,6 +1,6 @@
 import {  Menu, Transition } from '@headlessui/react'
-import {Fragment, useEffect, useState} from 'react'
-import defaultProfilePicture from '../../assets/defaultProfileIcon.png'
+import {Fragment} from 'react'
+import { useUser } from '../../Context/UserContext'
 
   import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
@@ -10,45 +10,27 @@ function classNames(...classes: any) {
 }
 
 
-  
-  
+
 const ProfileDropDown = () =>{
-    const [ displayName, setDisplayName ] = useState("");
-    const [ profilePicture , setProfilePicture ] = useState(defaultProfilePicture);
+    const { user } = useUser();
     const { t } = useTranslation();
     const userNavigation = [
         { name: t("language_profile_dropdown_profile"), href: '#' },
         { name: t("language_profile_dropdown_signout"), href: '/logout' },
     ]
-    const fetchDropDownData = async () =>{
-        let response = await fetch("/api/user/dp");
-        if(response.status === 200) {
-            const imgBlob = await response.blob();
-            const imageObjectURL = URL.createObjectURL(imgBlob);
-            setProfilePicture(imageObjectURL);
-        }
-        response = await fetch("/api/user/info");
-        if(response.status === 200) {
-            const data = await response.json();
-            setDisplayName(data.displayName);
-        }
 
-    }
-    useEffect(() => {
-       fetchDropDownData();
-    }, []);
        
     return (<Menu as="div" className="relative">
     <Menu.Button className="-m-1.5 flex items-center p-1.5">
       <span className="sr-only">Open user menu</span>
       <img
         className="w-8 h-8 rounded-full bg-gray-50"
-        src={profilePicture}
+        src={user?.profilePicture}
         alt=""
       />
       <span className="hidden lg:flex lg:items-center">
         <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-          {displayName}
+          {user?.displayName}
         </span>
         <ChevronDownIcon className="w-5 h-5 ml-2 text-gray-400" aria-hidden="true" />
       </span>

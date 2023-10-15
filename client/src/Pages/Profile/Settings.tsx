@@ -1,4 +1,7 @@
+import {useUser} from "../../Context/UserContext.tsx";
+
 const Settings = () => {
+    const {user} = useUser();
     return (<div className="divide-y divide-gray/5">
     <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
       <div>
@@ -14,7 +17,7 @@ const Settings = () => {
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
           <div className="col-span-full flex items-center gap-x-8">
             <img
-              src="https://media.licdn.com/dms/image/C4E03AQHLakW1Ph60yg/profile-displayphoto-shrink_800_800/0/1639846294158?e=1702512000&v=beta&t=WJ6tOb6IGL9K9AFGSJJa1Jx_PGSsSVXVIV1ILKWC1jQ"
+                src={user?.profilePicture}
               alt=""
               className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
             />
