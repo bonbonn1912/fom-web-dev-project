@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import authUser from "../../Types/user";
+import SetupUser from "../SetupUser/SetupUser";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -16,6 +18,7 @@ const AuthContext = React.createContext<AuthContextProps | undefined>(
 const AuthProvider = (props: props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [authUser, setAuthUser]  = useState<authUser>();
   const login = () => {
     setIsAuthenticated(true);
   };
@@ -26,12 +29,15 @@ const AuthProvider = (props: props) => {
   useEffect(() => {
     const checkAuth = async () => {
       const response = await fetch("/auth/status"); // Replace with your actual API endpoint
-      const status = await response.json();
-      if (status.auth === false) {
+      const user = await response.json();
+      console.log(authUser)
+
+      if (user.auth === false) {
         setIsAuthenticated(false);
         setIsLoading(false);
       } else {
-        setIsAuthenticated(status.auth);
+        setIsAuthenticated(user.auth);
+        setAuthUser(user);
         setIsLoading(false);
       }
     }; 
@@ -40,12 +46,24 @@ const AuthProvider = (props: props) => {
   }, []);   
   if (isLoading) {
     return <LoadingSpinner width={64} height={64}/>;
-  } else { 
+  } 
+  if(!isLoading && authUser == undefined) { 
     return (
       <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
         {props.children}
       </AuthContext.Provider>
-    );
+    ); 
+  }
+  if(!isLoading && authUser != undefined) {
+    if(authUser.setup === false) {
+      return <SetupUser />
+    } else {
+      return (
+        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+          {props.children}
+        </AuthContext.Provider>
+      );
+    }
   }
 };
 

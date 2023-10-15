@@ -26,6 +26,25 @@ const findUser = (username: string, email: string) => {
   });
 };
 
+const updateSetup = (accountId: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+        const user = await prisma.account.update({
+            where: {
+            accountId: accountId,
+            },
+            data: {
+            setup: true,
+            },
+        });
+        resolve(user);
+        } catch (error) {
+        console.error("Something went wrong searching for user", error);
+        reject(error);
+        }
+    });
+}
+
 const getUserAndCredentials = (email: string) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -96,4 +115,4 @@ const insertStravaToken = async (
   });
 };
 
-export { findUser, insertUser, getUserAndCredentials, insertStravaToken };
+export { findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup };
