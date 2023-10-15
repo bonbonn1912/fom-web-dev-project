@@ -76,7 +76,7 @@ const SetupUser = () => {
         }
 
     };
-
+//TODO Add switch to use default profile picture
     return (
         <div className="flex items-center justify-center w-full h-screen">
             <div className="w-full max-w-md p-8 mx-auto bg-white rounded-lg shadow-md">
