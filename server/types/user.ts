@@ -10,6 +10,7 @@ export interface IAccount {
   email: string;
   registeredAt: Date;
   updatedAt: Date;
+  isConnectedWithStrava: boolean;
   setup: boolean;
   isAdmin: boolean;
   descripton?: string;

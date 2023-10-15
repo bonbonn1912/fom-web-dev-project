@@ -9,6 +9,7 @@ import {
   registerGoogleUser,
   loginGoogleUser,
   validateLocalUser,
+    connectStravaUser
 } from "../controller/AuthController/auth";
 
 const authRouter = Router();
@@ -40,6 +41,9 @@ authRouter.post("/auth/validate", validateLocalUser )
 
 authRouter.post("/auth/register", registerUser);
 authRouter.post("/auth/local", loginUser);
+
+authRouter.get("/auth/strava/connect", connectStravaUser);
+authRouter.get("/auth/strava/connect/callback", connectStravaUser);
 
 authRouter.get("/auth/reg/strava", registerStravaUser);
 authRouter.get("/auth/reg/strava/callback", registerStravaUser);

@@ -20,7 +20,6 @@ passport.serializeUser(function (user, done) {
 });
 //TODO An db anbinden
 passport.deserializeUser(async (user: any, done) => {
-    console.log(user);
   const currentUser = await findUser(user.username, "NOT_VALID_EMAIL");
   if(currentUser == null){
         return done(null, false);
@@ -30,6 +29,7 @@ passport.deserializeUser(async (user: any, done) => {
     auth: true,
     setup: setup,
     displayName: displayName,
+    username: username,
     id: accountId
   }
   done(null, userData);

@@ -19,6 +19,7 @@ model Account {
   updatedAt    DateTime? @default(now()) @db.Timestamp(6)
   setup    Boolean
   isAdmin      Boolean
+  isConnectedWithStrava Boolean
   description  String?   @db.VarChar(500)
   accountType AccountType
   credentials Credentials?
@@ -35,6 +36,7 @@ model Strava {
     expires_at BigInt
     expires_in Int
     refresh_token String @db.VarChar(255)
+    connectedSince DateTime? @default(now()) @db.Timestamp(6)
 }
 
 enum AccountType {

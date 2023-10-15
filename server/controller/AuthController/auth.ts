@@ -6,6 +6,7 @@ import { localStrategy } from "../../handlers/strategies/local";
 import {
   stravaLoginStrategy,
   stravaRegisterStrategy,
+    stravaConnectionStrategy
 } from "../../handlers/strategies/strava";
 import {
   googleRegisterStrategy,
@@ -19,6 +20,8 @@ passport.use("stravaLogin", stravaLoginStrategy);
 passport.use("stravaRegister", stravaRegisterStrategy);
 passport.use("googleRegister", googleRegisterStrategy);
 passport.use("googleLogin", googleLoginStrategy);
+passport.use("stravaConnection", stravaConnectionStrategy);
+
 
 export const registerUser = async (req: Request, res: Response) => {
   const accountType = AccountType.LOCAL; // 1 Local, 2 Strava, 3 Google
@@ -74,6 +77,17 @@ export const registerStravaUser = async (
     failureRedirect: "/",
 })(req, res, next)
 };
+
+export const connectStravaUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+    ) => {
+        passport.authenticate("stravaConnection",{
+            successRedirect: "/dashboard/profile/connection",
+            failureRedirect: "/",
+        })(req, res, next)
+    }
 
 export const validateLocalUser = async (
   req: Request, 

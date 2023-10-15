@@ -45,6 +45,57 @@ const updateSetup = (accountId: number) => {
     });
 }
 
+const getStravaProps = (accountId: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+        const user = await prisma.strava.findFirst({
+            where: {
+            accountId: accountId,
+            },
+        });
+        resolve(user);
+        } catch (error) {
+        console.error("Something went wrong searching for user", error);
+        reject(error);
+        }
+    });
+}
+
+const setStravaConnection = (accountId: number, value: boolean) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+        const user = await prisma.account.update({
+            where: {
+            accountId: accountId,
+            },
+            data: {
+            isConnectedWithStrava: value,
+            },
+        });
+        resolve(user);
+        } catch (error) {
+        console.error("Something went wrong searching for user", error);
+        reject(error);
+        }
+    });
+}
+
+const removeStravaConnection = (accountId: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+        const user = await prisma.strava.delete({
+            where: {
+            accountId: accountId,
+            },
+        });
+        resolve(user);
+        } catch (error) {
+        console.error("Something went wrong searching for user", error);
+        reject(error);
+        }
+    });
+}
+
 const getUserAndCredentials = (email: string) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -71,6 +122,10 @@ const insertUser = (
   password: string,
   accountType: AccountType
 ) => {
+  let connectedWithStrava = false;
+  if(accountType == AccountType.STRAVA ){
+    connectedWithStrava = true;
+  }
   return new Promise(async (resolve, reject) => {
     try {
       const createdAccount = (await prisma.account.create({
@@ -79,7 +134,8 @@ const insertUser = (
           email: email,
           displayName: display_name,
           setup: false, // -> werte müssen noch in die config
-          isAdmin: false, // -> ebenfalls
+          isAdmin: false, // -> ebenfalls,
+          isConnectedWithStrava: connectedWithStrava,
           accountType: accountType,
         },
       })) as IAccount;
@@ -115,4 +171,4 @@ const insertStravaToken = async (
   });
 };
 
-export { findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup };
+export { findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup, getStravaProps, setStravaConnection, removeStravaConnection };
