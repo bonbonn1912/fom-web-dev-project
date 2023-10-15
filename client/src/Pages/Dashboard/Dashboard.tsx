@@ -25,29 +25,39 @@ import ProfileDropDown from './ProfileDropDown';
 import LanSettings from './LanSettings';
 import { useTranslation } from 'react-i18next';
 import { initLanguage } from '../../helper/i18n';
+import { useUser} from "../../Context/UserContext.tsx";
 // @ts-ignore
-const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
+
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
 const Dashboard = () => {
+ const {  setUser} = useUser();
+  const getDashboardData = async () =>{
+    const response = await fetch("/api/user/dashboard");
+    const data = await response.json();
+    const displayName = data.displayName;
+    const profilePicture = data.profilePicture;
+    setUser({
+      displayName: displayName,
+        profilePicture: `data:image/jpeg;base64,${profilePicture}`,
+    });
+
+  }
     const location = useLocation();
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
-      initLanguage(i18n);
+    initLanguage(i18n);
+    getDashboardData();
      setNavigation([
-      { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
-      { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
-      { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
-      { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
-      { name: t("language_dashboard_profile"), href: '/dashboard/profile', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
+    { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
+    { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
+    { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
+    { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
+    { name: t("language_dashboard_profile"), href: '/dashboard/profile/account', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
     
     ])
      }, [i18n.language]);
@@ -57,7 +67,7 @@ const Dashboard = () => {
     { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
     { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
     { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
-    { name: t("language_dashboard_profile"), href: '/dashboard/profile', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
+    { name: t("language_dashboard_profile"), href: '/dashboard/profile/account', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
   
   ]);
   const handleNavClick = (index: any) => {
@@ -239,7 +249,7 @@ const Dashboard = () => {
             <div className="px-4 sm:px-6 lg:px-8">
               <Routes>
                 <Route path="/workouts" element={ <Workout/>}/>
-                <Route path="/profile" element={<Profile/>}/>
+                <Route path="/profile/*" element={<Profile />}/>
               </Routes>
                                
                 </div>
