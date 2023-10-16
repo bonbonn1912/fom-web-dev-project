@@ -5,7 +5,10 @@ import CONFIG from "./config";
 import authRouter from "./routes/auth";
 import setupRouter from "./routes/setup";
 import userInfoRouter from "./routes/user";
+import stravaRouter from "./routes/strava";
 require("./handlers/strategies/session"); // Damit Session geladen wird
+import {initStravaWebhook} from "./controller/StravaController/strava";
+
 
 const app = express();
 
@@ -18,11 +21,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(authRouter);
 app.use(setupRouter);
 app.use(userInfoRouter);
+app.use(stravaRouter);
 app.get("/*", (req: Request, res: Response) => {
   res.sendFile(CONFIG.INDEX_PATH);
 });
 
 
-app.listen(CONFIG.PORT, () =>
-  console.log("Server listening on Port:" + CONFIG.PORT)
+app.listen(CONFIG.PORT, () => {
+      initStravaWebhook();
+      console.log("Server listening on Port:" + CONFIG.PORT)
+}
 );
