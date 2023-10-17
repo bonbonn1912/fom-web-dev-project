@@ -154,6 +154,7 @@ const insertUser = (
 
 const insertStravaToken = async (
   accountId: number,
+  ownerId: number,
   tokenData: ITokenResponse
 ) => {
   return new Promise(async (resolve, reject) => {
@@ -161,6 +162,7 @@ const insertStravaToken = async (
       const stravaEntry = await prisma.strava.create({
         data: {
           accountId: accountId,
+          ownerId: ownerId,
           ...tokenData,
         },
       });
@@ -171,4 +173,4 @@ const insertStravaToken = async (
   });
 };
 
-export { findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup, getStravaProps, setStravaConnection, removeStravaConnection };
+export { prisma,findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup, getStravaProps, setStravaConnection, removeStravaConnection };

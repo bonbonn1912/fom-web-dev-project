@@ -15,7 +15,6 @@ const initialUserSetup = async (req: Request, res: Response) => {
         const { gender, firstName, lastName, age, weight, ftp, restingHeartRate, maxHeartRate } = req.body;
         const profilePicture = req.file;
         const { displayName, id } = req.user as any;
-        console.log(req.user);
         const compressedPath = path.join(profileImagesPath, `${displayName}-profile-picture.jpg`);
         await sharp(profilePicture?.buffer)
             .toFile(compressedPath);

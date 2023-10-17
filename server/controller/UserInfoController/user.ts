@@ -31,7 +31,6 @@ const getInfo = async (req: Request, res: Response) =>{
 
 const getDashboardInfo = async (req: Request, res: Response) =>{
     const { id, username } = req.user as any;
-    console.log(req.user)
     try{
 
         let user = await UserHealthData.findOne({userId: id})

@@ -6,6 +6,7 @@ import authRouter from "./routes/auth";
 import setupRouter from "./routes/setup";
 import userInfoRouter from "./routes/user";
 import stravaRouter from "./routes/strava";
+import workoutRouter from "./routes/workout";
 require("./handlers/strategies/session"); // Damit Session geladen wird
 import {initStravaWebhook} from "./controller/StravaController/strava";
 
@@ -22,6 +23,7 @@ app.use(authRouter);
 app.use(setupRouter);
 app.use(userInfoRouter);
 app.use(stravaRouter);
+app.use(workoutRouter);
 app.get("/*", (req: Request, res: Response) => {
   res.sendFile(CONFIG.INDEX_PATH);
 });

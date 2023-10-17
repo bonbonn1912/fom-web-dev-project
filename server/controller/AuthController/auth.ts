@@ -72,7 +72,7 @@ export const registerStravaUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  passport.authenticate("stravaRegister",{
+  passport.authenticate("stravaRegister",{scope: ["activity:read_all,profile:read_all"],
     successRedirect: "/dashboard", 
     failureRedirect: "/",
 })(req, res, next)
@@ -84,6 +84,7 @@ export const connectStravaUser = async (
     next: NextFunction
     ) => {
         passport.authenticate("stravaConnection",{
+          scope: ["activity:read_all,profile:read_all"],
             successRedirect: "/dashboard/profile/connection",
             failureRedirect: "/",
         })(req, res, next)

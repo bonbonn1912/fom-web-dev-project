@@ -20,7 +20,6 @@ authRouter.use(passport.initialize());
 authRouter.use(passport.session());
 
 authRouter.get("/auth/status", (req, res) => {
-
     if (req.isAuthenticated()) {
       return res.json(req.user);
     } else {
