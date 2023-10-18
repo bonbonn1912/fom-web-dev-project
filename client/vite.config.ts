@@ -1,8 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-
+import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(),VitePWA({
+    manifest:{
+      start_url: "/",
+      scope: "/",
+      display: "standalone",
+      icons:[{
+        src: "bicycle.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any maskable"
+      }]
+    }
+  })],
   build: {
     outDir: '../build/client/'
   },

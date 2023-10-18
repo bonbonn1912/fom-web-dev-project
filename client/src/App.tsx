@@ -29,15 +29,6 @@ const App = () => {
               />
             }
           />
-            <Route
-                path="/mymap"
-                element={
-                    <ProtectedWrapper
-                        authElement={<Map/>}
-                        altElement={<Navigate to="/" replace />}
-                    />
-                }
-            />
           <Route path="/register" element={<Register />} />
           <Route
             path="/dashboard/*"
