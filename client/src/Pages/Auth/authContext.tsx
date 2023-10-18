@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import authUser from "../../Types/user";
+import SetupUser from "../SetupUser/SetupUser";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -14,7 +17,8 @@ const AuthContext = React.createContext<AuthContextProps | undefined>(
 
 const AuthProvider = (props: props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [authUser, setAuthUser]  = useState<authUser>();
   const login = () => {
     setIsAuthenticated(true);
   };
@@ -25,26 +29,41 @@ const AuthProvider = (props: props) => {
   useEffect(() => {
     const checkAuth = async () => {
       const response = await fetch("/auth/status"); // Replace with your actual API endpoint
-      const status = await response.json();
-      if (status.auth === false) {
+      const user = await response.json();
+      console.log(authUser)
+
+      if (user.auth === false) {
         setIsAuthenticated(false);
         setIsLoading(false);
       } else {
-        setIsAuthenticated(status.auth);
+        setIsAuthenticated(user.auth);
+        setAuthUser(user);
         setIsLoading(false);
       }
     }; 
 
     checkAuth();
-  }, []);  
+  }, []);   
   if (isLoading) {
-    return <div>Loading...</div>;
-  } else { 
+    return <LoadingSpinner width={64} height={64}/>;
+  } 
+  if(!isLoading && authUser == undefined) { 
     return (
       <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
         {props.children}
       </AuthContext.Provider>
-    );
+    ); 
+  }
+  if(!isLoading && authUser != undefined) {
+    if(authUser.setup === false) {
+      return <SetupUser />
+    } else {
+      return (
+        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+          {props.children}
+        </AuthContext.Provider>
+      );
+    }
   }
 };
 
@@ -56,4 +75,4 @@ const useAuth = () => {
   return context;
 };
 
-export { AuthProvider, useAuth };
+export { AuthProvider, useAuth};

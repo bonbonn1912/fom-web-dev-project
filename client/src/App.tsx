@@ -10,12 +10,14 @@ import Register from "./Pages/LandingPage/Register";
 import NotFound from "./Pages/NotFound/404";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import { AuthProvider } from "./Pages/Auth/authContext";
+import { UserProvider} from "./Context/UserContext.tsx";
 
 import ProtectedWrapper from "./Pages/Auth/ProtectedRoute";
 
 const App = () => {
   return (
     <AuthProvider>
+        <UserProvider>
       <Router>
         <Routes>
           <Route
@@ -27,6 +29,15 @@ const App = () => {
               />
             }
           />
+            <Route
+                path="/mymap"
+                element={
+                    <ProtectedWrapper
+                        authElement={<Map/>}
+                        altElement={<Navigate to="/" replace />}
+                    />
+                }
+            />
           <Route path="/register" element={<Register />} />
           <Route
             path="/dashboard/*"
@@ -40,6 +51,7 @@ const App = () => {
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Router>
+        </UserProvider>
     </AuthProvider>
   );
 };

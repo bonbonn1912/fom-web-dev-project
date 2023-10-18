@@ -26,7 +26,6 @@ i18n
 
 const initLanguage = (i18n: any) =>{
     const language = localStorage.getItem("language") || "ger"
-    console.log("language from init" + language)
     i18n.changeLanguage(language);
 }
 export {

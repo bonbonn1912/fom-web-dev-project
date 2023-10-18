@@ -1,7 +1,7 @@
 import strategy from "@riderize/passport-strava-oauth2";
 import CONFIG from "../../config";
-import { findUser, insertUser, insertStravaToken } from "../database/postgres";
-import { AccountType } from "@prisma/client";
+import {findUser, insertUser, insertStravaToken, setStravaConnection} from "../database/postgres";
+import { AccountType} from "@prisma/client";
 import { IStravaUser, ITokenResponse } from "../../types/strava";
 import { IAccount } from "../../types/user";
 
@@ -41,10 +41,10 @@ export const stravaRegisterStrategy = new StravaStrategy(
         token_type: "Bearer",
         access_token: accessToken,
         refresh_token: refreshToken,
-        expires_in: 3600 * 60, // Access token ist 6h Gültig
-        expires_at: Date.now() + 3600 * 60, // Timestamp bis wann token gültig ist
+        expires_in: 3600 * 60, // Not used
+        expires_at: 0, // Fetch real expire date from strava after first webhook
       };
-      await insertStravaToken(newUser.accountId, tokenData);
+      await insertStravaToken(newUser.accountId, parseInt(profileId),tokenData);
       return done(null, newUser);
     }
   }
@@ -68,4 +68,33 @@ export const stravaLoginStrategy = new StravaStrategy(
     }
     return done(null, false, { message: "1" }); // es existiert noch kein user -> register page nutzen
   }
+);
+
+export const stravaConnectionStrategy = new StravaStrategy(
+    {
+        clientID: CONFIG.STRAVA_CLIENT_ID,
+        clientSecret: CONFIG.STRAVA_CLIENT_SECRET,
+        callbackURL: "/auth/strava/connect/callback",
+        passReqToCallback: true,
+    },
+    async (req, accessToken, refreshToken, profile, done) => {
+        //@ts-ignore
+        const ownerId = parseInt(profile.id);
+        const{ id } = req.user as any;
+        try{
+            const tokenData: ITokenResponse = {
+                token_type: "Bearer",
+                access_token: accessToken,
+                refresh_token: refreshToken,
+                expires_in: 3600 * 60, // not used
+                expires_at: 0,
+            };
+            await insertStravaToken(id,ownerId, tokenData);
+            await setStravaConnection(id, true);
+            return done(null, req.user);
+        }catch (err){
+            return done(err, false)
+        }
+
+    }
 );

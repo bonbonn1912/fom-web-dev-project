@@ -1,9 +1,10 @@
 interface StravaProps {
   href: string;
+  title?: string;
 }
 
 
-const Strava = ({href}: StravaProps) =>{
+const Strava = ({href, title}: StravaProps) =>{
     return (
       <a
         href={href}
@@ -19,7 +20,7 @@ const Strava = ({href}: StravaProps) =>{
           <path fill="#ffffff" d="M120 288L232 56l112 232h-72l-40-96-40 96z" />
           <path fill="#fda580" d="M280 288l32 72 32-72h48l-80 168-80-168z" />
         </svg>
-        <span className="text-sm font-semibold leading-6">Strava</span>
+        <span className="text-sm font-semibold leading-6">{title == undefined ? "Strava" : title}</span>
       </a>
     );
   }

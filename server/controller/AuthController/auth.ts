@@ -6,6 +6,7 @@ import { localStrategy } from "../../handlers/strategies/local";
 import {
   stravaLoginStrategy,
   stravaRegisterStrategy,
+    stravaConnectionStrategy
 } from "../../handlers/strategies/strava";
 import {
   googleRegisterStrategy,
@@ -13,14 +14,18 @@ import {
 } from "../../handlers/strategies/google";
 import passport from "passport";
 import { AccountType } from "@prisma/client";
+import { logger} from "../../index";
 
 passport.use("local", localStrategy);
 passport.use("stravaLogin", stravaLoginStrategy);
 passport.use("stravaRegister", stravaRegisterStrategy);
 passport.use("googleRegister", googleRegisterStrategy);
 passport.use("googleLogin", googleLoginStrategy);
+passport.use("stravaConnection", stravaConnectionStrategy);
+
 
 export const registerUser = async (req: Request, res: Response) => {
+  logger.log('info', 'register', `Registering user ${req.body.username}`)
   const accountType = AccountType.LOCAL; // 1 Local, 2 Strava, 3 Google
   const { username, mail, password } = req.body as IRegisterUser;
   try {
@@ -36,12 +41,15 @@ export const registerUser = async (req: Request, res: Response) => {
         accountType
       )) as IAccount;
       if (account !== null) {
+        logger.log('info', 'register', `User ${req.body.username} registered`)
         return res.redirect("/");
       }
     } else {
+        logger.log('info', 'register', `User ${req.body.username} already exists`)
      return res.redirect("/register?error")
     }
   } catch (err) {
+    logger.log('error', 'register', `Error while registering user ${req.body.username}: ${err}`)
     return res.redirect("/register?error")
   }
 };
@@ -58,6 +66,7 @@ export const loginUser = async (
 };
 
 export const loginStravaUser = async (req: Request,res: Response,next: NextFunction) => {
+  logger.log('info', 'login', `Logging in user ${req.body.username}`)
   passport.authenticate("stravaLogin",{
     successRedirect: "/dashboard", 
     failureRedirect: "/",
@@ -69,18 +78,34 @@ export const registerStravaUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  passport.authenticate("stravaRegister",{
+  logger.log('info', 'register', `Registering Strava user`)
+  passport.authenticate("stravaRegister",{scope: ["activity:read_all,profile:read_all"],
     successRedirect: "/dashboard", 
     failureRedirect: "/",
 })(req, res, next)
 };
 
+export const connectStravaUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+    ) => {
+        logger.log('info', 'connect', `Connecting Strava user`)
+        passport.authenticate("stravaConnection",{
+          scope: ["activity:read_all,profile:read_all"],
+            successRedirect: "/dashboard/profile/connection",
+            failureRedirect: "/",
+        })(req, res, next)
+    }
+
 export const validateLocalUser = async (
   req: Request, 
   res: Response,
   next: NextFunction) =>{
+    logger.log('info', 'validate', `Validating user ${req.body.username}`)
     let isUsername = req.body.hasOwnProperty("username")
     let isEmail = req.body.hasOwnProperty("mail")
+    logger.log('info', 'validate', `Validating user  | ${isUsername} | ${isEmail}`)
     if(isUsername){
       let user = await findUser(req.body.username, "")
       if(user == null){
@@ -109,6 +134,7 @@ export const registerGoogleUser = async (
   res: Response,
   next: NextFunction
 ) => {
+  logger.log('info', 'register', `Registering Google user`)
   passport.authenticate("googleRegister",{
     successRedirect: "/dashboard", 
     failureRedirect: "/",
@@ -120,6 +146,7 @@ export const loginGoogleUser = async (
   res: Response,
   next: NextFunction
 ) => {
+    logger.log('info', 'login', `Logging in Google user`)
   passport.authenticate("googleLogin",{
     successRedirect: "/dashboard", 
     failureRedirect: "/",

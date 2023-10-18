@@ -25,5 +25,7 @@
   "language_register_page_password_input": "Password",
   "language_register_page_username_input": "Username",
   "language_register_page_sign_up_button": "Sign Up",
-  "language_register_page_continue_with": "Or continue with"
+  "language_register_page_continue_with": "Or continue with",
+  "language_profile_connections_connect_with_strava": "Connect with Strava",
+  "language_profile_connections_connected_with_strava_since": "Connected since: "
 }

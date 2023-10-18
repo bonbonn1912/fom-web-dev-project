@@ -1,34 +1,36 @@
 import {  Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import {Fragment} from 'react'
+import { useUser } from '../../Context/UserContext'
 
   import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 import { useTranslation } from 'react-i18next';
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
-  }
+}
 
 
-  
-  
+
 const ProfileDropDown = () =>{
+    const { user } = useUser();
     const { t } = useTranslation();
     const userNavigation = [
         { name: t("language_profile_dropdown_profile"), href: '#' },
         { name: t("language_profile_dropdown_signout"), href: '/logout' },
-      ]
+    ]
+
        
     return (<Menu as="div" className="relative">
     <Menu.Button className="-m-1.5 flex items-center p-1.5">
       <span className="sr-only">Open user menu</span>
       <img
         className="w-8 h-8 rounded-full bg-gray-50"
-        src="https://media.licdn.com/dms/image/C4E03AQHLakW1Ph60yg/profile-displayphoto-shrink_800_800/0/1639846294158?e=1702512000&v=beta&t=WJ6tOb6IGL9K9AFGSJJa1Jx_PGSsSVXVIV1ILKWC1jQ"
+        src={user?.profilePicture}
         alt=""
       />
       <span className="hidden lg:flex lg:items-center">
         <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-          Dominik Wolf
+          {user?.displayName}
         </span>
         <ChevronDownIcon className="w-5 h-5 ml-2 text-gray-400" aria-hidden="true" />
       </span>

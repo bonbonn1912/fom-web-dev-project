@@ -19,6 +19,7 @@ model Account {
   updatedAt    DateTime? @default(now()) @db.Timestamp(6)
   setup    Boolean
   isAdmin      Boolean
+  isConnectedWithStrava Boolean
   description  String?   @db.VarChar(500)
   accountType AccountType
   credentials Credentials?
@@ -27,14 +28,16 @@ model Account {
 }
 
 model Strava {
-    stravaId   Int       @id @default(autoincrement())
-    accountId  Int  @unique
+    stravaId   Int       @id @default(autoincrement()) // relativ in table
+    accountId  Int  @unique // FK to Account
     userId       Account      @relation(fields: [accountId], references: [accountId]) // FK auf Account
+    ownerId Int // Strava User Id. used to match against incomping post requests. //TODO add unique constraint
     token_type String @db.VarChar(50)
     access_token String @db.VarChar(255)
     expires_at BigInt
     expires_in Int
     refresh_token String @db.VarChar(255)
+    connectedSince DateTime? @default(now()) @db.Timestamp(6)
 }
 
 enum AccountType {
