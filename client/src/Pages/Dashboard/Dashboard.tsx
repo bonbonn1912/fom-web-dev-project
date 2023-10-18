@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { initLanguage } from '../../helper/i18n';
 import { useUser} from "../../Context/UserContext.tsx";
 // @ts-ignore
-
+import DetailedWorkout from "../Workout/DetailedWorkout.tsx";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -249,7 +249,9 @@ const Dashboard = () => {
             <div className="px-4 sm:px-6 lg:px-8">
               <Routes>
                 <Route path="/workouts" element={ <Workout/>}/>
+                <Route path="/workouts/:id" element={<DetailedWorkout />} />
                 <Route path="/profile/*" element={<Profile />}/>
+
               </Routes>
                                
                 </div>
