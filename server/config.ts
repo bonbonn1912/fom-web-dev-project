@@ -15,6 +15,7 @@ interface Config {
   NGROK_URL: string;
   STRAVA_WEBHOOK_VERIFY_TOKEN: string;
   STRAVA_API_BASE_URL: string;
+  LOG_PATH: string;
 }
 
 const CONFIG: Config = {
@@ -30,6 +31,7 @@ const CONFIG: Config = {
   NGROK_URL: process.env.NGROK_URL as string,
   STRAVA_WEBHOOK_VERIFY_TOKEN: process.env.STRAVA_WEBHOOK_VERIFY_TOKEN as string,
   STRAVA_API_BASE_URL: process.env.STRAVA_API_BASE_URL as string,
+  LOG_PATH: path.join(__dirname, "../logs"),
 };
 
 export default CONFIG;

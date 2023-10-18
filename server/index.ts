@@ -7,9 +7,11 @@ import setupRouter from "./routes/setup";
 import userInfoRouter from "./routes/user";
 import stravaRouter from "./routes/strava";
 import workoutRouter from "./routes/workout";
-require("./handlers/strategies/session"); // Damit Session geladen wird
+require("./handlers/strategies/session");
 import {initStravaWebhook} from "./controller/StravaController/strava";
+import CustomLogger from "./logging/logger";
 
+export const logger = new CustomLogger(CONFIG.LOG_PATH);
 
 const app = express();
 
@@ -31,6 +33,6 @@ app.get("/*", (req: Request, res: Response) => {
 
 app.listen(CONFIG.PORT, () => {
       initStravaWebhook();
-      console.log("Server listening on Port:" + CONFIG.PORT)
+      logger.log('info', 'server', `Server is listening on port ${CONFIG.PORT}`)
 }
 );

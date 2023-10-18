@@ -1,9 +1,10 @@
 import CONFIG from "../../config";
 import { Request, Response} from "express";
-import axios from "axios";
+import {logger} from '../../index'
 
 let currentWebHookId = 0;
 const verifyStravaToken = async (req: Request, res: Response) => {
+    logger.log('info', 'strava', `Verifying Strava token`)
     let params = req.query as any;
     let mode = params["hub.mode"];
     let token = params["hub.verify_token"];
@@ -14,9 +15,10 @@ const verifyStravaToken = async (req: Request, res: Response) => {
     if (mode && token) {
 
         if (mode === 'subscribe' && token === CONFIG.STRAVA_WEBHOOK_VERIFY_TOKEN) {
+            logger.log('info', 'strava', `Strava token verified`)
            res.json({"hub.challenge": challenge});
         } else {
-
+            logger.log('error', 'strava', `Strava token not verified`)
             res.status(403).send()
         }
     }
@@ -24,15 +26,15 @@ const verifyStravaToken = async (req: Request, res: Response) => {
 }
 
 const viewSubscriptions = async () =>{
+    logger.log('info', 'strava', `Viewing Strava subscriptions`)
     const url: string = `${CONFIG.STRAVA_API_BASE_URL}/push_subscriptions?client_id=${CONFIG.STRAVA_CLIENT_ID}&client_secret=${CONFIG.STRAVA_CLIENT_SECRET}`
     const res = await fetch(url, {
         method: "GET",
     })
     const data = await res.json();
     if(data.length !== 0){
-        console.log("Subscriptions found")
+        logger.log('info', 'strava', `Found Strava subscription ${data[0].id}`)
         currentWebHookId = data[0].id
-        console.log("Current webhook id: " + currentWebHookId)
     }
     return data.length !== 0
 
@@ -40,17 +42,21 @@ const viewSubscriptions = async () =>{
 
 
 const deleteSubscriptions = async (subscription: number) =>{
+    logger.log('info', 'strava', `Deleting Strava subscription ${subscription}`)
     const url: string = `${CONFIG.STRAVA_API_BASE_URL}/push_subscriptions/${subscription}?client_id=${CONFIG.STRAVA_CLIENT_ID}&client_secret=${CONFIG.STRAVA_CLIENT_SECRET}`
     try{
         const res = await fetch(url, {
             method: "DELETE",
         })
         if(res.status !== 204){
+            logger.log('error', 'strava', `Could not delete Strava subscription ${subscription}`)
             console.log("Error deleting subscription")
         }else{
+            logger.log('info', 'strava', `Deleting Strava subscription ${subscription}`)
             console.log("Subscription deleted : " + subscription)
         }
     }catch (err: any){
+        logger.log('error', 'strava', `Could not delete Strava subscription ${subscription}`)
         console.log(err)
     }
 }
@@ -80,6 +86,7 @@ const deleteSubscriptions = async (subscription: number) => {
 }; */
 
 const subscribeToStrava = async () => {
+    logger.log('info', 'strava', `Subscribing to Strava`)
     const url = 'https://www.strava.com/api/v3/push_subscriptions';
     const formData = new FormData();
     formData.append('client_id', CONFIG.STRAVA_CLIENT_ID);
@@ -93,13 +100,14 @@ const subscribeToStrava = async () => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log("Created new webhook with following id: " + data.id);
+            logger.log('info', 'strava', `Subscribed to Strava. Webhook id: ` + data.id)
             currentWebHookId = data.id;
         })
         .catch(error => console.error(error));
 }
 
 const initStravaWebhook = async () => {
+    logger.log('info', 'strava', `Initialize Strava Webhook`);
     const isAlreadySubscribed = await viewSubscriptions();
     if(!isAlreadySubscribed){
        subscribeToStrava();
