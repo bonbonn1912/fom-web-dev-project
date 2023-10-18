@@ -15,7 +15,22 @@ const getStravaActivity = async (id: string, accessToken: number) => {
     }catch(e){
         return null;
     }
+}
 
+const getStravaActivityStream = async (id: string, accessToken: number) => {
+    console.log("Fetching activity stream with id: " + id);
+    const url = `${CONFIG.STRAVA_API_BASE_URL}/activities/${id}/streams?keys=${CONFIG.STRAVA_ACITIVITY_STREAMS_KEYS}`;
+    try{
+        let response = await fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${accessToken.toString()}`
+            }
+        })
+        return await response.json();
+    }catch(e){
+        return null;
+    }
 }
 
 const getNewTokenSet = async (refreshToken: string) => {
@@ -28,9 +43,8 @@ const getNewTokenSet = async (refreshToken: string) => {
         console.log(e)
         return null;
     }
-
 }
 
 export {
-    getNewTokenSet, getStravaActivity
+    getNewTokenSet, getStravaActivity, getStravaActivityStream
 }

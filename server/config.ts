@@ -16,6 +16,7 @@ interface Config {
   STRAVA_WEBHOOK_VERIFY_TOKEN: string;
   STRAVA_API_BASE_URL: string;
   LOG_PATH: string;
+  STRAVA_ACITIVITY_STREAMS_KEYS: string,
 }
 
 const CONFIG: Config = {
@@ -32,6 +33,7 @@ const CONFIG: Config = {
   STRAVA_WEBHOOK_VERIFY_TOKEN: process.env.STRAVA_WEBHOOK_VERIFY_TOKEN as string,
   STRAVA_API_BASE_URL: process.env.STRAVA_API_BASE_URL as string,
   LOG_PATH: path.join(__dirname, "../logs"),
+  STRAVA_ACITIVITY_STREAMS_KEYS: process.env.STRAVA_ACITIVITY_STREAMS_KEYS as string,
 };
 
 export default CONFIG;

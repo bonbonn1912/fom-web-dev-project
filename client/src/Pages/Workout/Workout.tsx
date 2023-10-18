@@ -110,7 +110,7 @@ const Workout = () => {
                         </div>
                         <div className="">
                             <div className="hidden md:block">
-                                <Map polyString={action.map_polyline} width={"500"} height={"500"}/>
+                                <Map polyString={action.map_polyline} width={"200px"} height={"100px"}/>
                             </div>
                         </div>
                         <a href={`/dashboard/workouts/${action.activity}`}>

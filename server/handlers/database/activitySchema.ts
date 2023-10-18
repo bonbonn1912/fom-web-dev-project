@@ -64,4 +64,12 @@ export const getBasicActivityData = async (accountId: number) => {
     }
 }
 
+export  const getBasicActivityDataForActivityId = async (accountId: number, activityId: number) => {
+    try{
+        return await BasicActivityModel.find({accountId: accountId, activity: activityId});
+    }catch (e){
+        return null;
+    }
+}
+
 const BasicActivityModel = mongoose.model('BasicActivityData', BaseActivitySchema);
