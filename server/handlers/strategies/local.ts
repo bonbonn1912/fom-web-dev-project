@@ -5,8 +5,8 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 
 export const localStrategy = new LocalStrategy(
-  { usernameField: "mail", passwordField: "password" },
-  async (email, password, done) => {
+  { usernameField: "mail", passwordField: "password", passReqToCallback: true },
+  async (req, email, password, done) => {
     try {
       const user = await getUserAndCredentials(email);
       if (user == null || user == undefined) { // undefinded kann es eigentlich nie sein

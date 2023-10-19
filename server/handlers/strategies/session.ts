@@ -12,7 +12,6 @@ import {findUser} from "../database/postgres";
     mongoUrl:  CONFIG.MONGO_DB_URL +"/" + CONFIG.SESSION_DB,
     collectionName: "user_sessions",
   }),
-  cookie: { maxAge: 1000 * 60 * 50 },
 })
 
 passport.serializeUser(function (user, done) {

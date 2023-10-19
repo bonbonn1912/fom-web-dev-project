@@ -55,14 +55,29 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
-  passport.authenticate("local",{
-    successRedirect: "/dashboard", 
-    failureRedirect: "/",
-})(req, res, next)
+    passport.authenticate("local", (err: any, user: any, info: any) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.redirect("/");
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            if (req.body['remember-me'] === 'on') {
+                req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // long enough
+            } else {
+                req.session.cookie.expires = null; // session cookie
+            }
+            return res.redirect("/dashboard");
+        });
+    })(req, res, next);
 };
 
 export const loginStravaUser = async (req: Request,res: Response,next: NextFunction) => {
