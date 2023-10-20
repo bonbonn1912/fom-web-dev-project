@@ -26,13 +26,17 @@ app.use(setupRouter);
 app.use(userInfoRouter);
 app.use(stravaRouter);
 app.use(workoutRouter);
+
 app.get("/*", (req: Request, res: Response) => {
   res.sendFile(CONFIG.INDEX_PATH);
 });
 
 
+
+
 app.listen(CONFIG.PORT, () => {
       initStravaWebhook();
       logger.log('info', 'server', `Server is listening on port ${CONFIG.PORT}`)
+    console.log(`Server is listening on port ${CONFIG.PORT}`);
 }
 );

@@ -4,12 +4,12 @@ import {
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend,
+    DecimationOptions, Decimation
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import HoverLine from "./HoverLine.ts";
+
 
 
 
@@ -18,10 +18,9 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend,
-
+    Decimation
 );
 
 
@@ -43,6 +42,12 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
             return `${stunden}:${minuten.toString().padStart(2, "0")}h`;
         });
     }
+    const decimation: DecimationOptions = {
+        enabled: true,
+        algorithm: 'lttb',
+        samples: 10,
+        threshold: 100,
+    };
     const labels = formatYLabel( Array.from(Array(speed.length).keys()))
         Array.from(Array(speed.length).keys())
     const hoverLine = {
@@ -79,25 +84,34 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
             y0:{
                 min: 0,
                 labels: speed,
+                borderWidth: 1,
                 max: Math.ceil((Math.max(...speed) * 4.1) / 10) * 10,
                 type: "linear",
                 position: "left",
                 stack: "activity",
-                stackWeight: 2,
+                stackWeight: 5,
                 cubicInterpolationMode: 'monotone',
-                tension: 0.4
+                tension: 0.4,
+                title: {
+                    display: true,
+                    text: 'Speed'
+                }
             },
             y1: {
                 position: "left",
                 type: "linear",
                 stack: "activity",
                 offset: true,
-                stackWeight: 6,
+                stackWeight: 5,
                 labels: power,
                 min: 0,
                 max: Math.ceil((Math.max(...power) * 1.1) / 10) * 10,
                 cubicInterpolationMode: 'monotone',
-                tension: 0.4
+                tension: 0.4,
+                title: {
+                    display: true,
+                    text: 'Power'
+                }
 
             },
             y2: {
@@ -105,12 +119,16 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 type: "linear",
                 stack: "activity",
                 offset: true,
-                stackWeight: 6,
+                stackWeight: 8,
                 labels: altitude,
-                min:0,
+                min: Math.max(Math.min(...altitude)-5, 0),
                 max: Math.ceil((Math.max(...altitude) * 1.1) / 10) * 10,
                 cubicInterpolationMode: 'monotone',
-                tension: 0.4
+                tension: 0.4,
+                title: {
+                    display: true,
+                    text: 'Altitude'
+                }
                 //max: 500
             },
             y3: {
@@ -118,26 +136,35 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 type: "linear",
                 stack: "activity",
                 offset: true,
-                stackWeight: 6,
+                stackWeight: 10,
                 labels: heartRate,
+
               //  min: Math.min(...heartRate)-10,
-                min: 0,
+                min: Math.min(...heartRate)-10,
                 max: Math.ceil((Math.max(...heartRate) * 1.1) / 10) * 10,
                 cubicInterpolationMode: 'monotone',
-                tension: 0.4
-                //max: 500
+                tension: 0.4,
+                title: {
+                    display: true,
+                    text: 'Heart Rate'
+                }
             },
             y4: {
                 position: "left",
                 type: "linear",
                 stack: "activity",
                 offset: true,
-                stackWeight: 6,
+
+                stackWeight: 3,
                 labels: cadence,
                 min: 0,
-                max: Math.ceil((Math.max(...cadence) * 1.1) / 10) * 10,
+                max: Math.max(...cadence) +5,
                 cubicInterpolationMode: 'monotone',
-                tension: 0.4
+                tension: 0.4,
+                title: {
+                    display: true,
+                    text: 'Cadence'
+                }
                 //max: 500
             },
         },
@@ -148,6 +175,28 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
         interaction: {
             intersect: false,
             mode: "index",
+        },
+        plugins: {
+            legend: {
+                position: 'bottom' as const,
+            },
+            title: {
+                display: true,
+                text: 'Your Workout',
+            },
+            annotation:{
+                annotations: {
+                    line1: {
+                        display: true,
+                        type: 'line',
+                        yMin: 600,
+                        yMax: 0,
+                        borderColor: 'rgb(255,0,54)',
+                        borderWidth: 2,
+
+                    }
+                }
+            }
         },
     };
     const data = {
@@ -160,6 +209,7 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 pointRadius: 0,
                 yAxisID: 'y0',
+                borderWidth: 1,
             },
             {
                 label: 'Watts',
@@ -168,6 +218,7 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
                 pointRadius: 0,
                 yAxisID: 'y1',
+                borderWidth: 1,
             },
             {
                 label: 'Altitude',
@@ -176,6 +227,7 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 borderColor: "rgba(128,0,128,1)",
                 pointRadius: 0,
                 yAxisID: 'y2',
+                borderWidth: 1,
             },
             {
                 label: 'Heart Rate',
@@ -183,6 +235,7 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 backgroundColor: "rgba(0,128,0,0.3)",
                 borderColor: "rgba(0,128,0,1)",
                 pointRadius: 0,
+                borderWidth: 1,
                 yAxisID: 'y3',
             },
             {
@@ -192,13 +245,14 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 borderColor: "rgba(0,0,0,1)",
                 pointRadius: 0,
                 yAxisID: 'y4',
+                borderWidth: 1,
             },
         ],
     };
 
 
     //@ts-ignore
-    return <Line plugins={[hoverLine]} options={options} data={data} />;
+    return <Line plugins={[hoverLine, decimation]} options={options} data={data} />;
 }
 
 export default LineChart;

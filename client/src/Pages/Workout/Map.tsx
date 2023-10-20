@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import { decodePolyline} from "../../helper/polyline.ts";
 import {LatLng} from "leaflet";
-import {MapContainer, Polyline, TileLayer, useMap,} from "react-leaflet";
+import {MapContainer, useMap,} from "react-leaflet";
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
