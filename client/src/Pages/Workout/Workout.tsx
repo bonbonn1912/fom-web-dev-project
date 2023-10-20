@@ -55,6 +55,12 @@ const Workout = () => {
         initWorkoutArray()
     }, []);
 
+    const forward = (id: string) =>{
+        if(window.innerWidth > 640) { // 640px ist der Standardbruchpunkt für "sm" in Tailwind CSS
+            window.location.href = `/dashboard/workouts/${id}`;
+        }
+    }
+
     if (loading) {
         return <div>loading</div>
     } else {
@@ -64,6 +70,7 @@ const Workout = () => {
                 {actions.map((action, actionIdx) => (
                     <div
                         key={action.title}
+                        onClick={() => forward(action.activity)}
                         className={classNames(
                             actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '',
                             actionIdx === 1 ? 'sm:rounded-tr-lg' : '',
@@ -115,6 +122,7 @@ const Workout = () => {
                                 <Map polyString={action.map_polyline} width={"200px"} height={"100px"} controllables={false}/>
                             </div>
                         </div>
+                        <div className="block sm:hidden">
                         <a href={`/dashboard/workouts/${action.activity}`}>
                         <span className="absolute right-6 top-6 text-gray-300 group-hover:text-gray-400" aria-hidden="true">
 
@@ -124,6 +132,7 @@ const Workout = () => {
 
                         </span>
                         </a>
+                        </div>
                     </div>
                 ))}
             </div>
