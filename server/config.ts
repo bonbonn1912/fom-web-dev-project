@@ -17,6 +17,7 @@ interface Config {
   STRAVA_API_BASE_URL: string;
   LOG_PATH: string;
   STRAVA_ACITIVITY_STREAMS_KEYS: string,
+  ENV: string;
 }
 
 const CONFIG: Config = {
@@ -34,6 +35,7 @@ const CONFIG: Config = {
   STRAVA_API_BASE_URL: process.env.STRAVA_API_BASE_URL as string,
   LOG_PATH: path.join(__dirname, "../logs"),
   STRAVA_ACITIVITY_STREAMS_KEYS: process.env.STRAVA_ACITIVITY_STREAMS_KEYS as string,
+  ENV: process.env.NODE_ENV as string,
 };
 
 export default CONFIG;

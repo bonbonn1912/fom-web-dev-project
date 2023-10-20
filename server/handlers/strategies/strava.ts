@@ -11,7 +11,7 @@ export const stravaRegisterStrategy = new StravaStrategy(
   {
     clientID: CONFIG.STRAVA_CLIENT_ID,
     clientSecret: CONFIG.STRAVA_CLIENT_SECRET,
-    callbackURL: "/auth/reg/strava/callback",
+    callbackURL: `/auth/reg/strava/callback`,
     passReqToCallback: true,
   },
   async (req, accessToken, refreshToken, profile, done) => {
@@ -95,6 +95,5 @@ export const stravaConnectionStrategy = new StravaStrategy(
         }catch (err){
             return done(err, false)
         }
-
     }
 );

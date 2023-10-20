@@ -161,7 +161,6 @@ const Dashboard = () => {
                           </ul>
                         </li>
                         <LanSettings/>
-                       
                       </ul>
                     </nav>
                   </div>
@@ -251,9 +250,7 @@ const Dashboard = () => {
                 <Route path="/workouts" element={ <Workout/>}/>
                 <Route path="/workouts/:id" element={<DetailedWorkout />} />
                 <Route path="/profile/*" element={<Profile />}/>
-
               </Routes>
-                               
                 </div>
           </main>
         </div>

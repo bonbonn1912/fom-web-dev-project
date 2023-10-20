@@ -10,6 +10,8 @@ import workoutRouter from "./routes/workout";
 require("./handlers/strategies/session");
 import {initStravaWebhook} from "./controller/StravaController/strava";
 import CustomLogger from "./logging/logger";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 export const logger = new CustomLogger(CONFIG.LOG_PATH);
 
@@ -35,8 +37,8 @@ app.get("/*", (req: Request, res: Response) => {
 
 
 app.listen(CONFIG.PORT, () => {
-      initStravaWebhook();
-      logger.log('info', 'server', `Server is listening on port ${CONFIG.PORT}`)
-    console.log(`Server is listening on port ${CONFIG.PORT}`);
+    initStravaWebhook();
+    logger.log('info', 'server', `Server is listening on port ${CONFIG.PORT}`)
+    console.log(`Server is listening on port ${CONFIG.PORT}, ENV: ${process.env.ENV}`);
 }
 );

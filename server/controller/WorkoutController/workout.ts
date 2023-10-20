@@ -10,7 +10,6 @@ import {insertActivityStreamData} from "../../handlers/database/activityStreamSc
 const addWorkout = async (req: Request, res: Response) => {
     logger.log('info', 'workout', `Adding workout for user ${req.body.owner_id}`)
     const { owner_id, object_type, object_id, aspect_type, event_time, updates } = req.body as IWorkoutPost;
-
     let { accountId,access_token, expires_at, refresh_token } = await getStravaTokenForOwnerId(owner_id) as any;
     const rt = refresh_token;
     if(expires_at < Date.now()){
