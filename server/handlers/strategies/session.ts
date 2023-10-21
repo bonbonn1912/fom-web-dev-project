@@ -9,7 +9,7 @@ import {findUser} from "../database/postgres";
   secret: "keyboard cat",
   saveUninitialized: true, // don't create session until something stored //don't save session if unmodified
   store: MongoStore.create({
-    mongoUrl:  CONFIG.MONGO_DB_URL +"/" + CONFIG.SESSION_DB,
+    mongoUrl:  CONFIG.MONGO_DB_URL +"/" + CONFIG.SESSION_DB + "?authSource=admin",
     collectionName: "user_sessions",
   }),
 })

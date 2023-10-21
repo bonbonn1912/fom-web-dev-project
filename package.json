@@ -8,7 +8,8 @@
     "dev_win": "set ts_node=true&&set ENV=DEV&&nodemon --exec ts-node server/index.ts",
     "dev_mac": "export ts_node=true&&export ENV=DEV&&nodemon --exec ts-node backend/index.ts",
     "prod": "tsc &&cd client&& npm run build&& cd ..&&set ENV=PROD&& node build/index.js",
-    "prod_mac": "tsc &&cd client&& npm run build&& cd ..&&export ENV=PROD&& node build/index.js"
+    "prod_mac": "tsc &&cd client&& npm run build&& cd ..&&export ENV=PROD&& node build/index.js",
+    "docker": "node build/index.js"
   },
   "repository": {
     "type": "git",
