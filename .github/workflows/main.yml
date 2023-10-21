@@ -26,7 +26,7 @@ jobs:
         port: 22
         script: |
           pm2 list
-          cd /home/fom-wev-dev-project
+          cd /home/fom-web-dev-project
           pm2 stop ${{ env.PM2NAME }}-${{ env.APPLICATION_PORT }}
           git pull
           cd server
