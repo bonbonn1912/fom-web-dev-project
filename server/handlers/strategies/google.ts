@@ -6,14 +6,11 @@ import { IGoogleUser } from "../../types/google";
 import { IAccount } from "../../types/user";
 
 const StravaStrategy = strategy.Strategy;
-import * as dotenv from "dotenv";
-dotenv.config();
-const redirectPort = process.env.ENV == "PROD" ? "5000" : "3001";
 export const googleRegisterStrategy = new StravaStrategy(
   {
     clientID: CONFIG.GOOGLE_CLIENT_ID,
     clientSecret: CONFIG.GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://localhost:${redirectPort}/auth/reg/google/callback`,
+    callbackURL: `${CONFIG.GOOGLE_CALLBACK_URL}/auth/reg/google/callback`,
     scope: ['profile', 'email'],
     passReqToCallback: true,
   },
@@ -45,7 +42,7 @@ export const googleLoginStrategy = new StravaStrategy(
   {
     clientID: CONFIG.GOOGLE_CLIENT_ID,
     clientSecret: CONFIG.GOOGLE_CLIENT_SECRET,
-    callbackURL: `http://localhost:${redirectPort}/auth/log/google/callback`, //TODO In config
+    callbackURL: `${CONFIG.GOOGLE_CALLBACK_URL}/auth/log/google/callback`, //TODO In config
     scope: ['profile', 'email'],
     passReqToCallback: true,
   },

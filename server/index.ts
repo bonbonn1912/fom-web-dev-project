@@ -40,5 +40,6 @@ app.listen(CONFIG.PORT, () => {
     initStravaWebhook();
     logger.log('info', 'server', `Server is listening on port ${CONFIG.PORT}`)
     console.log(`Server is listening on port ${CONFIG.PORT}, ENV: ${process.env.ENV}`);
+    console.log("Google Callback url: " + CONFIG.GOOGLE_CALLBACK_URL)
 }
 );

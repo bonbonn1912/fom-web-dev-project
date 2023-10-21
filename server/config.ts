@@ -18,7 +18,11 @@ interface Config {
   LOG_PATH: string;
   STRAVA_ACITIVITY_STREAMS_KEYS: string,
   ENV: string;
+  GOOGLE_REDIRECT_PORT: string,
+  GOOGLE_CALLBACK_URL: string,
 }
+
+const GOOGLE_REDIRECT_PORT = process.env.ENV == "PROD" ? "5000" : "3001";
 
 const CONFIG: Config = {
   STATIC_PATH: path.join(__dirname, "../build/client"),
@@ -36,6 +40,8 @@ const CONFIG: Config = {
   LOG_PATH: path.join(__dirname, "./logs"),
   STRAVA_ACITIVITY_STREAMS_KEYS: process.env.STRAVA_ACITIVITY_STREAMS_KEYS as string,
   ENV: process.env.NODE_ENV as string,
+  GOOGLE_REDIRECT_PORT: GOOGLE_REDIRECT_PORT as string,
+  GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL as string,
 };
 
 export default CONFIG;
