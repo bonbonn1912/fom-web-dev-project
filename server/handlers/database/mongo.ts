@@ -18,4 +18,4 @@ export const UserSchema = new Schema({
 export const UserHealthData = mongoose.model('UserHealthData', UserSchema);
 
 // connecto to mongoDB
-mongoose.connect(CONFIG.MONGO_DB_URL+"/Accounts");
+mongoose.connect(CONFIG.MONGO_DB_URL+"/Accounts?authSource=admin");
