@@ -14,11 +14,9 @@ interface MapProps {
 const Map = ({polyString, width, height, controllables} : MapProps) => {
     const decodedPolyLine = decodePolyline( polyString)
     return (
-        <div className="" >
-            <MapContainer style={{height: height, width: width}}>
+            <MapContainer style={{height: height, width: width, zIndex: -5}}>
                 <SetBoundsRectangles decoded={decodedPolyLine} controllables={controllables}/>
             </MapContainer>
-        </div>
     )
 }
 
