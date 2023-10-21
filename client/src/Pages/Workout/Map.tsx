@@ -36,6 +36,7 @@ const  SetBoundsRectangles = ({decoded, controllables} : SetBoundsProps) => {
             map.scrollWheelZoom.disable();
             map.setZoom(16);
         }
+        map.scrollWheelZoom.disable();
 
 
         map.attributionControl.setPrefix(false);

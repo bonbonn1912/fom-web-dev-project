@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev_win": "set ts_node=true&&nodemon --exec ts-node server/index.ts",
-    "dev_linux": "export ts_node=true&&nodemon --exec ts-node backend/index.ts",
-    "prod": "tsc &&cd client&& npm run build&& cd ..&& node build/index.js"
+    "dev_win": "set ts_node=true&&set ENV=DEV&&nodemon --exec ts-node server/index.ts",
+    "dev_mac": "export ts_node=true&&export ENV=DEV&&nodemon --exec ts-node backend/index.ts",
+    "prod": "tsc &&cd client&& npm run build&& cd ..&&set ENV=PROD&& node build/index.js",
+    "prod_mac": "tsc &&cd client&& npm run build&& cd ..&&export ENV=PROD&& node build/index.js"
   },
   "repository": {
     "type": "git",

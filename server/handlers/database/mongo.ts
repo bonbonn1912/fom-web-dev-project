@@ -13,7 +13,6 @@ export const UserSchema = new Schema({
     restingHeartRate: Number,
     maxHeartRate: Number,
     profilePicture: String,
-
 });
 
 export const UserHealthData = mongoose.model('UserHealthData', UserSchema);
