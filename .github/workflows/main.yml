@@ -34,6 +34,9 @@ jobs:
           npx prisma generate
           npx prisma db push
           cd ..
+          cd client
+          npm install
+          npm run build
           npm run prod_mac
           cd ..
           pm2 start build/index.js --name ${{ env.PM2NAME }}-${{ env.APPLICATION_PORT }}
