@@ -25,9 +25,17 @@ const initialUserSetup = async (req: Request, res: Response) => {
             firstName: firstName,
             lastName: lastName,
             weight: weight,
+            weightProgress: [weight],
+            weightProgressDate: [new Date()],
             ftp: ftp,
+            ftpProgress: [ftp],
+            ftpProgressDate: [new Date()],
             restingHeartRate: restingHeartRate,
+            restingHeartRateProgress: [restingHeartRate],
+            restingHeartRateProgressDate: [new Date()],
             maxHeartRate: maxHeartRate,
+            maxHeartRateProgress: [maxHeartRate],
+            maxHeartRateProgressDate: [new Date()],
             profilePicture: compressedPath,
         })
         await user.save();
