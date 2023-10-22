@@ -29,12 +29,11 @@ jobs:
           cd /home/fom-web-dev-project
           pm2 stop ${{ env.PM2NAME }}-${{ env.APPLICATION_PORT }}
           git pull
+          npm install
           cd server
           npx prisma generate
           npx prisma db push
           cd ..
-          npm run build
-          cd client 
-          npm run build
+          npm run prod_mac
           cd ..
           pm2 start build/index.js --name ${{ env.PM2NAME }}-${{ env.APPLICATION_PORT }}
