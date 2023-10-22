@@ -28,6 +28,7 @@ import { initLanguage } from '../../helper/i18n';
 import { useUser} from "../../Context/UserContext.tsx";
 // @ts-ignore
 import DetailedWorkout from "../Workout/DetailedWorkout.tsx";
+import HomeScreen from "./HomeScreen.tsx";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -42,7 +43,11 @@ const Dashboard = () => {
     const profilePicture = data.profilePicture;
     setUser({
       displayName: displayName,
-        profilePicture: `data:image/jpeg;base64,${profilePicture}`,
+      profilePicture: `data:image/jpeg;base64,${profilePicture}`,
+      weight: data.weight,
+      ftp: data.ftp,
+      restingHeartRate: data.restingHeartRate,
+      maxHeartRate: data.maxHeartRate,
     });
 
   }
@@ -247,6 +252,7 @@ const Dashboard = () => {
           <main className="py-2">
             <div className="px-4 sm:px-6 lg:px-8">
               <Routes>
+                <Route path="/" element={<HomeScreen/>} />
                 <Route path="/workouts" element={ <Workout/>}/>
                 <Route path="/workouts/:id" element={<DetailedWorkout />} />
                 <Route path="/profile/*" element={<Profile />}/>
