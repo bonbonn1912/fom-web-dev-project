@@ -184,19 +184,6 @@ const LineChart = ({speed, power, cadence, altitude, heartRate} : LineChartProps
                 display: true,
                 text: 'Your Workout',
             },
-            annotation:{
-                annotations: {
-                    line1: {
-                        display: true,
-                        type: 'line',
-                        yMin: 600,
-                        yMax: 0,
-                        borderColor: 'rgb(255,0,54)',
-                        borderWidth: 2,
-
-                    }
-                }
-            }
         },
     };
     const data = {

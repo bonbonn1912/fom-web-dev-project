@@ -10,11 +10,12 @@ interface MapProps {
     width: string;
     height: string;
     controllables: boolean;
+    zIndex: number;
 }
-const Map = ({polyString, width, height, controllables} : MapProps) => {
+const Map = ({polyString, width, height, controllables, zIndex} : MapProps) => {
     const decodedPolyLine = decodePolyline( polyString)
     return (
-            <MapContainer style={{height: height, width: width, zIndex: -5}}>
+            <MapContainer style={{height: height, width: width, zIndex: zIndex}}>
                 <SetBoundsRectangles decoded={decodedPolyLine} controllables={controllables}/>
             </MapContainer>
     )

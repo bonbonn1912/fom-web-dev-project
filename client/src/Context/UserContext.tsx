@@ -27,7 +27,7 @@ interface UserProviderProps {
 }
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>({
-        displayName: "Test",
+        displayName: "",
         profilePicture: defaultProfilePicture,
         weight: "",
         ftp: "",

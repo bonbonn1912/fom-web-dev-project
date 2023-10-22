@@ -76,7 +76,7 @@ const Workout = () => {
                             actionIdx === 1 ? 'sm:rounded-tr-lg' : '',
                             actionIdx === actions.length - 2 ? 'sm:rounded-bl-lg' : '',
                             actionIdx === actions.length - 1 ? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none' : '',
-                            'group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 md:grid md:grid-cols-3'
+                            'group relative bg-white hover:bg-gray-100 p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 md:grid md:grid-cols-3'
                         )}
                     >
                         <div className="">
@@ -119,7 +119,7 @@ const Workout = () => {
                         </div>
                         <div className="">
                             <div className="hidden md:block">
-                                <Map polyString={action.map_polyline} width={"200px"} height={"100px"} controllables={false}/>
+                                <Map polyString={action.map_polyline} width={"200px"} height={"100px"} controllables={false} zIndex={0}/>
                             </div>
                         </div>
                         <div className="block sm:hidden">

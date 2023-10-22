@@ -63,7 +63,7 @@ const DetailedWorkout = () => {
                     <LineChart speed={speed} power={power} heartRate={heartRate} altitude={altitude} cadence={cadence}/>
                 </div>
                 <div className="w-full">
-                    <Map polyString={map_polyline} width={"100%"} height={"300px"} controllables={true}/>
+                    <Map polyString={map_polyline} width={"100%"} height={"300px"} controllables={true} zIndex={-1}/>
                 </div>
                 <div className="flex w-[300px] h-[300px]">
                     <Donut timeAboveFTP={timeAboveFtp} timeBelowFTP={timeBelowFtp}/>

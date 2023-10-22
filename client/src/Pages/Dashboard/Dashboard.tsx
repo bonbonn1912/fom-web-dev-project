@@ -58,7 +58,7 @@ const Dashboard = () => {
     initLanguage(i18n);
     getDashboardData();
      setNavigation([
-    { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
+    { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard/home'},
     { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
     { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
     { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
@@ -252,7 +252,7 @@ const Dashboard = () => {
           <main className="py-2">
             <div className="px-4 sm:px-6 lg:px-8">
               <Routes>
-                <Route path="/" element={<HomeScreen/>} />
+                <Route path="/" element={<HomeScreen/>}/>
                 <Route path="/workouts" element={ <Workout/>}/>
                 <Route path="/workouts/:id" element={<DetailedWorkout />} />
                 <Route path="/profile/*" element={<Profile />}/>
