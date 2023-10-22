@@ -22,6 +22,7 @@ const initialUserSetup = async (req: Request, res: Response) => {
             .toFile(compressedPath);
         const user = new UserHealthData({
             userId: id,
+            gender: gender,
             firstName: firstName,
             lastName: lastName,
             weight: weight,

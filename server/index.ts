@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import CONFIG from "./config";
 import authRouter from "./routes/auth";
-import setupRouter from "./routes/setup";
+import accountRouter from "./routes/account";
 import userInfoRouter from "./routes/user";
 import stravaRouter from "./routes/strava";
 import workoutRouter from "./routes/workout";
@@ -24,7 +24,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(authRouter);
-app.use(setupRouter);
+app.use(accountRouter);
 app.use(userInfoRouter);
 app.use(stravaRouter);
 app.use(workoutRouter);
