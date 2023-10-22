@@ -26,7 +26,7 @@ const getInfo = async (req: Request, res: Response) =>{
         logger.log('info', 'user', `Serving info for user ${JSON.stringify(req.user)}`)
         let user = await UserHealthData.findOne({userId: id})
         const { firstName, lastName, weight, ftp, restingHeartRate, maxHeartRate } = user as any;
-        res.status(200).json({ displayName: firstName + " " + lastName});
+        res.status(200).json({ displayName: firstName + " " + lastName,firstName: firstName,lastName: lastName, weight: weight, ftp: ftp, restingHeartRate: restingHeartRate, maxHeartRate: maxHeartRate});
     }
     catch (error) {
         logger.log('info', 'error', `Could not find info for user ${JSON.stringify(req.user)}`)
@@ -39,11 +39,11 @@ const getDashboardInfo = async (req: Request, res: Response) =>{
     try{
 
         let user = await UserHealthData.findOne({userId: id})
-        const { firstName, lastName, profilePicture } = user as any;
+        const { firstName, lastName, profilePicture, weight, ftp, maxHeartRate, restingHeartRate } = user as any;
         let imageAsBase64 = fs.readFileSync(profilePicture, 'base64');
         let dbUser = await findUser(username, "NOT_VALID_EMAIL");
         logger.log('info', 'user', `Serving dashboard info for user ${JSON.stringify(req.user)}`)
-        res.status(200).json({ displayName: firstName + " " + lastName, profilePicture: imageAsBase64});
+        res.status(200).json({ displayName: firstName + " " + lastName, profilePicture: imageAsBase64, weight: weight, ftp: ftp, maxHeartRate: maxHeartRate, restingHeartRate: restingHeartRate});
     }
     catch (error) {
         logger.log('info', 'error', `Could not find dashboard info for user ${JSON.stringify(req.user)}`)
@@ -90,6 +90,18 @@ const deleteStravaConnection = async (req: Request, res: Response) =>{
     }
 }
 
+const getDashboardInfoExtended = async (req: Request, res: Response) =>{
+   const { id } = req.user as any;
+    try{
+        const user = await UserHealthData.findOne({userId: id})
+        return res.status(200).json(user);
+    }catch (error) {
+        res.status(500).send('Could not find user.');
+    }
+}
+
+
+
 
 
 
@@ -98,5 +110,6 @@ export {
     getInfo,
     getDashboardInfo,
     getStravaInfo,
-    deleteStravaConnection
+    deleteStravaConnection,
+    getDashboardInfoExtended
 }

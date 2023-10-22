@@ -9,9 +9,17 @@ export const UserSchema = new Schema({
     gender: String,
     age: Number,
     weight: Number,
+    weightProgress: [Number],
+    weightProgressDate: [Date],
     ftp: Number,
+    ftpProgress: [Number],
+    ftpProgressDate: [Date],
     restingHeartRate: Number,
+    restingHeartRateProgress: [Number],
+    restingHeartRateProgressDate: [Date],
     maxHeartRate: Number,
+    maxHeartRateProgress: [Number],
+    maxHeartRateProgressDate: [Date],
     profilePicture: String,
 });
 
