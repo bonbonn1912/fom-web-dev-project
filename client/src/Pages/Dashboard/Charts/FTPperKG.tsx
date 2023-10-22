@@ -233,15 +233,15 @@ const FTPperKG = ({values, labels, gender}: FTPperKGProps) => {
         paddedLabels[startIndex + i] = labels[i];
     }
     const data = {
-            labels: paddedLabels,
-            datasets: [{
-                label: 'Your FTP per KG Progress',
-                data: paddedData,
-                fill: false,
-                borderColor: 'rgb(0, 0, 0)',
-                tension: 0.1
-            }]
-        };
+        labels: paddedLabels,
+        datasets: [{
+            label: 'Your FTP per KG Progress',
+            data: paddedData,
+            fill: false,
+            borderColor: 'rgb(0, 0, 0)',
+            tension: 0.1
+        }]
+    };
 
     const options: any = {
         maintainAspectRatio: false,

@@ -42,7 +42,7 @@ const HomeScreen = () =>{
 
     return(
         <div className="grid grid-cols-1 md:grid-cols-3">
-            <div className="md:col-span-2 col-span-full h-fit bg-amber-50 flex justify-center items-center h-[350px]">Summary Placeholder</div>
+            <div className="md:col-span-2 col-span-full bg-amber-50 flex justify-center items-center h-[350px]">Summary Placeholder</div>
             <div className="md:col-span-1 col-span-full h-fit">
                 <div className="w-full h-[350px]">
                     <FTPperKG gender={gender} labels={ftpPerKGLabels} values={ftpPerKG}/>

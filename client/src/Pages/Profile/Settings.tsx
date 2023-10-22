@@ -5,7 +5,7 @@ import LoadingSpinner from "../../components/LoadingSpinner.tsx";
 const Settings = () => {
   const {user} = useUser();
   const [ isLoading, setIsLoading ] = useState(true)
-  const [disabled, setDisabled] = useState(false)
+  const [disabled] = useState(false)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -49,6 +49,12 @@ const Settings = () => {
       method: "POST",
       body: data,
     });
+if (response.status === 200) {
+  window.location.reload();
+}else{
+  console.log("could not update user")
+}
+
   }
   if(isLoading) return <LoadingSpinner width={500} height={500}/>
   else{

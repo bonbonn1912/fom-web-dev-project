@@ -1,3 +1,4 @@
+import 'chartjs-plugin-annotation';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -74,10 +75,8 @@ const ProgressChart = ({values, labels, title, color} :ProgressChartProps) => {
             tension: 0.4
         }]
     }
-    return (
-
-            <Line options={options} data={data} />
-
+    // @ts-ignore
+    return (<><Line options={options} data={data}/></>
     )
 }
 
