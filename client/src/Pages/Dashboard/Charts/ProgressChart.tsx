@@ -50,8 +50,8 @@ const ProgressChart = ({values, labels, title, color} :ProgressChartProps) => {
         maintainAspectRatio: false,
         scales: {
             y: {
-                min: Math.min(...paddedData) - 10,
-                max: Math.max(...paddedData) + 10,
+                min: Math.max(Math.min(...values) - 10,0),
+                max: Math.max(...values) + 10,
             }
         },
         plugins: {
