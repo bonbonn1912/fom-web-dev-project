@@ -10,23 +10,33 @@ import {insertActivityStreamData} from "../../handlers/database/activityStreamSc
 const addWorkout = async (req: Request, res: Response) => {
     logger.log('info', 'workout', `Adding workout for user ${req.body.owner_id}`)
     const { owner_id, object_type, object_id, aspect_type, event_time, updates } = req.body as IWorkoutPost;
-    let { accountId,access_token, expires_at, refresh_token } = await getStravaTokenForOwnerId(owner_id) as any;
-    const rt = refresh_token;
-    if(expires_at < Date.now()){
-       logger.log('info', 'workout', `Refreshing token for user ${req.body.owner_id}`)
-       let { access_token, expires_at, refresh_token } = await getNewTokenSet(rt) as any;
-       await updateStravaTokenForOwnerId(owner_id, access_token, expires_at, refresh_token);
+    try{
+        let { accountId,access_token, expires_at, refresh_token } = await getStravaTokenForOwnerId(owner_id) as any;
+        const rt = refresh_token;
+        if(expires_at < Date.now()){
+            logger.log('info', 'workout', `Refreshing token for user ${req.body.owner_id}`)
+            let { access_token, expires_at, refresh_token } = await getNewTokenSet(rt) as any;
+            await updateStravaTokenForOwnerId(owner_id, access_token, expires_at, refresh_token);
+        }
+        let activity = await getStravaActivity(object_id.toString(), access_token) as any;
+        if(activity.type === "VirtualRide" || activity.type === "Ride"){
+            let activityStream = await getStravaActivityStream(object_id.toString(), access_token) as any;
+            const { id, success } = await insertBasicActivityData(activity, accountId);
+            const { stream_id, stream_success } = await insertActivityStreamData(activityStream, owner_id, id, accountId);
+            if(!success && !stream_success){
+                logger.log('info', 'workout', `Could not insert activity with id ${id} for user ${owner_id}`)
+            }else{
+                logger.log('info', 'workout', `Inserted activity with id ${id} for user ${owner_id}`)
+            }
+            res.status(200).send()
+
+        }else{
+            logger.log('info', 'workout', `Activity with id ${object_id} is not a ride or virtual ride`)
+            res.status(400).send()
+        }
+    }catch (e: any){
+        logger.log("error", "workout", `Could not add workout for user with error ${e.toString()}`)
     }
-    let activity = await getStravaActivity(object_id.toString(), access_token) as any;
-    let activityStream = await getStravaActivityStream(object_id.toString(), access_token) as any;
-    const { id, success } = await insertBasicActivityData(activity, accountId);
-    const { stream_id, stream_success } = await insertActivityStreamData(activityStream, owner_id, id, accountId);
-    if(!success && !stream_success){
-        logger.log('info', 'workout', `Could not insert activity with id ${id} for user ${owner_id}`)
-    }else{
-        logger.log('info', 'workout', `Inserted activity with id ${id} for user ${owner_id}`)
-    }
-    res.status(200).send()
 }
 
 const getWorkoutForUser = async (req: Request, res: Response) => {
