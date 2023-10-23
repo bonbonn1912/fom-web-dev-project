@@ -28,6 +28,7 @@ jobs:
           pm2 list
           cd /home/fom-web-dev-project
           pm2 stop ${{ env.PM2NAME }}-${{ env.APPLICATION_PORT }}
+          rm -f build
           git pull
           npm install
           cd server
