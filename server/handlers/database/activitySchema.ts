@@ -28,15 +28,15 @@ const BaseActivitySchema = new Schema({
 export const insertBasicActivityData = async (activity: any, accountId: number) => {
     console.log("Inserting activity stream with id: " + activity.id + " into database");
     try{
-      /*  const { elapsed_time, start_date, calories, distance } = activity;
+        const { elapsed_time, start_date, calories, distance } = activity;
         const healthDataEntry = { elapsed_time: elapsed_time, start_date: start_date, calories: calories, distance: distance };
 
         let entry = await UserHealthData.findOneAndUpdate(
             {userId: accountId},
             { $set: { [`activityDictionary.${activity.id}`]: healthDataEntry } },
             { new: true, upsert: true }
-        );
-        console.log(entry) */
+        )
+        console.log(entry)
         let newActivity = await BasicActivityModel.create({
             accountId: accountId,
             ownerId: activity.athlete.id,
