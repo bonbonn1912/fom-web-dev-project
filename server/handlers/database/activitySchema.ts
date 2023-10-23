@@ -31,7 +31,7 @@ export const insertBasicActivityData = async (activity: any, accountId: number) 
         const { elapsed_time, start_date, calories, distance } = activity;
         const healthDataEntry = { elapsed_time: elapsed_time, start_date: start_date, calories: calories, distance: distance };
 
-        await UserHealthData.findOneAndUpdate(
+        UserHealthData.findOneAndUpdate(
             {userId: accountId},
             { $set: { [`activityDictionary.${activity.id}`]: healthDataEntry } },
             { new: true, upsert: true }
