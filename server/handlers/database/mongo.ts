@@ -2,6 +2,12 @@ import { Schema } from 'mongoose';
 import * as mongoose from "mongoose";
 import CONFIG from "../../config";
 
+const ActivityValueSchema = new Schema({
+    elapsed_time: String,
+    start_date: String,
+    calories: String,
+    distance: String
+});
 export const UserSchema = new Schema({
     userId: Number,
     firstName: String,
@@ -21,7 +27,14 @@ export const UserSchema = new Schema({
     maxHeartRateProgress: [Number],
     maxHeartRateProgressDate: [Date],
     profilePicture: String,
+    activityDictionary: {
+        type: Map,
+        of: ActivityValueSchema,
+        required: false,
+    }
 });
+
+
 
 export const UserHealthData = mongoose.model('UserHealthData', UserSchema);
 

@@ -1,5 +1,7 @@
 import { Schema } from 'mongoose';
 import * as mongoose from "mongoose";
+import { UserHealthData} from "./mongo";
+
 const BaseActivitySchema = new Schema({
     accountId: Number,
     activity: { type: Number, unique: true},
@@ -26,6 +28,21 @@ const BaseActivitySchema = new Schema({
 export const insertBasicActivityData = async (activity: any, accountId: number) => {
     console.log("Inserting activity with id: " + activity.id + " into database");
     try{
+        const { elapsed_time, start_date, calories, distance } = activity;
+        const healthDataEntry = { elapsed_time: elapsed_time, start_date: start_date, calories: calories, distance: distance };
+
+        UserHealthData.findOneAndUpdate(
+            {userId: accountId},
+            { $set: { [`activityDictionary.${activity.id}`]: healthDataEntry } },
+            { new: true, upsert: true }
+        )
+            .then(updatedUserActivity => {
+                console.log('Updated User Activity');
+            })
+            .catch(err => {
+                console.error('Error:', err);
+            });
+
         let newActivity = await BasicActivityModel.create({
             accountId: accountId,
             ownerId: activity.athlete.id,
