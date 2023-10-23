@@ -32,7 +32,7 @@ const addWorkout = async (req: Request, res: Response) => {
 
         }else{
             logger.log('info', 'workout', `Activity with id ${object_id} is not a ride or virtual ride`)
-            res.status(400).send()
+            res.status(200).send()
         }
     }catch (e: any){
         logger.log("error", "workout", `Could not add workout for user with error ${e.toString()}`)
