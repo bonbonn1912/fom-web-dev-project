@@ -35,6 +35,7 @@ const addWorkout = async (req: Request, res: Response) => {
             res.status(200).send()
         }
     }catch (e: any){
+        console.log(e.toString());
         logger.log("error", "workout", `Could not add workout for user with error ${e.toString()}`)
     }
 }
