@@ -31,12 +31,16 @@ export const insertBasicActivityData = async (activity: any, accountId: number) 
         const { elapsed_time, start_date, calories, distance } = activity;
         const healthDataEntry = { elapsed_time: elapsed_time, start_date: start_date, calories: calories, distance: distance };
 
-        let entry = await UserHealthData.findOneAndUpdate(
+        await UserHealthData.findOneAndUpdate(
             {userId: accountId},
             { $set: { [`activityDictionary.${activity.id}`]: healthDataEntry } },
             { new: true, upsert: true }
-        )
-        console.log(entry)
+        ).then(updatedUserActivity => {
+            console.log('Updated User Activity');
+        })
+            .catch(err => {
+                console.log('Error:', err);
+            });
         let newActivity = await BasicActivityModel.create({
             accountId: accountId,
             ownerId: activity.athlete.id,
