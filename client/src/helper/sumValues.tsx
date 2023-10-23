@@ -1,5 +1,5 @@
 const sumValues = (values: any) => {
-
+    if(values === undefined) return({totalTime: 0, totalCalories: 0, totalDistance: 0});
     let totalTime = 0;
     let totalCalories = 0;
     let totalDistance = 0;
