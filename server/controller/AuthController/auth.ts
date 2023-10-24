@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { IRegisterUser, IAccount } from "../../types/user";
-import { findUser, insertUser } from "../../handlers/database/postgres";
+import { findUser, insertUser, insertMailConfirmation } from "../../handlers/database/postgres";
 import bcrypt from "bcrypt";
+import crpyto from "crypto";
 import { localStrategy } from "../../handlers/strategies/local";
 import {
   stravaLoginStrategy,
@@ -15,6 +16,7 @@ import {
 import passport from "passport";
 import { AccountType } from "@prisma/client";
 import { logger} from "../../index";
+import {sendEmail} from "../EmailController/confirmation";
 
 passport.use("local", localStrategy);
 passport.use("stravaLogin", stravaLoginStrategy);
@@ -41,8 +43,17 @@ export const registerUser = async (req: Request, res: Response) => {
         accountType
       )) as IAccount;
       if (account !== null) {
-        logger.log('info', 'register', `User ${req.body.username} registered`)
-        return res.redirect("/");
+          const mailConfirmationCode = crpyto.randomUUID();
+            const mailConfirmation = await insertMailConfirmation( mailConfirmationCode).then((data) => {
+                sendEmail(mail, username,mailConfirmationCode);
+                logger.log('info', 'register', `User ${req.body.username} registered`)
+                return res.redirect("/");
+            }).catch((err) => {
+                logger.log('error', 'register', `Error while inserting mail confirmation code: ${err}`)
+                return null;
+            });
+
+
       }
     } else {
         logger.log('info', 'register', `User ${req.body.username} already exists`)

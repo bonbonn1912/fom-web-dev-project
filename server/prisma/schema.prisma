@@ -20,11 +20,21 @@ model Account {
   setup    Boolean
   isAdmin      Boolean
   isConnectedWithStrava Boolean
+  isMailConfirmed Boolean
   description  String?   @db.VarChar(500)
   accountType AccountType
   credentials Credentials?
   reset Reset[]
   strava Strava?
+}
+
+model Confirmation {
+  confirmationId Int @id @default(autoincrement())
+  code String @db.VarChar(50)
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt DateTime? @default(now()) @db.Timestamp(6)
+  validUntil DateTime?
+  isActive Boolean
 }
 
 model Strava {
