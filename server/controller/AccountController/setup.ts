@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import {UserHealthData} from "../../handlers/database/mongo";
 import { updateSetup} from "../../handlers/database/postgres";
 import { logger } from "../../index";
+import crypto from "crypto";
 
 const initialUserSetup = async (req: Request, res: Response) => {
     logger.log('info', 'setup', `Creating user ${req.body.firstName} ${req.body.lastName}`)
@@ -17,7 +18,7 @@ const initialUserSetup = async (req: Request, res: Response) => {
         const { gender, firstName, lastName, age, weight, ftp, restingHeartRate, maxHeartRate } = req.body;
         const profilePicture = req.file;
         const { displayName, id } = req.user as any;
-        const compressedPath = path.join(profileImagesPath, `${displayName}-profile-picture.jpg`);
+        const compressedPath = path.join(profileImagesPath, `${crypto.randomUUID()}.jpg`);
         await sharp(profilePicture?.buffer)
             .toFile(compressedPath);
         const user = new UserHealthData({
