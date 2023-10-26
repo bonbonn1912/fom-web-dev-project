@@ -126,6 +126,7 @@ const insertUser = (
   if(accountType == AccountType.STRAVA ){
     connectedWithStrava = true;
   }
+  let isMailConfirmed = AccountType.LOCAL ? false : true;
   return new Promise(async (resolve, reject) => {
     try {
       const createdAccount = (await prisma.account.create({
@@ -136,6 +137,7 @@ const insertUser = (
           setup: false, // -> werte müssen noch in die config
           isAdmin: false, // -> ebenfalls,
           isConnectedWithStrava: connectedWithStrava,
+          isMailConfirmed: isMailConfirmed,
           accountType: accountType,
         },
       })) as IAccount;
@@ -173,4 +175,21 @@ const insertStravaToken = async (
   });
 };
 
-export { prisma,findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup, getStravaProps, setStravaConnection, removeStravaConnection };
+const insertMailConfirmation = async (uuid: string) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const mailEntry = await prisma.confirmation.create({
+                data: {
+                    code: uuid,
+                    isActive: true,
+                }
+            });
+            resolve(mailEntry);
+        } catch (error) {
+            reject(error);
+        }
+    })
+
+}
+
+export { prisma,findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup, getStravaProps, setStravaConnection, removeStravaConnection, insertMailConfirmation };

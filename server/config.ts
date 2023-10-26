@@ -20,6 +20,11 @@ interface Config {
   ENV: string;
   GOOGLE_REDIRECT_PORT: string,
   GOOGLE_CALLBACK_URL: string,
+  STRATO_SMTP_HOST: string,
+  STRATO_SMTP_PORT: string,
+  STRATO_MAIL: string,
+  STRATO_MAIL_PASSWORD: string,
+
 }
 
 const GOOGLE_REDIRECT_PORT = process.env.ENV == "PROD" ? "5000" : "3001";
@@ -42,6 +47,10 @@ const CONFIG: Config = {
   ENV: process.env.NODE_ENV as string,
   GOOGLE_REDIRECT_PORT: GOOGLE_REDIRECT_PORT as string,
   GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL as string,
+  STRATO_SMTP_HOST: process.env.STRATO_SMTP_HOST as string,
+  STRATO_SMTP_PORT: process.env.STRATO_SMTP_PORT as string,
+  STRATO_MAIL: process.env.STRATO_MAIL as string,
+  STRATO_MAIL_PASSWORD: process.env.STRATO_MAIL_PASSWORD as string,
 };
 
 export default CONFIG;

@@ -12,6 +12,7 @@ import {initStravaWebhook} from "./controller/StravaController/strava";
 import CustomLogger from "./logging/logger";
 import * as dotenv from "dotenv";
 dotenv.config();
+import {sendEmail} from "./controller/EmailController/confirmation";
 
 export const logger = new CustomLogger(CONFIG.LOG_PATH);
 
@@ -28,12 +29,9 @@ app.use(accountRouter);
 app.use(userInfoRouter);
 app.use(stravaRouter);
 app.use(workoutRouter);
-
 app.get("/*", (req: Request, res: Response) => {
   res.sendFile(CONFIG.INDEX_PATH);
 });
-
-
 
 
 app.listen(CONFIG.PORT, () => {
