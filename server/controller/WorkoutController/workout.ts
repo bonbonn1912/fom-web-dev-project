@@ -6,8 +6,10 @@ import {getBasicActivityData, insertBasicActivityData} from "../../handlers/data
 import { updateStravaTokenForOwnerId} from "../../handlers/shared/strava.postgres";
 import { logger} from "../../index";
 import {insertActivityStreamData} from "../../handlers/database/activityStreamSchema";
+import logJsonBody from "../../logging/bodyLogger";
 
 const addWorkout = async (req: Request, res: Response) => {
+    logJsonBody(req.body, "stravaAddWorkout")
     logger.log('info', 'workout', `Adding workout for user ${req.body.owner_id}`)
     const { owner_id, object_type, object_id, aspect_type, event_time, updates } = req.body as IWorkoutPost;
     try{
@@ -19,6 +21,7 @@ const addWorkout = async (req: Request, res: Response) => {
             await updateStravaTokenForOwnerId(owner_id, access_token, expires_at, refresh_token);
         }
         let activity = await getStravaActivity(object_id.toString(), access_token) as any;
+        logJsonBody(activity, "stravaActivity")
         if(activity.type === "VirtualRide" || activity.type === "Ride"){
             let activityStream = await getStravaActivityStream(object_id.toString(), access_token) as any;
             const { id, success } = await insertBasicActivityData(activity, accountId);
