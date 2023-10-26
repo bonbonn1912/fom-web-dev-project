@@ -20,8 +20,8 @@ model Account {
   setup    Boolean
   isAdmin      Boolean
   isConnectedWithStrava Boolean
-  isMailConfirmed Boolean
-  description  String?   @db.VarChar(500)
+  isMailConfirmed Boolean @default(true)
+   description  String?   @db.VarChar(500)
   accountType AccountType
   credentials Credentials?
   reset Reset[]
