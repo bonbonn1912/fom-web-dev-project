@@ -15,8 +15,12 @@ export default defineConfig({
             urlPattern: /^\/auth\//,
             handler: "NetworkOnly", // oder ein anderer Handler, je nach Anforderung
           },
+          {
+            urlPattern: /^\/api/,
+            handler: "NetworkOnly",
+          },
         ],
-        navigateFallbackDenylist: [/^\/auth\//, /^\/logout/],
+        navigateFallbackDenylist: [/^\/auth\//, /^\/logout/,/^\/api\//],
       },
       manifest: {
         start_url: "/",

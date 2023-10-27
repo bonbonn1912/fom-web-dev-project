@@ -2,14 +2,18 @@ import { Request, Response} from "express";
 import { getStravaTokenForOwnerId} from "../../handlers/shared/strava.postgres";
 import {IWorkoutPost} from "../../types/workout";
 import {getNewTokenSet, getStravaActivity, getStravaActivityStream} from "../../handlers/shared/strava.api";
-import {getBasicActivityData, insertBasicActivityData} from "../../handlers/database/activitySchema";
+import {
+    getBasicActivityData,
+    getOneActivityData,
+    insertBasicActivityData
+} from "../../handlers/database/activitySchema";
 import { updateStravaTokenForOwnerId} from "../../handlers/shared/strava.postgres";
 import { logger} from "../../index";
 import {insertActivityStreamData} from "../../handlers/database/activityStreamSchema";
 import logJsonBody from "../../logging/bodyLogger";
 
 const addWorkout = async (req: Request, res: Response) => {
-    logJsonBody(req.body, "stravaAddWorkout")
+  //  logJsonBody(req.body, "stravaAddWorkout")
     logger.log('info', 'workout', `Adding workout for user ${req.body.owner_id}`)
     const { owner_id, object_type, object_id, aspect_type, event_time, updates } = req.body as IWorkoutPost;
     try{
@@ -21,7 +25,7 @@ const addWorkout = async (req: Request, res: Response) => {
             await updateStravaTokenForOwnerId(owner_id, access_token, expires_at, refresh_token);
         }
         let activity = await getStravaActivity(object_id.toString(), access_token) as any;
-        logJsonBody(activity, "stravaActivity")
+       // logJsonBody(activity, "stravaActivity")
         if(activity.type === "VirtualRide" || activity.type === "Ride"){
             let activityStream = await getStravaActivityStream(object_id.toString(), access_token) as any;
             const { id, success } = await insertBasicActivityData(activity, accountId);
@@ -55,4 +59,17 @@ const getWorkoutForUser = async (req: Request, res: Response) => {
     }
 }
 
-export { addWorkout, getWorkoutForUser }
+const getWorkoutMetaData = async (req: Request, res: Response) => {
+    logger.log('info', 'workout', `Fetching workout metadata for user ${JSON.stringify(req.user)}`)
+   // const { id } = req.user as any;
+    const { id} = req.query as any;
+    try{
+        const activity = await getOneActivityData( id);
+        res.status(200).json(activity)
+
+    }catch (e){
+        res.status(500).send(e);
+    }
+}
+
+export { addWorkout, getWorkoutForUser, getWorkoutMetaData }

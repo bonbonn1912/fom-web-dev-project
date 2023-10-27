@@ -73,9 +73,17 @@ export const insertBasicActivityData = async (activity: any, accountId: number) 
 
 export const getBasicActivityData = async (accountId: number) => {
     try{
-
         return await BasicActivityModel.find({accountId: accountId});
     }catch(e){
+        return null;
+    }
+}
+
+export const getOneActivityData = async ( activityId: number) => {
+    try{
+        return await BasicActivityModel.findOne({activity: activityId});
+    }
+    catch (e){
         return null;
     }
 }
@@ -88,4 +96,4 @@ export  const getBasicActivityDataForActivityId = async (accountId: number, acti
     }
 }
 
-const BasicActivityModel = mongoose.model('BasicActivityData', BaseActivitySchema);
+export const BasicActivityModel = mongoose.model('BasicActivityData', BaseActivitySchema);

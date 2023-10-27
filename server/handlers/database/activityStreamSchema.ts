@@ -1,7 +1,7 @@
 import mongoose, {Schema} from 'mongoose';
 import {UserHealthData} from "./mongo";
 
-const AcitivtyStreamSchema = new Schema({
+ const AcitivtyStreamSchema = new Schema({
     type: {
         type: String,
         required: true,
@@ -12,7 +12,7 @@ const AcitivtyStreamSchema = new Schema({
     },
 });
 
-const ActivityStreamModel = mongoose.model('AcitivtyStreams', new Schema({
+export const ActivityStreamModel = mongoose.model('AcitivtyStreams', new Schema({
     activity: Number,
     ownerId: Number,
     accountId: Number,
