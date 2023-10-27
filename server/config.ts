@@ -24,7 +24,6 @@ interface Config {
   STRATO_SMTP_PORT: string,
   STRATO_MAIL: string,
   STRATO_MAIL_PASSWORD: string,
-
 }
 
 const GOOGLE_REDIRECT_PORT = process.env.ENV == "PROD" ? "5000" : "3001";

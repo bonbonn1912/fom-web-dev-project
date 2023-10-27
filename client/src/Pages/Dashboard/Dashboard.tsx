@@ -29,7 +29,7 @@ import { useUser} from "../../Context/UserContext.tsx";
 // @ts-ignore
 import DetailedWorkout from "../Workout/DetailedWorkout.tsx";
 import HomeScreen from "./HomeScreen.tsx";
-
+import Equipment from "../Equipment/Equipment.tsx";
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
@@ -255,6 +255,7 @@ const Dashboard = () => {
                 <Route path="/" element={<HomeScreen/>}/>
                 <Route path="/workouts" element={ <Workout/>}/>
                 <Route path="/workouts/:id" element={<DetailedWorkout />} />
+                <Route path="/equip" element={<Equipment />}/>
                 <Route path="/profile/*" element={<Profile />}/>
               </Routes>
                 </div>
