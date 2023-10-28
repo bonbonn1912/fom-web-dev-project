@@ -26,6 +26,7 @@ model Account {
   credentials Credentials?
   reset Reset[]
   strava Strava?
+  equipment Equipment[]
 }
 
 model Confirmation {
@@ -35,6 +36,26 @@ model Confirmation {
   updatedAt DateTime? @default(now()) @db.Timestamp(6)
   validUntil DateTime?
   isActive Boolean
+}
+
+model Equipment {
+  equipmentId Int @id @default(autoincrement())
+  accountId Int
+  userId Account @relation(fields: [accountId], references: [accountId])
+  name String @db.VarChar(255)
+  notice String? @db.VarChar(500)
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
+  updatedAt DateTime? @default(now()) @db.Timestamp(6)
+  distance Int
+  maxDistance Int
+  type EquipmentType
+  isActive Boolean
+}
+
+enum EquipmentType {
+  BIKE
+  EQUIPMENT
+  ACCESSORY
 }
 
 model Strava {

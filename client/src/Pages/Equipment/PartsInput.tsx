@@ -11,10 +11,14 @@ const PartsInput = ({display, onSubmitOrCancel} : PartsInputProps) => {
     const [partName, setPartName] = useState<string>('');
     const [partNotice, setPartNotice] = useState<string>('');
     const [partDistance, setPartDistance] = useState<number>(0);
+    const [ maxDistance, setMaxDistance] = useState<number>(0);
+    const [isActive, setIsActive] = useState<boolean>(false);
+    const [ type, setType] = useState<'BIKE' | 'EQUIPMENT' | 'ACCESSORY'>('BIKE');
 
     const submitPart = () => {
         if (onSubmitOrCancel) {
-            onSubmitOrCancel({name: partName, notice: partNotice, distance: partDistance});
+            // @ts-ignore eqipmentId is from the server
+            onSubmitOrCancel({name: partName, notice: partNotice, distance: partDistance, maxDistance: maxDistance, isActive: isActive, type: type});
         }
     }
 
@@ -30,7 +34,7 @@ const PartsInput = ({display, onSubmitOrCancel} : PartsInputProps) => {
     const displayClass = display ? 'block' : 'hidden';
     return (
         <div className={`${displayClass} mt-5 mb-5`}>
-            <div className="grid sm:grid-cols-3 grid-cols-1 gap-x-2.5 gap-y-2.5">
+            <div className="grid sm:grid-cols-4 grid-cols-1 gap-x-2.5 gap-y-2.5">
                 <div className="relative md:col-span-1 col-span-full">
                     <label
                         htmlFor="name"
@@ -65,6 +69,7 @@ const PartsInput = ({display, onSubmitOrCancel} : PartsInputProps) => {
                         placeholder="Ölen bei erreichen der Distanz"
                     />
                 </div>
+                <div className="grid md:grid-cols-2 gap-2.5 col-span-full md:col-span-1">
                 <div className="relative md:col-span-1 col-span-full">
                     <label
                         htmlFor="name"
@@ -74,13 +79,75 @@ const PartsInput = ({display, onSubmitOrCancel} : PartsInputProps) => {
                     </label>
                     <input
                         type="number"
-                        name="distance"
-                        id="distance"
+                        name="maxDistance"
+                        id="maxDistance"
+                        min={0}
+                        max={50000}
                         value={partDistance.toString() || ''}
-                        onChange={(e) => setPartDistance(parseInt(e.target.value))}
+                        onChange={(e) => setPartDistance(parseInt(e.target.value) || 0)}
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        placeholder="5000"
+                        placeholder="Bremsscheibe"
                     />
+                </div>
+                <div className="relative md:col-span-1 col-span-full">
+                    <label
+                        htmlFor="name"
+                        className="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900"
+                    >
+                        Max Distanz
+                    </label>
+                    <div className="grid md:col-span-1 col-span-full">
+                        <input
+                            type="number"
+                            name="distance"
+                            id="distance"
+                            min={0}
+                            max={50000}
+                            value={maxDistance.toString() || ''}
+                            onChange={(e) => setMaxDistance(parseInt(e.target.value) || 0)}
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            placeholder="5000"
+                        />
+                    </div>
+                </div>
+                </div>
+                <div className="relative md:col-span-1 col-span-full">
+                <div className="relative flex gap-x-3 items-center md:ml-3 ml-0">
+                    <label
+                        htmlFor="optionSelect"
+                        className="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900"
+                    >
+                        Typ
+                    </label>
+                    <div className="grid md:col-span-1 col-span-full">
+                        <select
+                            value={type}
+                            name="optionSelect"
+                            id="optionSelect"
+                            onChange={(e) => setType( e.target.value as 'BIKE' | 'EQUIPMENT' | 'ACCESSORY')}
+                            className="md:w-full block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        >
+                            <option value="" disabled hidden>Wähle eine Option</option>
+                            <option value="BIKE">Rad</option>
+                            <option value="EQUIPMENT">Ausrüstung</option>
+                            <option value="ACCESSORY">Zubehör</option>
+                        </select>
+                    </div>
+                    <div className="flex h-6 items-center">
+                        <input
+                            id="isActive"
+                            name="isActive"
+                            type="checkbox"
+                            onChange={(e) => setIsActive(e.target.checked)}
+                            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                        />
+                    </div>
+                    <div className="text-sm leading-6">
+                        <label htmlFor="comments" className="font-medium text-gray-900">
+                            Active
+                        </label>
+                    </div>
+                </div>
                 </div>
             </div>
             <div className="mt-3 md:col-span-1 col-span-full">

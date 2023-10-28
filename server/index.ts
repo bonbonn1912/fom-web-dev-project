@@ -7,6 +7,7 @@ import accountRouter from "./routes/account";
 import userInfoRouter from "./routes/user";
 import stravaRouter from "./routes/strava";
 import workoutRouter from "./routes/workout";
+import equipmentRouter from "./routes/equipment";
 require("./handlers/strategies/session");
 import {initStravaWebhook} from "./controller/StravaController/strava";
 import CustomLogger from "./logging/logger";
@@ -29,6 +30,7 @@ app.use(accountRouter);
 app.use(userInfoRouter);
 app.use(stravaRouter);
 app.use(workoutRouter);
+app.use(equipmentRouter)
 app.get("/*", (req: Request, res: Response) => {
   res.sendFile(CONFIG.INDEX_PATH);
 });
