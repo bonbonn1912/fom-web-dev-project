@@ -1,44 +1,51 @@
 import PartsInput from "./PartsInput.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { IParts} from "../../Types/Parts.tsx";
 import {BarsArrowUpIcon, ChevronDownIcon, MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import ListItem from "./ListItem.tsx";
+import LoadingSpinner from "../../components/LoadingSpinner.tsx";
 
 
 const Equipment = () => {
-    const [parts, setParts] = useState<IParts[]>([
-        {
-            name: 'Bremsscheibe',
-            notice: 'Shimano SM-RT54',
-            distance: 0,
-            maxDistance: 2000,
-            isActive: true,
-        },
-        {
-            name: 'Bremsbeläge',
-            notice: 'Shimano B01S',
-            distance: 0,
-            maxDistance: 2000,
-            isActive: true,
+    const [ parts, setParts] = useState<IParts[]>([]);
 
-        }
-    ]);
     const [ displayParts, setDisplayParts] = useState<IParts[]>(parts);
-
+    const [ isLoading, setIsLoading] = useState<boolean>(true);
 
     const [showPartsInput, setShowPartsInput] = useState(false);
     const togglePartsInput = () => {
         setShowPartsInput(!showPartsInput);
     }
 
+    const getParts = async () => {
+        const res = await fetch('/api/equipment');
+        const data = await res.json();
+        setParts(data);
+        setDisplayParts(data);
+        setIsLoading(false);
+    }
+
     const filterParts = (parts: IParts[], query: string) => {
         if(query === '') return setDisplayParts(parts);
-        const searchResult =  parts.filter(part => part.name.includes(query));
+        const searchResult = parts.filter(part => JSON.stringify(part).toLowerCase().includes(query.toLowerCase()));
         setDisplayParts(searchResult)
     }
 
-    const addPart = (newParts: IParts | null) => {
+    useEffect(() => {
+        getParts();
+    }, []);
+
+    const addPart = async (newParts: IParts | null) => {
         if(newParts) {
+
+           const res = await fetch('/api/equipment',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+               body: JSON.stringify(newParts),
+           })
+            if(!res.ok) return console.log('error');
             const newPartsArray = [...parts, newParts];
             setDisplayParts(newPartsArray);
             setParts(newPartsArray)
@@ -47,6 +54,34 @@ const Equipment = () => {
         }
         togglePartsInput();
     }
+
+    const deletePart = async (equipmentId: number,listIndex: number) => {
+
+        const res = await fetch(`/api/equipment?equipmentId=${equipmentId}`, {
+            method: 'DELETE',
+        })
+        if(!res.ok) return console.log('error');
+        const newPartsArray = [...parts];
+        newPartsArray.splice(listIndex, 1);
+        setDisplayParts(newPartsArray);
+        setParts(newPartsArray);
+    }
+    const updatePart = async (equipmentId: number,listIndex: number) => {
+
+        const res = await fetch(`/api/equipment/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({equipmentId: equipmentId, isActive: !parts[listIndex].isActive}),
+        })
+        if(!res.ok) return console.log('error');
+        const newPartsArray = [...parts];
+        newPartsArray[listIndex].isActive = !newPartsArray[listIndex].isActive;
+        setDisplayParts(newPartsArray);
+        setParts(newPartsArray);
+    }
+
 
     return (
         <div>
@@ -108,9 +143,10 @@ const Equipment = () => {
         </div>
             <PartsInput display={showPartsInput} onSubmitOrCancel={addPart}/>
             {
+                isLoading ? <LoadingSpinner width={50} height={50}/> :
                 displayParts.map((part, index) => (
-                    <ListItem part={part} key={index}/>
-                    ))
+                <ListItem part={part} key={index} listIndex={index} deleteHandler={deletePart} changeStatusHandler={updatePart}/>
+         ))
             }
         </div>
     )

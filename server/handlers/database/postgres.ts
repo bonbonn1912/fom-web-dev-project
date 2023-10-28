@@ -1,4 +1,4 @@
-import { PrismaClient, AccountType } from "@prisma/client";
+import {PrismaClient, AccountType, EquipmentType} from "@prisma/client";
 const prisma = new PrismaClient();
 import { IAccount, ICredentials } from "../../types/user";
 import { ITokenResponse } from "../../types/strava";
@@ -189,7 +189,89 @@ const insertMailConfirmation = async (uuid: string) => {
             reject(error);
         }
     })
-
 }
 
-export { prisma,findUser, insertUser, getUserAndCredentials, insertStravaToken, updateSetup, getStravaProps, setStravaConnection, removeStravaConnection, insertMailConfirmation };
+const insertEquipment = async (accountId: number, name: string, notice: string, currentDistance: number, maxDistance: number, type: EquipmentType, isActive: boolean) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const equipmentEntry = await prisma.equipment.create({
+                data: {
+                    accountId: accountId,
+                    name: name,
+                    notice: notice,
+                    distance: currentDistance,
+                    maxDistance: maxDistance,
+                    type: type,
+                    isActive: isActive,
+                }
+            });
+            resolve(equipmentEntry);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+const getEquipment = async (accountId: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const equipment = await prisma.equipment.findMany({
+                where: {
+                    accountId: accountId,
+                }
+            });
+            resolve(equipment);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+const deleteEquipment = async (equipmentId: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const equipment = await prisma.equipment.delete({
+                where: {
+                    equipmentId: equipmentId,
+                }
+            });
+            resolve(equipment);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+const changeEquipmentStatus = async (equipmentId: number, isActive: boolean) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const equipment = await prisma.equipment.update({
+                where: {
+                    equipmentId: equipmentId,
+                },
+                data: {
+                    isActive: isActive,
+                }
+            });
+            resolve(equipment);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+export { prisma,
+        findUser,
+        insertUser,
+        getUserAndCredentials,
+        insertStravaToken,
+        updateSetup,
+        getStravaProps,
+        setStravaConnection,
+        removeStravaConnection,
+        insertMailConfirmation,
+        insertEquipment,
+        getEquipment,
+        deleteEquipment,
+        changeEquipmentStatus
+};
