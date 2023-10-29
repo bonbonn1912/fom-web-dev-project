@@ -2,7 +2,7 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-    Navigate, Link,
+     Link,
 } from "react-router-dom";
 import { lazy} from "react";
 import "./App.css"; // Stile können mit TailwindCSS-Klassen angepasst werden
