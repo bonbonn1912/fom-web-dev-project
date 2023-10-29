@@ -1,8 +1,8 @@
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate, Link,
 } from "react-router-dom";
 import { lazy} from "react";
 import "./App.css"; // Stile können mit TailwindCSS-Klassen angepasst werden
@@ -16,7 +16,8 @@ import { UserProvider} from "./Context/UserContext.tsx";
 import ProtectedWrapper from "./Pages/Auth/ProtectedRoute";
 
 const App = () => {
-  return (
+  // @ts-ignore
+    return (
     <AuthProvider>
         <UserProvider>
       <Router>
@@ -25,7 +26,7 @@ const App = () => {
             path="/"
             element={
               <ProtectedWrapper
-                authElement={<Navigate to="/dashboard" replace />}
+                authElement={<Link to="/dashboard" replace />}
                 altElement={<Login/>}
               />
             }
@@ -36,7 +37,7 @@ const App = () => {
             element={
               <ProtectedWrapper
                 authElement={<Dashboard />}
-                altElement={<Navigate to="/" replace />}
+                altElement={<Login/>}
               />
             }
           />

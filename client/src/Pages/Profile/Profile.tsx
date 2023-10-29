@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 
 //@ts-ignore
 import {
@@ -59,12 +59,12 @@ const Profile = () => {
                 >
                   {navigation.map((item, index) => (
                     <li key={item.name}>
-                      <a href={item.href}
+                      <Link to={item.href}
                         onClick={() => handleSwitch(index)}
                         className={`${item.current ? "text-indigo-400" : ""} cursor-pointer`}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
