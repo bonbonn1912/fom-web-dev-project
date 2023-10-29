@@ -18,18 +18,22 @@ import {
 } from '@heroicons/react/24/outline'
 // @ts-ignore
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+
+import { lazy} from "react";
 import bicycle from '../../assets/bicycle.png'
-import Workout from '../Workout/Workout';
-import Profile from '../Profile/Profile';
-import ProfileDropDown from './ProfileDropDown';
-import LanSettings from './LanSettings';
+const Workout = lazy(() => import("../Workout/Workout.tsx"));
+const Profile = lazy(() => import("../Profile/Profile.tsx"));
+const ProfileDropDown = lazy(() => import("./ProfileDropDown.tsx"));
+const LanSettings = lazy(() => import("./LanSettings.tsx"));
+
+// @ts-ignore
+const DetailedWorkout = lazy(() => import("../Workout/DetailedWorkout.tsx"));
+const HomeScreen = lazy(() => import("./HomeScreen.tsx"));
+const Equipment = lazy(() => import("../Equipment/Equipment.tsx"));
 import { useTranslation } from 'react-i18next';
 import { initLanguage } from '../../helper/i18n';
-import { useUser} from "../../Context/UserContext.tsx";
-// @ts-ignore
-import DetailedWorkout from "../Workout/DetailedWorkout.tsx";
-import HomeScreen from "./HomeScreen.tsx";
-import Equipment from "../Equipment/Equipment.tsx";
+import { useUser } from "../../Context/UserContext.tsx";
+
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
 }

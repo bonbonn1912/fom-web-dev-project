@@ -11,6 +11,7 @@ import { updateStravaTokenForOwnerId} from "../../handlers/shared/strava.postgre
 import { logger} from "../../index";
 import {insertActivityStreamData} from "../../handlers/database/activityStreamSchema";
 import logJsonBody from "../../logging/bodyLogger";
+import {updateEquipmentDistance} from "../../handlers/database/postgres";
 
 const addWorkout = async (req: Request, res: Response) => {
   //  logJsonBody(req.body, "stravaAddWorkout")
@@ -30,6 +31,7 @@ const addWorkout = async (req: Request, res: Response) => {
             let activityStream = await getStravaActivityStream(object_id.toString(), access_token) as any;
             const { id, success } = await insertBasicActivityData(activity, accountId);
             const { stream_id, stream_success } = await insertActivityStreamData(activityStream, owner_id, id, accountId);
+            const equipped = await updateEquipmentDistance(accountId, activity.distance, activity.id);
             if(!success && !stream_success){
                 logger.log('info', 'workout', `Could not insert activity with id ${id} for user ${owner_id}`)
             }else{

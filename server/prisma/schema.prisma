@@ -50,6 +50,15 @@ model Equipment {
   maxDistance Int
   type EquipmentType
   isActive Boolean
+  equipmentToWorkout EquipmentToActivity[]
+}
+
+model EquipmentToActivity {
+  equipmentToWorkoutId Int @id @default(autoincrement())
+  equipmentId Int
+  equipment Equipment @relation(fields: [equipmentId], references: [equipmentId])
+  activity BigInt
+  createdAt DateTime? @default(now()) @db.Timestamp(6)
 }
 
 enum EquipmentType {

@@ -4,11 +4,12 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { lazy} from "react";
 import "./App.css"; // Stile können mit TailwindCSS-Klassen angepasst werden
 import Login from "./Pages/LandingPage/Login";
 import Register from "./Pages/LandingPage/Register";
-import NotFound from "./Pages/NotFound/404";
-import Dashboard from "./Pages/Dashboard/Dashboard";
+const NotFound = lazy(() => import("./Pages/NotFound/404"));
+const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 import { AuthProvider } from "./Pages/Auth/authContext";
 import { UserProvider} from "./Context/UserContext.tsx";
 
