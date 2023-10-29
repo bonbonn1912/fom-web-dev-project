@@ -11,6 +11,7 @@ import equipmentRouter from "./routes/equipment";
 require("./handlers/strategies/session");
 import {initStravaWebhook} from "./controller/StravaController/strava";
 import CustomLogger from "./logging/logger";
+import compression from "compression";
 import * as dotenv from "dotenv";
 dotenv.config();
 import {sendEmail} from "./controller/EmailController/confirmation";
@@ -19,12 +20,26 @@ export const logger = new CustomLogger(CONFIG.LOG_PATH);
 
 const app = express();
 
+app.use(compression());
+
 app.use(express.static(CONFIG.STATIC_PATH));
 app.use('/images', express.static('images'));
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.get("*.js", function (req, res, next) {
+    req.url = req.url + ".gz";
+    res.set("Content-Encoding", "gzip");
+    res.set("Content-Type", "text/javascript");
+    next();
+});
 
+app.get("*.css", function (req, res, next) {
+    req.url = req.url + ".gz";
+    res.set("Content-Encoding", "gzip");
+    res.set("Content-Type", "text/css");
+    next();
+});
 app.use(authRouter);
 app.use(accountRouter);
 app.use(userInfoRouter);
@@ -32,6 +47,8 @@ app.use(stravaRouter);
 app.use(workoutRouter);
 app.use(equipmentRouter)
 app.get("/*", (req: Request, res: Response) => {
+  res.set('Content-Encoding', 'gzip');
+  res.set('Content-Type', 'text/html');
   res.sendFile(CONFIG.INDEX_PATH);
 });
 

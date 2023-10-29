@@ -30,7 +30,7 @@ const GOOGLE_REDIRECT_PORT = process.env.ENV == "PROD" ? "5000" : "3001";
 
 const CONFIG: Config = {
   STATIC_PATH: path.join(__dirname, "../build/client"),
-  INDEX_PATH: path.resolve(__dirname, "../build/client", "index.html"),
+  INDEX_PATH: path.resolve(__dirname, "../build/client", "index.html.gz"),
   PORT: process.env.PORT,
   STRAVA_CLIENT_ID: process.env.STRAVA_CLIENT_ID as string,
   STRAVA_CLIENT_SECRET: process.env.STRAVA_CLIENT_SECRET as string,
