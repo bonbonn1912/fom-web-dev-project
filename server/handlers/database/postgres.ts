@@ -260,6 +260,76 @@ const changeEquipmentStatus = async (equipmentId: number, isActive: boolean) => 
     })
 }
 
+const updateEquipmentDistance = async (acountId: number, distance: number, activity: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+           const equipment = await prisma.equipment.findMany({
+                where: {
+                    accountId: acountId,
+                    isActive: true,
+                },
+           });
+           equipment.map(async (element) => {
+                const newDistance = parseInt((distance/1000).toFixed(0));
+                const update = await prisma.equipment.update({
+                    where: { equipmentId: element.equipmentId },
+                    data: { distance: element.distance + newDistance },
+                })
+               const relation = await prisma.equipmentToActivity.create({
+                   data: {
+                       equipmentId: element.equipmentId,
+                       activity: activity,
+                   }
+               })
+               console.log(relation);
+            });
+            resolve(equipment);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+const mapEquipmentToActivity = async (equipmentId: number,activity: number) => {
+    return new Promise(async (resolve, reject) =>{
+        try{
+            const relation = await prisma.equipmentToActivity.create({
+                data: {
+                    equipmentId: equipmentId,
+                    activity: activity,
+                }
+            })
+            console.log(relation);
+        }catch (error) {
+            reject(error);
+        }
+    })
+}
+
+const decrementEquipmentDistance = async (acountId: number, distance: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+           const equipment = await prisma.equipment.findMany({
+                where: {
+                    accountId: acountId,
+                    isActive: true,
+                },
+           });
+           equipment.map(async (element) => {
+                const newDistance = parseInt((distance/1000).toFixed(0));
+                await prisma.equipment.update({
+                    where: { equipmentId: element.equipmentId },
+                    data: { distance: element.distance - newDistance },
+                })
+            });
+            resolve(equipment);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
 export { prisma,
         findUser,
         insertUser,
@@ -273,5 +343,6 @@ export { prisma,
         insertEquipment,
         getEquipment,
         deleteEquipment,
-        changeEquipmentStatus
+        changeEquipmentStatus,
+        updateEquipmentDistance
 };
