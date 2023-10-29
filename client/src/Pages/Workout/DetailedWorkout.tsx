@@ -6,6 +6,7 @@ import Map from "./Map.tsx";
 import Donut from "./DonutChart.tsx";
 import RedModal from "../../components/RedMoal.tsx";
 import {authenticate} from "../Auth/authContext.tsx";
+import pako from "pako";
 
 
 const ModalTile = "Delete Workout";
@@ -32,8 +33,13 @@ const DetailedWorkout = () => {
         const metadata = await metaRepsonse.json();
         setWorkoutTitle(metadata.name)
         const data = await response.json();
-
-        const streams = data[1];
+        const start = new Date();
+        const compressedBuffer = Uint8Array.from(atob(data[1]), c => c.charCodeAt(0));
+        const decompressedBuffer = pako.inflate(compressedBuffer);
+        const text = new TextDecoder().decode(decompressedBuffer);
+        const streams = JSON.parse(text);
+        const end = new Date();
+        console.log("Time to decompress: " + (end.getTime() - start.getTime()) + "ms");
 
         const totalTime = data[0][0].elapsed_time as number;
 

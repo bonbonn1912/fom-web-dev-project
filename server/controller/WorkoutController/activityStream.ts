@@ -1,6 +1,7 @@
 import CONFIG from "../../config";
 import {getBasicActivityData, getBasicActivityDataForActivityId} from "../../handlers/database/activitySchema";
 import {getBasicActivityStreamDataForActivityId} from "../../handlers/database/activityStreamSchema";
+import zlib from "zlib";
 
 const getDetailedWorkoutForUser = async (req: any, res: any) => {
     const { id } = req.user as any;
@@ -9,7 +10,13 @@ const getDetailedWorkoutForUser = async (req: any, res: any) => {
     try{
         const activity = await getBasicActivityDataForActivityId(id, activityId);
         const activityStream = await getBasicActivityStreamDataForActivityId(id, activityId);
-        res.status(200).json([activity, activityStream])
+        const activtiyStreamString = JSON.stringify(activityStream);
+        const activityStreamGzip = zlib.gzipSync(activtiyStreamString);
+        const compressed_base64_str = activityStreamGzip.toString('base64');
+        // gzip activityStream
+        // const activityStreamGzip = await gzip(activityStream);
+
+        res.status(200).json([activity, compressed_base64_str])
 
     }catch (e){
         res.status(500).send(e);
