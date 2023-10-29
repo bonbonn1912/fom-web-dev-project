@@ -1,10 +1,10 @@
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
 } from "react-router-dom";
-import { lazy} from "react";
+import {lazy, Suspense} from "react";
 import "./App.css"; // Stile können mit TailwindCSS-Klassen angepasst werden
 import Login from "./Pages/LandingPage/Login";
 import Register from "./Pages/LandingPage/Register";
@@ -16,16 +16,18 @@ import { UserProvider} from "./Context/UserContext.tsx";
 import ProtectedWrapper from "./Pages/Auth/ProtectedRoute";
 
 const App = () => {
-  return (
+  // @ts-ignore
+    return (
     <AuthProvider>
         <UserProvider>
       <Router>
+        <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route
             path="/"
             element={
               <ProtectedWrapper
-                authElement={<Navigate to="/dashboard" replace />}
+                  authElement={<Navigate to="/dashboard" replace />}
                 altElement={<Login/>}
               />
             }
@@ -42,6 +44,7 @@ const App = () => {
           />
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
+        </Suspense>
       </Router>
         </UserProvider>
     </AuthProvider>

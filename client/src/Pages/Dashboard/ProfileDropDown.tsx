@@ -5,6 +5,7 @@ import { useUser } from '../../Context/UserContext'
   import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 import { useTranslation } from 'react-i18next';
+import {Link} from "react-router-dom";
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
 }
@@ -15,8 +16,8 @@ const ProfileDropDown = () =>{
     const { user } = useUser();
     const { t } = useTranslation();
     const userNavigation = [
-        { name: t("language_profile_dropdown_profile"), href: '#' },
-        { name: t("language_profile_dropdown_signout"), href: '/logout' },
+        { name: t("language_profile_dropdown_profile"), href: '/dashboard/profile/account', type: 'link' },
+        { name: t("language_profile_dropdown_signout"), href: '/logout', type: 'tag'},
     ]
 
        
@@ -46,19 +47,31 @@ const ProfileDropDown = () =>{
     >
       <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
         {userNavigation.map((item) => (
-          <Menu.Item key={item.name}>
-            {({ active }) => (
-              <a
-                href={item.href}
-                className={classNames(
-                  active ? 'bg-gray-50' : '',
-                  'block px-3 py-1 text-sm leading-6 text-gray-900'
+            <Menu.Item key={item.name}>
+                {({ active }) => (
+                    item.type === 'link' ? (
+                        <Link
+                            to={item.href}
+                            className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700'
+                            )}
+                        >
+                            {item.name}
+                        </Link>
+                    ) : (
+                        <a
+                            href={item.href}
+                            className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700'
+                            )}
+                        >
+                            {item.name}
+                        </a>
+                    )
                 )}
-              >
-                {item.name}
-              </a>
-            )}
-          </Menu.Item>
+            </Menu.Item>
         ))}
       </Menu.Items>
     </Transition>

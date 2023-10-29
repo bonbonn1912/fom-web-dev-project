@@ -1,7 +1,7 @@
 // @ts-ignore
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, useLocation, Link} from 'react-router-dom';
 // @ts-ignore
-import { Fragment, useEffect, useState } from 'react'
+import {Fragment, Suspense, useEffect, useState} from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 // @ts-ignore
 import {
@@ -33,6 +33,7 @@ const Equipment = lazy(() => import("../Equipment/Equipment.tsx"));
 import { useTranslation } from 'react-i18next';
 import { initLanguage } from '../../helper/i18n';
 import { useUser } from "../../Context/UserContext.tsx";
+import LoadingSpinner from "../../components/LoadingSpinner.tsx";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -132,7 +133,7 @@ const Dashboard = () => {
                       </button>
                     </div>
                   </Transition.Child>
-                  {/* Sidebar component, swap this element with another sidebar if you like */}
+                  {/*  Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex flex-col px-6 pb-4 overflow-y-auto bg-white grow gap-y-5">
                     <div className="flex items-center h-16 shrink-0">
                       <img
@@ -147,8 +148,8 @@ const Dashboard = () => {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                <Link onClick={() => setSidebarOpen(false)}
+                                  to={item.href}
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-50 text-indigo-600'
@@ -164,7 +165,7 @@ const Dashboard = () => {
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
@@ -196,8 +197,7 @@ const Dashboard = () => {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item, index) => (
                       <li key={item.name} onClick={() =>{handleNavClick(index)}}>
-                        <a
-                          href={item.href}
+                        <Link to={item.href}
                           className={classNames(
                             item.current
                               ? 'bg-gray-50 text-indigo-600'
@@ -213,7 +213,7 @@ const Dashboard = () => {
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -255,6 +255,7 @@ const Dashboard = () => {
           </div>
           <main className="py-2">
             <div className="px-4 sm:px-6 lg:px-8">
+              <Suspense fallback={<LoadingSpinner callFrom={"Dashboard Supsense"} height={50} width={50}/>}>
               <Routes>
                 <Route path="/" element={<HomeScreen/>}/>
                 <Route path="/workouts" element={ <Workout/>}/>
@@ -262,6 +263,7 @@ const Dashboard = () => {
                 <Route path="/equip" element={<Equipment />}/>
                 <Route path="/profile/*" element={<Profile />}/>
               </Routes>
+              </Suspense>
                 </div>
           </main>
         </div>

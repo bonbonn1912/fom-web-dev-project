@@ -5,6 +5,8 @@ import LineChart from "./LineChart.tsx";
 import Map from "./Map.tsx";
 import Donut from "./DonutChart.tsx";
 import RedModal from "../../components/RedMoal.tsx";
+import {authenticate} from "../Auth/authContext.tsx";
+import pako from "pako";
 
 
 const ModalTile = "Delete Workout";
@@ -31,8 +33,13 @@ const DetailedWorkout = () => {
         const metadata = await metaRepsonse.json();
         setWorkoutTitle(metadata.name)
         const data = await response.json();
-
-        const streams = data[1];
+        const start = new Date();
+        const compressedBuffer = Uint8Array.from(atob(data[1]), c => c.charCodeAt(0));
+        const decompressedBuffer = pako.inflate(compressedBuffer);
+        const text = new TextDecoder().decode(decompressedBuffer);
+        const streams = JSON.parse(text);
+        const end = new Date();
+        console.log("Time to decompress: " + (end.getTime() - start.getTime()) + "ms");
 
         const totalTime = data[0][0].elapsed_time as number;
 
@@ -61,8 +68,9 @@ const DetailedWorkout = () => {
     }
 
     useEffect(() => {
-
-        getWorkoutData();
+        authenticate().then(() => {
+            getWorkoutData();
+        });
     }, []);
 
     const deleteHandler = async (del: boolean) =>{
@@ -80,7 +88,7 @@ const DetailedWorkout = () => {
     }
     if(isLoading) {
         return (
-           <LoadingSpinner height={100}  width={100}/>
+           <LoadingSpinner callFrom={"detailedWorkout"} height={100}  width={100}/>
         )
     }else{
         return (

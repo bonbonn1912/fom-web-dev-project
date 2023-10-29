@@ -4,6 +4,8 @@ import { IParts} from "../../Types/Parts.tsx";
 import {BarsArrowUpIcon, ChevronDownIcon, MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 import ListItem from "./ListItem.tsx";
 import LoadingSpinner from "../../components/LoadingSpinner.tsx";
+import {authenticate} from "../Auth/authContext.tsx";
+
 
 
 const Equipment = () => {
@@ -32,7 +34,9 @@ const Equipment = () => {
     }
 
     useEffect(() => {
-        getParts();
+        authenticate().then(() => {
+            getParts();
+        });
     }, []);
 
     const addPart = async (newParts: IParts | null) => {
@@ -143,7 +147,7 @@ const Equipment = () => {
         </div>
             <PartsInput display={showPartsInput} onSubmitOrCancel={addPart}/>
             {
-                isLoading ? <LoadingSpinner width={50} height={50}/> :
+                isLoading ? <LoadingSpinner callFrom="Equipment" width={50} height={50}/> :
                 displayParts.map((part, index) => (
                 <ListItem part={part} key={index} listIndex={index} deleteHandler={deletePart} changeStatusHandler={updatePart}/>
          ))

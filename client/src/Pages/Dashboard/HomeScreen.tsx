@@ -9,6 +9,8 @@ import {FaWeightScale} from "react-icons/fa6";
 import {ImPowerCord} from "react-icons/im";
 import {FaHeartbeat} from "react-icons/fa";
 import {GiHeartBeats} from "react-icons/gi";
+import { authenticate} from "../Auth/authContext.tsx";
+
 const HomeScreen = () =>{
     const [isLoading, setIsLoading] = useState(true);
     const [ftpPerKG, setFtpPerKG] = useState<number[]>([0]);
@@ -26,7 +28,9 @@ const HomeScreen = () =>{
     const [restingHeartRate, setRestingHeartRate] = useState<number>(0);
     const [maxHeartRate, setMaxHeartRate] = useState<number>(0);
     useEffect(() => {
-        getExtendedUserInfo();
+        authenticate().then(() => {
+            getExtendedUserInfo()
+        })
     }, []);
 
     const getExtendedUserInfo = async () => {
@@ -53,7 +57,7 @@ const HomeScreen = () =>{
     }
 
 
-    if(isLoading) return(<LoadingSpinner width={500} height={500}/>)
+    if(isLoading) return(<LoadingSpinner callFrom={"HomeScreen"} width={500} height={500}/>)
 
     return(
         <div className="grid grid-cols-1 md:grid-cols-3">

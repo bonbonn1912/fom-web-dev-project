@@ -6,6 +6,8 @@ import { TbBrandZwift } from 'react-icons/tb';
 import Map from './Map.tsx';
 import 'leaflet/dist/leaflet.css';
 import {convertTimestamp} from "../../helper/time.ts";
+import {Link} from "react-router-dom";
+import {authenticate} from "../Auth/authContext.tsx";
 
 const DemoActions = [
     {
@@ -52,7 +54,9 @@ const Workout = () => {
     }
 
     useEffect(() => {
-        initWorkoutArray()
+        authenticate().then(() => {
+            initWorkoutArray();
+        });
     }, []);
 
     const forward = (id: string) =>{
@@ -123,7 +127,7 @@ const Workout = () => {
                             </div>
                         </div>
                         <div className="block sm:hidden">
-                        <a href={`/dashboard/workouts/${action.activity}`}>
+                        <Link to={`/dashboard/workouts/${action.activity}`}>
                         <span className="absolute right-6 top-6 text-gray-300 group-hover:text-gray-400" aria-hidden="true">
 
                             <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -131,7 +135,7 @@ const Workout = () => {
                             </svg>
 
                         </span>
-                        </a>
+                        </Link>
                         </div>
                     </div>
                 ))}

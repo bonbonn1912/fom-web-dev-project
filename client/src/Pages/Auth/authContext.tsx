@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import authUser from "../../Types/user";
 import SetupUser from "../SetupUser/SetupUser";
+import {redirect} from "react-router-dom";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -40,19 +41,18 @@ const AuthProvider = (props: props) => {
         setAuthUser(user);
         setIsLoading(false);
       }
-    }; 
-
+    };
     checkAuth();
   }, []);   
   if (isLoading) {
-    return <LoadingSpinner width={64} height={64}/>;
+    return <LoadingSpinner callFrom={"authConext"} width={64} height={64}/>;
   } 
-  if(!isLoading && authUser == undefined) { 
+  if(!isLoading && authUser == undefined) {
     return (
       <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
         {props.children}
       </AuthContext.Provider>
-    ); 
+    );
   }
   if(!isLoading && authUser != undefined) {
     if(authUser.setup === false) {
@@ -75,4 +75,17 @@ const useAuth = () => {
   return context;
 };
 
-export { AuthProvider, useAuth};
+const authenticate = async () =>{
+    const response = await fetch("/auth/status"); // Replace with your actual API endpoint
+    const status = await response.json();
+    return new Promise((resolve, reject) => {
+        if(status.auth === false) {
+            window.location.href = "/";
+            reject(false);
+        }else {
+            resolve(true);
+        }
+    });
+}
+
+export { AuthProvider, useAuth, authenticate};

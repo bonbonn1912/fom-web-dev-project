@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { useLocation} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useLocation} from "react-router-dom";
 
 //@ts-ignore
 import {
@@ -33,6 +33,8 @@ const Profile = () => {
     ];
     const [profile, setProfile] = useState(true)
     const [navigation, setNavigation] = useState(secondaryNavigation)
+
+
     const handleSwitch = (index: number) =>{
         const newNavigation = navigation.map((item, i) => {
             if (i === index) {
@@ -59,12 +61,12 @@ const Profile = () => {
                 >
                   {navigation.map((item, index) => (
                     <li key={item.name}>
-                      <a href={item.href}
+                      <Link to={item.href}
                         onClick={() => handleSwitch(index)}
                         className={`${item.current ? "text-indigo-400" : ""} cursor-pointer`}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
