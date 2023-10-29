@@ -4,11 +4,12 @@ import {useEffect} from "react";
 interface LoadingSpinnerProps {
   width: number;
   height: number;
+  callFrom: string;
 }
 
-const LoadingSpinner = ({ width, height }: LoadingSpinnerProps) => {
+const LoadingSpinner = ({ width, height, callFrom }: LoadingSpinnerProps) => {
     useEffect(() => {
-      // console.log("LoadingSpinner.tsx wurde geladen");
+      // console.log("LoadingSpinner.tsx wurde von " + callFrom + " aufgerufen.");
     }, []);
   return (
     <div className="flex items-center justify-center h-screen p-10">

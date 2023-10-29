@@ -7,6 +7,7 @@ import Map from './Map.tsx';
 import 'leaflet/dist/leaflet.css';
 import {convertTimestamp} from "../../helper/time.ts";
 import {Link} from "react-router-dom";
+import {authenticate} from "../Auth/authContext.tsx";
 
 const DemoActions = [
     {
@@ -53,7 +54,9 @@ const Workout = () => {
     }
 
     useEffect(() => {
-        initWorkoutArray()
+        authenticate().then(() => {
+            initWorkoutArray();
+        });
     }, []);
 
     const forward = (id: string) =>{

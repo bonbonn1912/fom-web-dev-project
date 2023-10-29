@@ -45,7 +45,7 @@ const AuthProvider = (props: props) => {
     checkAuth();
   }, []);   
   if (isLoading) {
-    return <LoadingSpinner width={64} height={64}/>;
+    return <LoadingSpinner callFrom={"authConext"} width={64} height={64}/>;
   } 
   if(!isLoading && authUser == undefined) {
     return (
@@ -75,13 +75,17 @@ const useAuth = () => {
   return context;
 };
 
-const authentice = async () =>{
+const authenticate = async () =>{
     const response = await fetch("/auth/status"); // Replace with your actual API endpoint
-    if(response.status === 200){
-        return true;
-    }else{
-      redirect("/");
-    }
+    const status = await response.json();
+    return new Promise((resolve, reject) => {
+        if(status.auth === false) {
+            window.location.href = "/";
+            reject(false);
+        }else {
+            resolve(true);
+        }
+    });
 }
 
-export { AuthProvider, useAuth, authentice};
+export { AuthProvider, useAuth, authenticate};

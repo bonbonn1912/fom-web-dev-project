@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {Link, useLocation} from "react-router-dom";
 
 //@ts-ignore
@@ -33,6 +33,8 @@ const Profile = () => {
     ];
     const [profile, setProfile] = useState(true)
     const [navigation, setNavigation] = useState(secondaryNavigation)
+
+
     const handleSwitch = (index: number) =>{
         const newNavigation = navigation.map((item, i) => {
             if (i === index) {

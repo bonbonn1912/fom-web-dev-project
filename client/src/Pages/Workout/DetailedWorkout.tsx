@@ -5,6 +5,7 @@ import LineChart from "./LineChart.tsx";
 import Map from "./Map.tsx";
 import Donut from "./DonutChart.tsx";
 import RedModal from "../../components/RedMoal.tsx";
+import {authenticate} from "../Auth/authContext.tsx";
 
 
 const ModalTile = "Delete Workout";
@@ -61,8 +62,9 @@ const DetailedWorkout = () => {
     }
 
     useEffect(() => {
-
-        getWorkoutData();
+        authenticate().then(() => {
+            getWorkoutData();
+        });
     }, []);
 
     const deleteHandler = async (del: boolean) =>{
@@ -80,7 +82,7 @@ const DetailedWorkout = () => {
     }
     if(isLoading) {
         return (
-           <LoadingSpinner height={100}  width={100}/>
+           <LoadingSpinner callFrom={"detailedWorkout"} height={100}  width={100}/>
         )
     }else{
         return (

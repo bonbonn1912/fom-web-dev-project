@@ -3,6 +3,7 @@ import { MinusIcon } from '@heroicons/react/20/solid'
 import {useEffect, useState} from "react";
 import Strava from "../../components/fields/Strava.tsx";
 import { useTranslation} from "react-i18next";
+import {authenticate} from "../Auth/authContext.tsx";
 
 
 interface IConnection {
@@ -44,7 +45,9 @@ const Connection = () => {
 
   }
   useEffect(() => {
-    getStravaInfo()
+    authenticate().then(() => {
+        getStravaInfo();
+    });
   }, []);
 
   return (

@@ -1,6 +1,7 @@
 import {useUser} from "../../Context/UserContext.tsx";
 import {useEffect, useState} from "react";
 import LoadingSpinner from "../../components/LoadingSpinner.tsx";
+import {authenticate} from "../Auth/authContext.tsx";
 
 const Settings = () => {
   const {user} = useUser();
@@ -33,7 +34,9 @@ const Settings = () => {
   }
 
   useEffect(() => {
-    fetchUserData();
+    authenticate().then(() => {
+        fetchUserData();
+    })
   }, []);
   const handleChange = (e: any) => {
     const {name, value} = e.target;
@@ -56,7 +59,7 @@ if (response.status === 200) {
 }
 
   }
-  if(isLoading) return <LoadingSpinner width={500} height={500}/>
+  if(isLoading) return <LoadingSpinner callFrom={"Settings"} width={500} height={500}/>
   else{
     return (
         <div className="divide-y divide-gray/5">

@@ -255,7 +255,7 @@ const Dashboard = () => {
           </div>
           <main className="py-2">
             <div className="px-4 sm:px-6 lg:px-8">
-              <Suspense fallback={<LoadingSpinner height={50} width={50}/>}>
+              <Suspense fallback={<LoadingSpinner callFrom={"Dashboard Supsense"} height={50} width={50}/>}>
               <Routes>
                 <Route path="/" element={<HomeScreen/>}/>
                 <Route path="/workouts" element={ <Workout/>}/>
