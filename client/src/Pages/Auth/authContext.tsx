@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import authUser from "../../Types/user";
 import SetupUser from "../SetupUser/SetupUser";
+import {redirect} from "react-router-dom";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -40,19 +41,18 @@ const AuthProvider = (props: props) => {
         setAuthUser(user);
         setIsLoading(false);
       }
-    }; 
-
+    };
     checkAuth();
   }, []);   
   if (isLoading) {
     return <LoadingSpinner width={64} height={64}/>;
   } 
-  if(!isLoading && authUser == undefined) { 
+  if(!isLoading && authUser == undefined) {
     return (
       <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
         {props.children}
       </AuthContext.Provider>
-    ); 
+    );
   }
   if(!isLoading && authUser != undefined) {
     if(authUser.setup === false) {
@@ -75,4 +75,13 @@ const useAuth = () => {
   return context;
 };
 
-export { AuthProvider, useAuth};
+const authentice = async () =>{
+    const response = await fetch("/auth/status"); // Replace with your actual API endpoint
+    if(response.status === 200){
+        return true;
+    }else{
+      redirect("/");
+    }
+}
+
+export { AuthProvider, useAuth, authentice};

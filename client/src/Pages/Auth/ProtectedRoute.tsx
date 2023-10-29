@@ -13,8 +13,12 @@ const ProtectedWrapper: React.FC<ProtectedWrapperProps> = ({ authElement, altEle
  /* if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   } */
-
-  return isAuthenticated ? authElement : altElement;
+  if(isAuthenticated){
+    return authElement;
+  }else{
+    window.history.replaceState(null, "", "/");
+    return altElement;
+  }
 };
 
 export default ProtectedWrapper;

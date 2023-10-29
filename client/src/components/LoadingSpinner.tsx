@@ -1,4 +1,5 @@
 import bicycle from "../assets/bicycle.png";
+import {useEffect} from "react";
 
 interface LoadingSpinnerProps {
   width: number;
@@ -6,6 +7,9 @@ interface LoadingSpinnerProps {
 }
 
 const LoadingSpinner = ({ width, height }: LoadingSpinnerProps) => {
+    useEffect(() => {
+      // console.log("LoadingSpinner.tsx wurde geladen");
+    }, []);
   return (
     <div className="flex items-center justify-center h-screen p-10">
       <div

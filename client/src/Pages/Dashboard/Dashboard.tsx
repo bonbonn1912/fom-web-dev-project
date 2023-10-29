@@ -133,7 +133,7 @@ const Dashboard = () => {
                       </button>
                     </div>
                   </Transition.Child>
-                  {/* Sidebar component, swap this element with another sidebar if you like */}
+                  {/*  Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex flex-col px-6 pb-4 overflow-y-auto bg-white grow gap-y-5">
                     <div className="flex items-center h-16 shrink-0">
                       <img

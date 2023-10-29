@@ -2,9 +2,9 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-     Link,
+    Navigate,
 } from "react-router-dom";
-import { lazy} from "react";
+import {lazy, Suspense} from "react";
 import "./App.css"; // Stile können mit TailwindCSS-Klassen angepasst werden
 import Login from "./Pages/LandingPage/Login";
 import Register from "./Pages/LandingPage/Register";
@@ -21,12 +21,13 @@ const App = () => {
     <AuthProvider>
         <UserProvider>
       <Router>
+        <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route
             path="/"
             element={
               <ProtectedWrapper
-                authElement={<Link to="/dashboard" replace />}
+                  authElement={<Navigate to="/dashboard" replace />}
                 altElement={<Login/>}
               />
             }
@@ -37,12 +38,13 @@ const App = () => {
             element={
               <ProtectedWrapper
                 authElement={<Dashboard />}
-                altElement={<Login/>}
+                altElement={<Navigate to="/" replace />}
               />
             }
           />
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
+        </Suspense>
       </Router>
         </UserProvider>
     </AuthProvider>
