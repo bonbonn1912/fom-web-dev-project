@@ -8,7 +8,7 @@ interface IRecordProps {
 }
 
 const Record = ({device,characteristic}: IRecordProps) =>{
-    const [heartRates, setHeartRates] = useState<number[]>(new Array(60).fill(0));
+    const [heartRates, setHeartRates] = useState<number[]>([]);
     const [seconds, setSeconds] = useState(new Array(60).fill(0));
     const [counter, setCounter] = useState(0);
     const [heartRate, setHeartRate] = useState(0);

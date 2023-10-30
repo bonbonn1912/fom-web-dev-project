@@ -50,9 +50,8 @@ const HeartRateChart = ({heartRate, seconds} : HeartRateChartProps) => {
                 stack: "activity",
                 offset: true,
                 labels:seconds,
-                  min: Math.max(Math.min(...heartRate)-10,30),
-
-                max: Math.max(...heartRate)+10,
+                min: Math.max(Math.ceil(Math.min(...heartRate) / 10) * 10-20,0),
+                max: Math.ceil(Math.max(...heartRate) / 10) * 10+10,
                 cubicInterpolationMode: 'monotone',
                 tension: 1,
 
