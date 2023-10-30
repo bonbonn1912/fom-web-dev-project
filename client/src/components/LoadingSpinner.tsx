@@ -12,7 +12,7 @@ const LoadingSpinner = ({ width, height, callFrom }: LoadingSpinnerProps) => {
       // console.log("LoadingSpinner.tsx wurde von " + callFrom + " aufgerufen.");
     }, []);
   return (
-    <div className="flex items-center justify-center h-screen p-10">
+    <div id={callFrom} className="flex items-center justify-center h-screen p-10">
       <div
         className={`md:w-[${width/2}px] w-[${width/4}px] h-[${
           height/4
