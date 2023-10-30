@@ -36,8 +36,6 @@ const  SetBoundsRectangles = ({decoded, controllables} : SetBoundsProps) => {
             map.setZoom(16);
         }
         map.scrollWheelZoom.disable();
-
-
         map.attributionControl.setPrefix(false);
         let polyLine = L.polyline(decoded as unknown as [number,number][], {color: 'red'}).addTo(map);
         map.fitBounds(polyLine.getBounds());

@@ -61,23 +61,20 @@ const Workout = () => {
     }, []);
 
     const forward = (id: string) =>{
-        if(window.innerWidth > 640) { // 640px ist der Standardbruchpunkt für "sm" in Tailwind CSS
+        if(window.innerWidth > 640) {
             navigate(`/dashboard/workouts/${id}`);
         }
     }
 
-    if (loading) {
-        return <div>loading</div>
-    } else {
-        return (
-            // only return this if isLoading is false
-            <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 md:ml-10 md:mr-10">
-                {actions.map((action, actionIdx) => (
-                    <div
-                        key={action.title}
-                        onClick={() => forward(action.activity)}
-                        className={classNames(
-                            actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '',
+    if (loading)return <div>loading</div>
+
+    return (
+        <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 md:ml-10 md:mr-10">
+            {actions.map((action, actionIdx) => (
+                <div
+                    key={action.title}
+                    onClick={() => forward(action.activity)}
+                    className={classNames(actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '',
                             actionIdx === 1 ? 'sm:rounded-tr-lg' : '',
                             actionIdx === actions.length - 2 ? 'sm:rounded-bl-lg' : '',
                             actionIdx === actions.length - 1 ? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none' : '',
@@ -142,7 +139,5 @@ const Workout = () => {
                 ))}
             </div>
         )
-    }
-
 }
 export default Workout
