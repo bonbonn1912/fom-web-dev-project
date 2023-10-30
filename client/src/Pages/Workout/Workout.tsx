@@ -6,7 +6,7 @@ import { TbBrandZwift } from 'react-icons/tb';
 import Map from './Map.tsx';
 import 'leaflet/dist/leaflet.css';
 import {convertTimestamp} from "../../helper/time.ts";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {authenticate} from "../Auth/authContext.tsx";
 
 const DemoActions = [
@@ -35,6 +35,7 @@ function classNames(...classes: any) {
 const Workout = () => {
     const [actions, setActions] = useState(DemoActions);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
     const initWorkoutArray = async () => {
         const workouts = await getWorkoutArray();
         const newWorkouts = workouts.map((singleWorkout: any) => {
@@ -61,7 +62,7 @@ const Workout = () => {
 
     const forward = (id: string) =>{
         if(window.innerWidth > 640) { // 640px ist der Standardbruchpunkt für "sm" in Tailwind CSS
-            window.location.href = `/dashboard/workouts/${id}`;
+            navigate(`/dashboard/workouts/${id}`);
         }
     }
 

@@ -15,6 +15,7 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+    PlayIcon
 } from '@heroicons/react/24/outline'
 // @ts-ignore
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
@@ -25,6 +26,7 @@ const Workout = lazy(() => import("../Workout/Workout.tsx"));
 const Profile = lazy(() => import("../Profile/Profile.tsx"));
 const ProfileDropDown = lazy(() => import("./ProfileDropDown.tsx"));
 const LanSettings = lazy(() => import("./LanSettings.tsx"));
+const Training = lazy(() => import("../Training/Training.tsx"));
 
 // @ts-ignore
 const DetailedWorkout = lazy(() => import("../Workout/DetailedWorkout.tsx"));
@@ -65,6 +67,7 @@ const Dashboard = () => {
      setNavigation([
     { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard/home'},
     { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
+    { name: "Start Training", href: '/dashboard/training', icon: PlayIcon, current: location.pathname.startsWith('/dashboard/training')},
     { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
     { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
     { name: t("language_dashboard_profile"), href: '/dashboard/profile/account', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
@@ -260,6 +263,7 @@ const Dashboard = () => {
                 <Route path="/" element={<HomeScreen/>}/>
                 <Route path="/workouts" element={ <Workout/>}/>
                 <Route path="/workouts/:id" element={<DetailedWorkout />} />
+                <Route path="/training" element={<Training />}/>
                 <Route path="/equip" element={<Equipment />}/>
                 <Route path="/profile/*" element={<Profile />}/>
               </Routes>

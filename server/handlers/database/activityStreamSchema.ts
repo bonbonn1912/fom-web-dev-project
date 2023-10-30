@@ -44,7 +44,7 @@ const getBasicActivityStreamDataForActivityId = async (accountId: number, activi
     console.log("Account id " + accountId + " activity id: " + activityId);
     console.log(parseInt(activityId));
     try{
-        return await ActivityStreamModel.find({accountId: accountId, activity: parseInt(activityId)});
+        return await ActivityStreamModel.findOne({accountId: accountId, activity: parseInt(activityId)});
     }catch(e){
         return null;
     }

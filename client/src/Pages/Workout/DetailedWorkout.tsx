@@ -6,8 +6,8 @@ import Map from "./Map.tsx";
 import Donut from "./DonutChart.tsx";
 import RedModal from "../../components/RedMoal.tsx";
 import {authenticate} from "../Auth/authContext.tsx";
-import pako from "pako";
-
+import {useQuery} from "react-query";
+import { getDetailedWorkoutData} from "../../Queries/Queries.ts";
 
 const ModalTile = "Delete Workout";
 const ModalDesc = "Are you sure you want to delete this workout? This action cannot be undone.";
@@ -15,7 +15,7 @@ const ModalButtonText = "Delete";
 
 const DetailedWorkout = () => {
     const [workoutTitle, setWorkoutTitle] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [ isLoading, setIsLoading] = useState(true);
     const [ heartRate, setHeartRate] = useState([]);
     const [ speed, setSpeed] = useState([]);
     const [ cadence, setCadence] = useState([]);
@@ -26,29 +26,27 @@ const DetailedWorkout = () => {
     const [ timeBelowFtp, setTimeBelowFtp] = useState(0);
     const {id} = useParams<{id: string}>();
     const [modalOpen, setModalOpen] = useState(false);
+    const { data, error, isLoading: isQueryLoading } = useQuery({
+        queryKey: ['workout', id],
+        // @ts-ignore
+        queryFn: () => getDetailedWorkoutData(id),
+        onSuccess: (data) => {
+            console.log("done fetching")
+           const { activity, totalTime, polyline, name } = data;
+            setStreamData(activity, totalTime, polyline, name);
+        },
+        staleTime: 1000 * 60 * 5, // 5 minutes
+    })
 
-    const getWorkoutData = async () => {
-        const response = await fetch(`/api/workout/detailed-summary?id=${id}`);
-        const metaRepsonse = await fetch(`/api/workout/metadata?id=${id}`);
-        const metadata = await metaRepsonse.json();
-        setWorkoutTitle(metadata.name)
-        const data = await response.json();
-        const start = new Date();
-        const compressedBuffer = Uint8Array.from(atob(data[1]), c => c.charCodeAt(0));
-        const decompressedBuffer = pako.inflate(compressedBuffer);
-        const text = new TextDecoder().decode(decompressedBuffer);
-        const streams = JSON.parse(text);
-        const end = new Date();
-        console.log("Time to decompress: " + (end.getTime() - start.getTime()) + "ms");
 
-        const totalTime = data[0][0].elapsed_time as number;
-
-        setTimeAboveFtp(data[1][0].timeAboveFtp as number);
-        setTimeBelowFtp(totalTime-data[1][0].timeAboveFtp as number)
-        setMap_polyline(data[0][0].map_summary_polyline);
-        streams[0].series.map((stream: any) => {
+    const setStreamData = (activity: any, totalTime: any, polyline: any, name: any) =>{
+        setWorkoutTitle(name)
+        setTimeAboveFtp(activity.timeAboveFtp as number);
+        setTimeBelowFtp(totalTime - activity.timeAboveFtp as number)
+        setMap_polyline(polyline);
+        activity.series.map((stream: any) => {
             if(stream.type === "watts"){
-               setPower(stream.data);
+                setPower(stream.data);
             }
             if(stream.type === "velocity_smooth"){
                 setSpeed(stream.data);
@@ -63,13 +61,15 @@ const DetailedWorkout = () => {
                 setAltitude(stream.data);
             }
         });
-
         setIsLoading(false);
     }
 
     useEffect(() => {
         authenticate().then(() => {
-            getWorkoutData();
+        if(!isQueryLoading){
+            const { activity, totalTime, polyline, name } = data as any;
+            setStreamData(activity, totalTime, polyline, name);
+        }
         });
     }, []);
 
@@ -85,6 +85,9 @@ const DetailedWorkout = () => {
 
         }
         setModalOpen(!modalOpen);
+    }
+    if(error){
+        return <div>error</div>
     }
     if(isLoading) {
         return (

@@ -12,14 +12,17 @@ const NotFound = lazy(() => import("./Pages/NotFound/404"));
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 import { AuthProvider } from "./Pages/Auth/authContext";
 import { UserProvider} from "./Context/UserContext.tsx";
-
+import { QueryClient, QueryClientProvider} from "react-query";
 import ProtectedWrapper from "./Pages/Auth/ProtectedRoute";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   // @ts-ignore
     return (
     <AuthProvider>
         <UserProvider>
+            <QueryClientProvider client={queryClient}>
       <Router>
         <Suspense fallback={<div>Loading...</div>}>
         <Routes>
@@ -46,6 +49,7 @@ const App = () => {
         </Routes>
         </Suspense>
       </Router>
+            </QueryClientProvider>
         </UserProvider>
     </AuthProvider>
   );

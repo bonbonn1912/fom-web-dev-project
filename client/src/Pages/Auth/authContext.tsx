@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import authUser from "../../Types/user";
 import SetupUser from "../SetupUser/SetupUser";
-import {redirect} from "react-router-dom";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
