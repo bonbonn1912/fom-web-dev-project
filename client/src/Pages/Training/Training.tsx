@@ -4,7 +4,7 @@ const Training = () => {
     const [heartRate, setHeartRate] = useState(0);
     const [device, setDevice] = useState<BluetoothDevice | null>(null);
     const [characteristic, setCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | null>(null);
-
+    console.log(device)
     const connectToBluetoothDevice = async () => {
         try {
             const device = await navigator.bluetooth.requestDevice({
@@ -26,8 +26,6 @@ const Training = () => {
                 setHeartRate(event.target.value.getUint8(1));
             });
 
-            // Save device and characteristic in state
-            setDevice(device);
             setCharacteristic(characteristic);
         } catch (error) {
             console.error('Failed to connect:', error);
