@@ -1,14 +1,17 @@
-import { useParams} from "react-router-dom";
-import {useEffect, useReducer, useState} from "react";
-import LoadingSpinner from "../../components/LoadingSpinner.tsx";
-import LineChart from "./LineChart.tsx";
-import Map from "./Map.tsx";
-import Donut from "./DonutChart.tsx";
-import RedModal from "../../components/RedMoal.tsx";
-import {authenticate} from "../Auth/authContext.tsx";
-import {useQuery} from "react-query";
-import { getDetailedWorkoutData} from "../../Queries/Queries.ts";
-import { WorkoutReducer, initialState} from "../../Reducer/Workout.tsx";
+import {
+    LoadingSpinner,
+    LineChart,
+    Map,
+    Donut,
+    RedModal,
+    authenticate,
+    getDetailedWorkoutData,
+    WorkoutReducer,
+    initialState }
+from './index.ts';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { useEffect, useReducer, useState } from 'react';
 
 
 const ModalTile = "Delete Workout";
@@ -22,6 +25,7 @@ const DetailedWorkout = () => {
     const [state, dispatch] = useReducer(WorkoutReducer, initialState);
 
     const setData = (data: any) =>{
+        // @ts-ignore
         dispatch({type: 'SET_WORKOUT_DATA', payload: data});
         setIsLoading(false);
     }

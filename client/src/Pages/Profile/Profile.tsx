@@ -17,7 +17,7 @@ import { Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import Settings from "./Settings";
 import Connection from "./Connection";
 import {Route, Routes} from "react-router-dom";
-//import Workout from "../Workout/Workout.tsx";
+//import Workout from "../Workout/Workout.ts";
 
 
 /*
