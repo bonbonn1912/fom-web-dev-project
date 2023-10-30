@@ -33,20 +33,15 @@ const DetailedWorkout = () => {
         const metadata = await metaRepsonse.json();
         setWorkoutTitle(metadata.name)
         const data = await response.json();
-        const start = new Date();
         const compressedBuffer = Uint8Array.from(atob(data[1]), c => c.charCodeAt(0));
         const decompressedBuffer = pako.inflate(compressedBuffer);
         const text = new TextDecoder().decode(decompressedBuffer);
-        const streams = JSON.parse(text);
-        const end = new Date();
-        console.log("Time to decompress: " + (end.getTime() - start.getTime()) + "ms");
-
+        const activity = JSON.parse(text);
         const totalTime = data[0][0].elapsed_time as number;
-
-        setTimeAboveFtp(data[1][0].timeAboveFtp as number);
-        setTimeBelowFtp(totalTime-data[1][0].timeAboveFtp as number)
+        setTimeAboveFtp(activity.timeAboveFtp as number);
+        setTimeBelowFtp(totalTime - activity.timeAboveFtp as number)
         setMap_polyline(data[0][0].map_summary_polyline);
-        streams[0].series.map((stream: any) => {
+        activity.series.map((stream: any) => {
             if(stream.type === "watts"){
                setPower(stream.data);
             }
