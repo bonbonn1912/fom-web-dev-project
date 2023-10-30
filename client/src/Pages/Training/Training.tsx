@@ -1,51 +1,42 @@
-import { useState} from 'react';
+import { verifiyBrowser} from "../../helper/verifyBrowser.ts";
+import {useState} from "react";
+import './pulsate.css'
+import Connect from "./Connect.tsx";
+import Record from "./Record.tsx";
 
-const Training = () => {
-    const [heartRate, setHeartRate] = useState(0);
+
+
+const Trainig = () =>{
     const [device, setDevice] = useState<BluetoothDevice | null>(null);
     const [characteristic, setCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | null>(null);
-    console.log(device)
-    const connectToBluetoothDevice = async () => {
-        try {
-            const device = await navigator.bluetooth.requestDevice({
-                filters: [{ services: ['heart_rate'] }]
-            });
-            device.addEventListener('gattserverdisconnected', () => {
-                console.log('Device disconnected');
-                setDevice(null);
-                setCharacteristic(null);
-            });
-            // @ts-ignore
-            const server = await device.gatt.connect();
-            const service = await server.getPrimaryService('heart_rate');
-            const characteristic = await service.getCharacteristic('heart_rate_measurement');
-            await characteristic.startNotifications();
 
-            characteristic.addEventListener('characteristicvaluechanged', (event) => {
-                // @ts-ignore
-                setHeartRate(event.target.value.getUint8(1));
-            });
+    const browser = verifiyBrowser();
+    if(!browser) return <div>Your Browser is Not supported</div>
 
-            setCharacteristic(characteristic);
-        } catch (error) {
-            console.error('Failed to connect:', error);
-        }
-    };
+    const deviceHandler = (device: BluetoothDevice | null, characteristic: BluetoothRemoteGATTCharacteristic | null) => {
+        if(!device || !characteristic) return;
+        setDevice(device);
+        setCharacteristic(characteristic);
+        setScene(1)
+    }
 
-    const disconnectBluetoothDevice = () => {
-        if (characteristic) {
-            characteristic.stopNotifications();
-            characteristic.removeEventListener('characteristicvaluechanged', () => { /* Handler */ });
-        }
-    };
 
-    return (
-        <div>
-            <h1>Heart Rate: {heartRate}</h1>
-            <button onClick={connectToBluetoothDevice}>Connect</button>
-            <button onClick={disconnectBluetoothDevice}>Disconnect</button>
+
+
+    const [scene, setScene] = useState(0);
+
+    if(scene == 0){
+        return <Connect deviceHandler={deviceHandler}/>
+    }
+    if(scene == 1){
+        return <div className="flex flex-col">
+            {/* @ts-ignore */}
+            <Record device={device} characteristic={characteristic}/>
+            <button onClick={() => { setScene(0)}}> Back </button>
         </div>
-    );
-};
+    }
 
-export default Training;
+
+}
+
+export default Trainig

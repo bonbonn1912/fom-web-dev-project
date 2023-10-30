@@ -1,0 +1,28 @@
+@keyframes pulseBg {
+    0% {
+        background-color: #FECACA;
+    }
+    50% {
+        background-color: #F87171;
+    }
+    100% {
+        background-color: #FECACA;
+    }
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.heart{
+    color: #ff2828;
+    animation: heartbeat 1s infinite;
+}
