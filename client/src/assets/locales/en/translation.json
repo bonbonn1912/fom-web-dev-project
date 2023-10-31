@@ -27,5 +27,10 @@
   "language_register_page_sign_up_button": "Sign Up",
   "language_register_page_continue_with": "Or continue with",
   "language_profile_connections_connect_with_strava": "Connect with Strava",
-  "language_profile_connections_connected_with_strava_since": "Connected since: "
+  "language_profile_connections_connected_with_strava_since": "Connected since: ",
+  "language_summary_title": "Your Summary",
+  "language_summary_total_distance": "Total Distance",
+  "language_summary_total_time": "Total Time",
+  "language_summary_total_calories": "Total Calories",
+  "language_summary_avg_speed": "Average Speed"
 }

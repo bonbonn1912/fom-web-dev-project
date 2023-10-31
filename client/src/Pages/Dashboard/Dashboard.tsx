@@ -142,7 +142,7 @@ const Dashboard = () => {
                       <img
                         className="w-auto h-8"
                         src={bicycle}
-                        alt="Your Company"
+                        alt="bicycle_logo"
                       />
                     </div>
                     <nav className="flex flex-col flex-1">

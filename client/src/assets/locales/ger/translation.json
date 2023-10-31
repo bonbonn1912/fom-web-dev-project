@@ -27,5 +27,10 @@
   "language_register_page_sign_up_button": "Registrieren",
   "language_register_page_continue_with": "Oder weiter mit",
   "language_profile_connections_connect_with_strava": "Mit Strava verbinden",
-  "language_profile_connections_connected_with_strava_since": "Verbunden seit: "
+  "language_profile_connections_connected_with_strava_since": "Verbunden seit: ",
+  "language_summary_title": "Ihre Zusammenfassung",
+  "language_summary_total_distance": "Distanz gefahren",
+  "language_summary_total_time": "Zeit",
+  "language_summary_total_calories": "Verbrannte Kalorien",
+  "language_summary_avg_speed": "Durchnittsgeschwindigkeit"
 }
