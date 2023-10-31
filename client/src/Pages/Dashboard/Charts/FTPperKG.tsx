@@ -220,8 +220,9 @@ interface FTPperKGProps {
     values: number[];
     labels: string[];
     gender: 'male' | 'female' | 'other',
+    title: string
 }
-const FTPperKG = ({values, labels, gender}: FTPperKGProps) => {
+const FTPperKG = ({values, labels, gender, title}: FTPperKGProps) => {
     let paddedData = new Array(10).fill(null);
     let startIndex = Math.floor((10 - values.length) / 2);
     for (let i = 0; i < values.length; i++) {
@@ -235,7 +236,7 @@ const FTPperKG = ({values, labels, gender}: FTPperKGProps) => {
     const data = {
         labels: paddedLabels,
         datasets: [{
-            label: 'Your FTP per KG Progress',
+            label: title,
             data: paddedData,
             fill: false,
             borderColor: 'rgb(0, 0, 0)',

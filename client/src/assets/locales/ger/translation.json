@@ -32,5 +32,17 @@
   "language_summary_total_distance": "Distanz gefahren",
   "language_summary_total_time": "Zeit",
   "language_summary_total_calories": "Verbrannte Kalorien",
-  "language_summary_avg_speed": "Durchnittsgeschwindigkeit"
+  "language_summary_avg_speed": "Durchnittsgeschwindigkeit",
+  "language_homescreen_watts_title": "Watt",
+  "language_homescreen_watts_chart_title": "Verlauf der FTP",
+  "language_homescreen_ftp_per_kg_title": "Watt pro kg",
+  "language_homescreen_weight_unit": "kg",
+  "language_homescreen_weight_chart_title": "Gewichtsverlauf",
+  "language_homescreen_weight_title": "Gewicht",
+  "language_homescreen_resting_heartrate_title": "Ruheherzfrequenz",
+  "language_homescreen_resting_heartrate_chart_title": "Verlauf der Ruheherzfrequenz",
+  "language_homescreen_resting_heartrate_unit": "Spm",
+  "language_homescreen_max_heartrate_title": "Maximale Herzfrequenz",
+    "language_homescreen_max_heartrate_chart_title": "Verlauf der maximalen Herzfrequenz",
+  "language_homescreen_max_heartrate_unit": "Spm"
 }
