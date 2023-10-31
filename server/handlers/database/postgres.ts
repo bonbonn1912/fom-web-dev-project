@@ -281,7 +281,7 @@ const updateEquipmentDistance = async (acountId: number, distance: number, activ
                        activity: activity,
                    }
                })
-               console.log(relation);
+              console.log("created relation between equipment and activity");
             });
             resolve(equipment);
         } catch (error) {
