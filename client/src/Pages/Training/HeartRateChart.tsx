@@ -32,7 +32,6 @@ interface HeartRateChartProps {
     seconds: number[];
 }
 const HeartRateChart = ({heartRate, seconds} : HeartRateChartProps) => {
-    console.log(seconds)
     const last60Seconds = seconds.slice(-60);
     const options = {
         maintainAspectRatio: false,

@@ -20,6 +20,21 @@ const Map = ({polyString, width, height, controllables, zIndex} : MapProps) => {
             </MapContainer>
     )
 }
+interface MapForRecordProps {
+    decodedPolyLine: LatLng[];
+    width: string;
+    height: string;
+    controllables: boolean;
+    zIndex: number;
+}
+export const MapForRecord = ({decodedPolyLine, width, height, controllables, zIndex} : MapForRecordProps) => {
+
+    return (
+        <MapContainer style={{height: height, width: width, zIndex: zIndex}}>
+            <SetBoundsRectangles decoded={decodedPolyLine} controllables={controllables}/>
+        </MapContainer>
+    )
+}
 
 interface SetBoundsProps {
     decoded: LatLng[];

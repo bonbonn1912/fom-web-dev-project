@@ -1,8 +1,11 @@
 import { verifiyBrowser} from "../../helper/verifyBrowser.ts";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import './pulsate.css'
 import Connect from "./Connect.tsx";
 import Record from "./Record.tsx";
+import {getCoordinatesAsync} from "../../helper/coordinates.ts";
+import {MapForRecord} from "../Workout/Map.tsx";
+import {LatLng} from "leaflet";
 
 
 
@@ -11,6 +14,9 @@ const Trainig = () =>{
     const [characteristicMap, setCharacteristicMap] = useState<Map<string, BluetoothRemoteGATTCharacteristic> | null>(null);
     const [heartRate, setHeartRate] = useState<number[]>([]);
     const [seconds, setSeconds] = useState<number[]>([]);
+    // @ts-ignore
+    const [coordinates, setCoordinates] = useState<number[][]>();
+    const coordiantesRef= useRef<number[][]>([[50,8]]);
     const browser = verifiyBrowser();
     if(!browser) return <div>Your Browser is Not supported</div>
 
@@ -40,8 +46,16 @@ const Trainig = () =>{
 
     }
 
-    const emitData = (hr: any, sec: any) => {
-        console.log("received data from child prop")
+    const emitData = async (hr: any, sec: any) => {
+       const coordinates = await getCoordinatesAsync();
+       // @ts-ignore
+       const lat = coordinates.coords.latitude ;
+         // @ts-ignore
+         const long = coordinates.coords.longitude;
+       // @ts-ignore
+       // set coordiantes ref
+        console.log(coordiantesRef.current)
+           coordiantesRef.current = [...coordiantesRef.current, [lat, long]];
        setHeartRate(hr);
        setSeconds(sec);
     }
@@ -65,6 +79,8 @@ const Trainig = () =>{
             }
             {/* @ts-ignore */}
             <button onClick={() => { setScene(2)}}> Stop Recording </button>
+            {/* @ts-ignore */}
+            <MapForRecord decodedPolyLine={coordiantesRef.current} width={200} height={100} controllables={true} zIndex={10}/>
         </div>
     }
     if(scene == 2){
@@ -82,6 +98,15 @@ const Trainig = () =>{
                             })
                         }
                    </div>
+                <div className="flex flex-row">
+                    {
+                        coordiantesRef.current?.slice(1).map((cor, index) => {
+                            return <div className="ml-1" key={index}>Lat {cor[0]}; long: {cor[1]}</div>
+                        })
+                    }
+                </div>
+                {/* @ts-ignore */}
+
             </div>
         )
 
