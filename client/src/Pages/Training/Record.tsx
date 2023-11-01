@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import  HeartRateChart from "./HeartRateChart.tsx"
+import {useEffect, useRef, useState} from "react";
+import HeartRateChart from "./HeartRateChart.tsx"
 import {AiFillHeart} from "react-icons/ai";
 
 interface IRecordProps {
@@ -7,35 +7,41 @@ interface IRecordProps {
     characteristic: BluetoothRemoteGATTCharacteristic;
 }
 
+let globalHeartRate = 0;
+
 const Record = ({device,characteristic}: IRecordProps) =>{
-    const [heartRates, setHeartRates] = useState<number[]>(new Array(60).fill(0));
-    const [seconds, setSeconds] = useState<number[]>(new Array(60).fill(0));
+    const secondRef = useRef<number>(0);
+    const secondsRefArray = useRef<number[]>(new Array(60).fill(0));
     const [counter, setCounter] = useState(0);
-    const [heartRate, setHeartRate] = useState(0);
+    const heartRateRef = useRef(0)
+    const heartRatesRef = useRef<number[]>([]);
+
+    const [realHeartRate, setRealHeartRate] = useState<number[]>([]);
+    const [seconds, setSeconds] = useState<number[]>([]);
+
     const [coordinates] = useState<number[][]>([]);
-    let letUpdate = true;
     const initDevice = async () => {
         await characteristic.stopNotifications();
         characteristic.removeEventListener('characteristicvaluechanged', () => { /* Handler */ });
         characteristic.startNotifications().then((charDevice) =>{
-            console.log("add eventlistener")
             charDevice.addEventListener('characteristicvaluechanged', handleNotifications);
     }   )};
     useEffect(() => {
         initDevice();
+        initIntervall();
     }, []);
-    const handleNotifications = async (event: any) => {
-        if(letUpdate){
-            letUpdate = false;
-         //   const coordinates  = await getCoordinatesAsync();
-            let heartRate = event.target.value.getUint8(1);
-            updateHeartRate(heartRate);
-            setHeartRate(heartRate);
+    const initIntervall = () =>{
+        setInterval(() => {
+            updateHeartRate(heartRateRef.current)
+        }, 1000);
+    }
+    console.log("rerender")
 
-            setTimeout(() => {
-                letUpdate = true;
-            }, 4000)
-        }
+    const handleNotifications = async (event: any) => {
+        heartRateRef.current = event.target.value.getUint8(1);
+      //  heartRatesRef.current = [...heartRatesRef.current, heartRate];
+        // @ts-ignore
+     //  setHeartRate;
     }
     /*
     const record = async () => {
@@ -50,17 +56,13 @@ const Record = ({device,characteristic}: IRecordProps) =>{
 
 
     const updateHeartRate =(newRate: number) => {
-        let newArray = [newRate, ...heartRates];
-        console.log(newArray)
-        let newSeconds = [counter, ...seconds];
+        // @ts-ignore
+        heartRatesRef.current = [...heartRatesRef.current, newRate];
+        secondRef.current = secondRef.current + 1;
+        heartRateRef.current = newRate;
+        secondsRefArray.current = [...secondsRefArray.current, secondRef.current];
+        setRealHeartRate([...realHeartRate, newRate])
         setCounter(counter + 1);
-        if (newArray.length > 60) {
-            const nt = newArray.shift();
-            console.log(nt)
-        }
-        setSeconds(newSeconds)
-        setHeartRates(newArray);
-
     };
     const disconnectBluetoothDevice = () => {
         if (characteristic) {
@@ -82,19 +84,15 @@ const Record = ({device,characteristic}: IRecordProps) =>{
                     <div>
                         <AiFillHeart className="heart" size={90}/>
                     </div>
-
                     <div>
-                        {heartRate} bpm
-                    </div>
-                    <div>
-                        {coordinates.length > 0 && coordinates[coordinates.length-1][0]}
+                        {heartRateRef.current} bpm
                     </div>
                 </div>
 
             </div>
             <div className="sm:col-span-2 col-span-full">
             <div className="w-full h-[350px]">
-                <HeartRateChart heartRate={heartRates} seconds={seconds}/>
+              <HeartRateChart heartRate={heartRatesRef.current} seconds={secondsRefArray.current}/>
             </div>
             </div>
         </div>

@@ -32,7 +32,7 @@ interface HeartRateChartProps {
     seconds: number[];
 }
 const HeartRateChart = ({heartRate, seconds} : HeartRateChartProps) => {
-
+    console.log(seconds)
     const last60Seconds = seconds.slice(-60);
     const options = {
         maintainAspectRatio: false,
@@ -84,7 +84,7 @@ const HeartRateChart = ({heartRate, seconds} : HeartRateChartProps) => {
                         y: num,
                         hidden: num === 0  // Setzt hidden: true, wenn der Wert 0 ist
                     }
-                }),
+                }).slice(-60),
                 backgroundColor: "rgba(255,31,31,0.3)",
                 borderColor: "rgb(255,0,0)",
                 pointRadius: 0,
