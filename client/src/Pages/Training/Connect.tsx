@@ -49,6 +49,7 @@ const Connect = ({ deviceHandler} : IConnectProps) =>{
     const [characteristicMap, setCharacteristicMap] = useState<Map<string, BluetoothRemoteGATTCharacteristic>>(new Map());
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     useEffect(() => {
+        console.log(characteristic);
         console.log('useEffect');
     }, []);
 
@@ -104,6 +105,7 @@ const Connect = ({ deviceHandler} : IConnectProps) =>{
             setCharacteristicMap(characteristicMap.set(id, characteristic));
             // @ts-ignore
             setCharacteristic(characteristic);
+
             characteristic?.addEventListener('characteristicvaluechanged', (event) => {
                 // @ts-ignore
                 setHeartRate(event.target.value.getUint8(1));
@@ -168,7 +170,10 @@ const Connect = ({ deviceHandler} : IConnectProps) =>{
             <button
                 disabled={isButtonDisabled}
                 className="bg-blue-400 disabled:bg-blue-200  w-full block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={() => deviceHandler(deviceMap, characteristicMap)}
+                onClick={() => {
+
+                    deviceHandler(deviceMap, characteristicMap)
+                }}
             >
                 Next
             </button>

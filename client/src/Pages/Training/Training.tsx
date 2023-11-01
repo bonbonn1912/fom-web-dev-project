@@ -14,12 +14,29 @@ const Trainig = () =>{
     if(!browser) return <div>Your Browser is Not supported</div>
 
     const deviceHandler = (deviceMap: Map<string, BluetoothDevice> | null, characteristicMap: Map<string, BluetoothRemoteGATTCharacteristic> | null) => {
+        // get permission for coordinates
+        console.log("deviceHandler")
+
         if(!deviceMap || !characteristicMap) return;
         // @ts-ignore
         setDeviceMap(deviceMap);
         // @ts-ignore
         setCharacteristicMap(characteristicMap);
-        setScene(1)
+        navigator.geolocation.getCurrentPosition(
+            () => {
+               setScene(1)
+            },
+            (error) => {
+                // Fehlerbehandlung
+                console.error("Fehler beim Abruf der Geoposition: ", error);
+            },
+            {
+                timeout: 10000,
+                maximumAge: 0,
+                enableHighAccuracy: true,
+            }
+        );
+
     }
 
 
@@ -31,6 +48,7 @@ const Trainig = () =>{
         return <Connect deviceHandler={deviceHandler}/>
     }
     if(scene == 1){
+        console.log("hier")
         return <div className="flex flex-col">
             {
                 deviceMap?.get('heart-rate-monitor') && characteristicMap?.get('heart-rate-monitor') &&

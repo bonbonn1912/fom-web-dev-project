@@ -8,26 +8,59 @@ interface IRecordProps {
 }
 
 const Record = ({device,characteristic}: IRecordProps) =>{
-    const [heartRates, setHeartRates] = useState<number[]>([]);
-    const [seconds, setSeconds] = useState(new Array(60).fill(0));
+    const [heartRates, setHeartRates] = useState<number[]>(new Array(60).fill(0));
+    const [seconds, setSeconds] = useState<number[]>(new Array(60).fill(0));
     const [counter, setCounter] = useState(0);
     const [heartRate, setHeartRate] = useState(0);
-    characteristic.addEventListener('characteristicvaluechanged', (event) => {
-        // @ts-ignore
-        updateHeartRate(event.target.value.getUint8(1));
-        // @ts-ignore
-        setHeartRate(event.target.value.getUint8(1));
-    });
-    const updateHeartRate = (newRate: number) => {
-            const newArray = [...heartRates, newRate];
-            const newSeconds = [...seconds, counter];
-            setCounter(counter + 1);
-            if (newArray.length > 60) {
-                newArray.shift();
-            }
+    const [coordinates] = useState<number[][]>([]);
+    let letUpdate = true;
+    const initDevice = async () => {
+        await characteristic.stopNotifications();
+        characteristic.removeEventListener('characteristicvaluechanged', () => { /* Handler */ });
+        characteristic.startNotifications().then((charDevice) =>{
+            console.log("add eventlistener")
+            charDevice.addEventListener('characteristicvaluechanged', handleNotifications);
+    }   )};
+    useEffect(() => {
+        initDevice();
+    }, []);
+    const handleNotifications = async (event: any) => {
+        if(letUpdate){
+            letUpdate = false;
+         //   const coordinates  = await getCoordinatesAsync();
+            let heartRate = event.target.value.getUint8(1);
+            updateHeartRate(heartRate);
+            setHeartRate(heartRate);
 
-            setSeconds(newSeconds)
-            setHeartRates(newArray);
+            setTimeout(() => {
+                letUpdate = true;
+            }, 4000)
+        }
+    }
+    /*
+    const record = async () => {
+        setInterval(async () => {
+            const coordinates  = await getCoordinatesAsync();
+           console.log(coordinates)
+            console.log(heartRate)
+        }, 2000);
+    } */
+
+
+
+
+    const updateHeartRate =(newRate: number) => {
+        let newArray = [newRate, ...heartRates];
+        console.log(newArray)
+        let newSeconds = [counter, ...seconds];
+        setCounter(counter + 1);
+        if (newArray.length > 60) {
+            const nt = newArray.shift();
+            console.log(nt)
+        }
+        setSeconds(newSeconds)
+        setHeartRates(newArray);
+
     };
     const disconnectBluetoothDevice = () => {
         if (characteristic) {
@@ -52,6 +85,9 @@ const Record = ({device,characteristic}: IRecordProps) =>{
 
                     <div>
                         {heartRate} bpm
+                    </div>
+                    <div>
+                        {coordinates.length > 0 && coordinates[coordinates.length-1][0]}
                     </div>
                 </div>
 
