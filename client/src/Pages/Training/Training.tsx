@@ -7,16 +7,18 @@ import Record from "./Record.tsx";
 
 
 const Trainig = () =>{
-    const [device, setDevice] = useState<BluetoothDevice | null>(null);
-    const [characteristic, setCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | null>(null);
+    const [deviceMap, setDeviceMap] = useState<Map<string, BluetoothDevice> | null>(null);
+    const [characteristicMap, setCharacteristicMap] = useState<Map<string, BluetoothRemoteGATTCharacteristic> | null>(null);
 
     const browser = verifiyBrowser();
     if(!browser) return <div>Your Browser is Not supported</div>
 
-    const deviceHandler = (device: BluetoothDevice | null, characteristic: BluetoothRemoteGATTCharacteristic | null) => {
-        if(!device || !characteristic) return;
-        setDevice(device);
-        setCharacteristic(characteristic);
+    const deviceHandler = (deviceMap: Map<string, BluetoothDevice> | null, characteristicMap: Map<string, BluetoothRemoteGATTCharacteristic> | null) => {
+        if(!deviceMap || !characteristicMap) return;
+        // @ts-ignore
+        setDeviceMap(deviceMap);
+        // @ts-ignore
+        setCharacteristicMap(characteristicMap);
         setScene(1)
     }
 
@@ -30,8 +32,12 @@ const Trainig = () =>{
     }
     if(scene == 1){
         return <div className="flex flex-col">
+            {
+                deviceMap?.get('heart-rate-monitor') && characteristicMap?.get('heart-rate-monitor') &&
+                // @ts-ignore
+                <Record device={deviceMap.get('heart-rate-monitor')} characteristic={characteristicMap.get('heart-rate-monitor')}/>
+            }
             {/* @ts-ignore */}
-            <Record device={device} characteristic={characteristic}/>
             <button onClick={() => { setScene(0)}}> Back </button>
         </div>
     }
