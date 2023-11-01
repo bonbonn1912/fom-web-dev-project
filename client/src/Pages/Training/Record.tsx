@@ -5,33 +5,48 @@ import {AiFillHeart} from "react-icons/ai";
 interface IRecordProps {
     device: BluetoothDevice;
     characteristic: BluetoothRemoteGATTCharacteristic;
+    emitData: (hr: any, sec: any) => void;
 }
 
-let globalHeartRate = 0;
 
-const Record = ({device,characteristic}: IRecordProps) =>{
+const Record = ({device,characteristic, emitData}: IRecordProps) =>{
     const secondRef = useRef<number>(0);
     const secondsRefArray = useRef<number[]>(new Array(60).fill(0));
     const [counter, setCounter] = useState(0);
     const heartRateRef = useRef(0)
     const heartRatesRef = useRef<number[]>([]);
+    const intervalRef = useRef<any>(null);
 
     const [realHeartRate, setRealHeartRate] = useState<number[]>([]);
-    const [seconds, setSeconds] = useState<number[]>([]);
 
-    const [coordinates] = useState<number[][]>([]);
     const initDevice = async () => {
         await characteristic.stopNotifications();
         characteristic.removeEventListener('characteristicvaluechanged', () => { /* Handler */ });
         characteristic.startNotifications().then((charDevice) =>{
             charDevice.addEventListener('characteristicvaluechanged', handleNotifications);
     }   )};
+
+    const stopDevice = async () => {
+
+        await characteristic.stopNotifications();
+        characteristic.removeEventListener('characteristicvaluechanged', () => { /* Handler */ });
+    }
+
     useEffect(() => {
         initDevice();
         initIntervall();
     }, []);
+
+    useEffect(() => {
+        return () => {
+            if (intervalRef.current !== null) {
+                clearInterval(intervalRef.current);  // Stopt den Interval
+            }
+            stopDevice();
+        }
+    }, []);
     const initIntervall = () =>{
-        setInterval(() => {
+        intervalRef.current  = setInterval(() => {
             updateHeartRate(heartRateRef.current)
         }, 1000);
     }
@@ -61,6 +76,7 @@ const Record = ({device,characteristic}: IRecordProps) =>{
         secondRef.current = secondRef.current + 1;
         heartRateRef.current = newRate;
         secondsRefArray.current = [...secondsRefArray.current, secondRef.current];
+        emitData(heartRatesRef.current, secondsRefArray.current);
         setRealHeartRate([...realHeartRate, newRate])
         setCounter(counter + 1);
     };
@@ -95,6 +111,7 @@ const Record = ({device,characteristic}: IRecordProps) =>{
               <HeartRateChart heartRate={heartRatesRef.current} seconds={secondsRefArray.current}/>
             </div>
             </div>
+
         </div>
     )
 }
