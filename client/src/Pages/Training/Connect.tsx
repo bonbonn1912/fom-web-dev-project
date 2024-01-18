@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {GiHeartBeats} from "react-icons/gi";
+import {SiSmartthings} from "react-icons/si";
 
 interface IConnectProps {
     deviceHandler: (device: Map<string, BluetoothDevice> | null, characteristic: Map<string, BluetoothRemoteGATTCharacteristic> | null) => void;
@@ -15,6 +16,8 @@ const initSensor = [
         description: 'Supports all heart rate monitors that follow the BLE Spec. for Heart Rate Profile 1.0',
         isConnected: false,
         buttonAction: 0,
+        serviceName: 'heart_rate',
+        characteristicName: 'heart_rate_measurement',
     },
     {
         name: 'Powermeter/Cadence',
@@ -22,6 +25,8 @@ const initSensor = [
         description: 'Currently only supports powemeters that follow the BLE Spec. Cycling Power Service 1.1',
         isConnected: false,
         buttonAction: 1,
+        serviceName: 'cycling_power',
+        characteristicName: 'cycling_power_measurement',
     },
     {
         name: 'Smart Trainer',
@@ -29,6 +34,8 @@ const initSensor = [
         description: 'Currently only supports smart trainers that follow the BLE Spec. Fitness Machine Service 1.0',
         isConnected: false,
         buttonAction: 2,
+        serviceName: 'cycling_power',
+        characteristicName: 'cycling_power'
     },
 ]
 
@@ -72,7 +79,7 @@ const Connect = ({ deviceHandler} : IConnectProps) =>{
             case 'tier-powermeter':
                 return <div>Powermeter</div>
             case 'tier-smart-trainer':
-                return <div>Smart Trainer</div>
+                return <div><SmartTrainerStatus/></div>
         }
     }
 
@@ -87,20 +94,35 @@ const Connect = ({ deviceHandler} : IConnectProps) =>{
             </div>
         )
     }
-
-    const connectToBluetoothDevice = async (filter: IFilterProps, id:string) => {
+    const SmartTrainerStatus = () =>{
+        return (
+            <div className="flex h-full flex-col">
+                <p className="w-full font-light">{device?.name}</p>
+                <div className="flex flex-row h-full items-center">
+                    <SiSmartthings className="animate-pulse" size={60}/>
+                </div>
+            </div>
+        )
+    }
+    // @ts-ignore
+    const connectToBluetoothDevice = async (filter: IFilterProps, id:string, serviceName: string, characteristicName: string) => {
+        console.log(filter);
         try {
             const device = await navigator.bluetooth.requestDevice({
-                filters: [filter]
+                filters: [{ services: ['cycling_power'] }],
+                optionalServices: ['fitness_machine'],
             });
             setIsButtonDisabled(false)
             setSensor(sensor.map((sensor) => sensor.id == id ? {...sensor, isConnected: true} : sensor));
             const server = await device.gatt?.connect();
-            const service = await server?.getPrimaryService('heart_rate');
-            const characteristic = await service?.getCharacteristic('heart_rate_measurement');
-            await characteristic?.startNotifications();
+            const fitnessMachineService = await server?.getPrimaryService('fitness_machine');
+            const characteristic = await fitnessMachineService?.getCharacteristic('indoor_bike_data');
+         //   const service = await server?.getPrimaryService(serviceName);
+          //  const characteristic = await service?.getCharacteristic(characteristicName);
+          //  await characteristic?.startNotifications();
             setDevice(device);
             setDeviceMap(deviceMap.set(id, device));
+
             // @ts-ignore
             setCharacteristicMap(characteristicMap.set(id, characteristic));
             // @ts-ignore
@@ -142,7 +164,7 @@ const Connect = ({ deviceHandler} : IConnectProps) =>{
                         <>
                             <p className="mt-4 text-sm leading-6 text-gray-600">{device.description}</p>
                             <button
-                                onClick={() => connectToBluetoothDevice(returnFilter(device.buttonAction), device.id)}
+                                onClick={() => connectToBluetoothDevice(returnFilter(device.buttonAction), device.id, device.serviceName, device.characteristicName)}
                                 aria-describedby={device.id}
                                 className={classNames(
                                     device.isConnected

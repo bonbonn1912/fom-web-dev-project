@@ -1,12 +1,9 @@
-import { verifiyBrowser} from "../../helper/verifyBrowser.ts";
-import {useRef, useState} from "react";
+import {verifiyBrowser} from "../../helper/verifyBrowser.ts";
+import {useEffect, useRef, useState} from "react";
 import './pulsate.css'
 import Connect from "./Connect.tsx";
 import Record from "./Record.tsx";
 import {getCoordinatesAsync} from "../../helper/coordinates.ts";
-import {MapForRecord} from "../Workout/Map.tsx";
-import {LatLng} from "leaflet";
-
 
 
 const Trainig = () =>{
@@ -77,10 +74,14 @@ const Trainig = () =>{
                 // @ts-ignore
                 <Record sceneHandler={changeScene} emitData={emitData} device={deviceMap.get('heart-rate-monitor')} characteristic={characteristicMap.get('heart-rate-monitor')}/>
             }
+            {
+                deviceMap?.get('tier-smart-trainer') && characteristicMap?.get('tier-smart-trainer') &&
+                // @ts-ignore
+               <SmartTrainer device={deviceMap?.get('tier-smart-trainer')} characteristic={characteristicMap.get('tier-smart-trainer')}/>
+            }
             {/* @ts-ignore */}
             <button onClick={() => { setScene(2)}}> Stop Recording </button>
             {/* @ts-ignore */}
-            <MapForRecord decodedPolyLine={coordiantesRef.current} width={200} height={100} controllables={true} zIndex={10}/>
         </div>
     }
     if(scene == 2){
@@ -111,8 +112,57 @@ const Trainig = () =>{
         )
 
     }
+        }
+        interface ISmartTrainerProps{
+            device: BluetoothDevice;
+            characteristic: BluetoothRemoteGATTCharacteristic;
+        }
+
+        // @ts-ignore
+        const SmartTrainer = ({device,characteristic }: ISmartTrainerProps) =>{
+       const [power, setPower] = useState(0);
+       const [speed, setSpeed] = useState(0);
+         const [cadence, setCadence] = useState(0);
+         const [altSpeed, setAltSpeed] = useState(0);
+            const [altCadence, setAltCadence] = useState(0);
+            const [altPower, setAltPower] = useState(0);
 
 
-}
+            useEffect(() => {
+                characteristic.startNotifications();
+
+                characteristic.addEventListener('characteristicvaluechanged', (event) => {
+                    // @ts-ignore
+                    const data = event.target.value as DataView;
+
+                    /* NB: speed is only based on the rotation of the smart trainer's resistance unit, meaning that it is easier to get a higher speed
+                     *  when using less resistance. If we really want to use speed, we should do a do some trickery using the power, either calculating
+                     *  the speed solely on power or some hybrid using the smart trainer speed weighted with the power. I think 100% power based speed
+                     *  would be best. */
+                    const speed = (data.getUint8(2) + (data.getUint8(3) << 8)) / 100;
+                    const cadence = (data.getUint8(4) + (data.getUint8(5) << 8)) / 2;
+                    const power = data.getUint8(6) + (data.getUint8(7) << 8);
+                    const altSpeed = (data.getUint16(2)) / 100;
+                    const altCadence = (data.getUint16(4)) / 2;
+                    const altPower = data.getUint16(6);
+                    setAltCadence(altCadence)
+                    setAltPower(altPower)
+                    setAltSpeed(altSpeed)
+                    setPower(power);
+                    setSpeed(speed);
+                    setCadence(cadence);
+                })
+            },[])
+            return (
+                <div className="flex flex-col">
+                    <p>Power: {power} Watt</p>
+                    <p>Alt Power: {altPower} Watt</p>
+                    <p>Speed: {speed} Kmh</p>
+                    <p>Alt Speed: {altSpeed} Kmh</p>
+                    <p>Cadence: {cadence} Rpm</p>
+                    <p>Alt Cadence: {altCadence} Rpm</p>
+                </div>
+            )
+        }
 
 export default Trainig
