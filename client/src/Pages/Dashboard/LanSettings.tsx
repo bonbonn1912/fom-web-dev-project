@@ -1,6 +1,7 @@
 
 import {  useState } from "react";
 import { useTranslation } from 'react-i18next';
+import { TbBluetoothOff } from "react-icons/tb";
 
 import {
   // @ts-ignore
@@ -15,6 +16,7 @@ function classNames(...classes: any) {
 const LanSettings = () => {
 const { t } = useTranslation();
   const [showDiv, setShowDiv] = useState(false);
+ // const [ allowBluetooth, setAllowBluetooth ] = useState(true);
 
   const toggleDiv = () => {
     setShowDiv(!showDiv);
@@ -32,13 +34,17 @@ const { t } = useTranslation();
         {t("language_button_settings")}
       </button>
       {showDiv && (
-        <div className="absolute grid items-center justify-center h-10 grid-cols-3 gap-3 origin-bottom-left bg-white rounded-md shadow-lg w-fit bottom-14 ring-1 ring-gray-900/5 focus:outline-none">
-          <div className="flex justify-center pl-2 text-sm font-semibold w-fit">{t("language_toggle_german")}</div>
-          <div className="flex items-center justify-center">
-            <ToggleLanguage />
+
+          <div className="absolute grid items-center justify-center h-10 grid-cols-3 gap-3 origin-bottom-left bg-white rounded-md shadow-lg w-fit bottom-14 ring-1 ring-gray-900/5 focus:outline-none">
+              <>
+              <div className="flex justify-center pl-2 text-sm font-semibold w-fit">{t("language_toggle_german")}</div>
+              <div className="flex items-center justify-center">
+                  <ToggleLanguage />
+              </div>
+              <div className="flex justify-center pr-2 text-sm font-semibold w-fit">{t("language_toggle_english")}</div>
+              </>
           </div>
-          <div className="flex justify-center pr-2 text-sm font-semibold w-fit">{t("language_toggle_english")}</div>
-        </div>
+
       )}
     </li>
   );

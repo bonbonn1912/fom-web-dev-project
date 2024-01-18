@@ -1,5 +1,7 @@
 import {Request, Response} from "express";
 import { UserHealthData } from '../../handlers/database/mongo'
+import {getCredentialsById,updatePasswordCredentials} from "../../handlers/database/postgres";
+import bcrypt from "bcrypt";
 
 const updateAccountInformation = async (req: Request, res: Response) =>{
     const { id } = req.user as any;
@@ -52,6 +54,24 @@ const updateAccountInformation = async (req: Request, res: Response) =>{
     }
 }
 
+const updatePassword = async (req: Request, res: Response) =>{
+    const { id } = req.user as any;
+    console.log(req.user);
+    const { new_password, current_password  } = req.body as any;
+    const { credentials } = await getCredentialsById(id) as any;
+    bcrypt.compare(current_password, credentials.password, async (err, result) => {
+        if(result){
+            const newHash = await bcrypt.hash(new_password, 12);
+            await updatePasswordCredentials(id, newHash)
+            res.redirect("/logout");
+        }else{
+            res.sendStatus(401);
+        }
+    });
+
+}
+
+
 export {
-    updateAccountInformation
+    updateAccountInformation, updatePassword
 }

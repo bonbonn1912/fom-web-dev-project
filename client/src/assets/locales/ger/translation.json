@@ -44,5 +44,7 @@
   "language_homescreen_resting_heartrate_unit": "Spm",
   "language_homescreen_max_heartrate_title": "Maximale Herzfrequenz",
     "language_homescreen_max_heartrate_chart_title": "Verlauf der maximalen Herzfrequenz",
-  "language_homescreen_max_heartrate_unit": "Spm"
+  "language_homescreen_max_heartrate_unit": "Spm",
+  "language_toggle_bluetooth_on": "Bluetooth Verbunden",
+  "language_toggle_bluetooth_off": "Bluetooth nicht erlaubt"
 }

@@ -2,7 +2,7 @@ import { Router} from "express";
 import multer from "multer";
 
 import { initialUserSetup} from "../controller/AccountController/setup";
-import {updateAccountInformation} from "../controller/AccountController/update";
+import {updateAccountInformation, updatePassword} from "../controller/AccountController/update";
 
 const setupRouter = Router();
 
@@ -17,6 +17,7 @@ setupRouter.get("/status", (req, res) => {
 
 setupRouter.post("/api/account/setup",initialUserSetup );
 setupRouter.post("/api/account/update", updateAccountInformation)
+setupRouter.post("/api/account/update-password", updatePassword)
 
 
 export default setupRouter;

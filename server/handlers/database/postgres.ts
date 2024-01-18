@@ -114,6 +114,24 @@ const getUserAndCredentials = (email: string) => {
     }
   });
 };
+const getCredentialsById = (id: number) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = prisma.account.findFirst({
+                where: {
+                   accountId: id,
+                },
+                include: {
+                    credentials: true,
+                },
+            });
+            resolve(user);
+        } catch (error) {
+            console.error("Something went wrong searching for user", error);
+            reject(error);
+        }
+    });
+};
 
 const insertUser = (
   username: string,
@@ -339,13 +357,33 @@ const removeActivityFromEquipment = async (activity: number, distance: number) =
     })
 }
 
+const updatePasswordCredentials = async (accountId: number, newPassword: string) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const credentials = await prisma.credentials.update({
+                where: {
+                    accountId: accountId,
+                },
+                data: {
+                    password: newPassword,
+                }
+            });
+            resolve(credentials);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 
 export { prisma,
         findUser,
         insertUser,
         getUserAndCredentials,
+        getCredentialsById,
         insertStravaToken,
         updateSetup,
+        updatePasswordCredentials,
         getStravaProps,
         setStravaConnection,
         removeStravaConnection,
