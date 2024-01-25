@@ -12,6 +12,4 @@ workoutRouter.get("/api/workout/detailed-summary", getDetailedWorkoutForUser);
 workoutRouter.get("/api/workout/metadata", getWorkoutMetaData);
 
 workoutRouter.delete("/api/workout/delete", deleteWorkout)
-
-
 export default workoutRouter;
