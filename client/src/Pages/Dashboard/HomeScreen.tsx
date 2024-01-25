@@ -10,6 +10,8 @@ import {ImPowerCord} from "react-icons/im";
 import {FaHeartbeat} from "react-icons/fa";
 import {GiHeartBeats} from "react-icons/gi";
 import { authenticate} from "../Auth/authContext.tsx";
+import {useTranslation} from "react-i18next";
+import {initLanguage} from "../../helper/i18n.ts";
 
 const HomeScreen = () =>{
     const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +29,9 @@ const HomeScreen = () =>{
     const [ftp, setFtp] = useState<number>(0);
     const [restingHeartRate, setRestingHeartRate] = useState<number>(0);
     const [maxHeartRate, setMaxHeartRate] = useState<number>(0);
+    const { t, i18n } = useTranslation();
     useEffect(() => {
+        initLanguage(i18n);
         authenticate().then(() => {
             getExtendedUserInfo()
         })
@@ -71,15 +75,15 @@ const HomeScreen = () =>{
                                 <dt className="text-base leading-7 text-gray-600">FTP</dt>
                                 <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                                     <div className="flex items-center">
-                                        {<ImPowerCord size={35}/>} <div className="ml-2">{ftp} watts</div>
+                                        {<ImPowerCord size={35}/>} <div className="ml-2">{ftp} {t("language_homescreen_watts_title")}</div>
                                     </div>
                                 </dd>
                             </div>
                             <div className="w-full h-[350px] md:col-span-2 col-span-full">
-                                <FTPperKG gender={gender} labels={ftpPerKGLabels} values={ftpPerKG}/>
+                                <FTPperKG gender={gender} labels={ftpPerKGLabels} values={ftpPerKG} title={t("language_homescreen_ftp_per_kg_title")}/>
                             </div>
                             <div className="w-full h-[350px] md:col-span-1 col-span-full">
-                                <ProgressChart values={ftpProgress} labels={ftpPerKGLabels} title={"Your FTP Progress"} color={'rgb(255,0,0)'}/>
+                                <ProgressChart values={ftpProgress} labels={ftpPerKGLabels} title={t("language_homescreen_watts_chart_title")} color={'rgb(255,0,0)'}/>
                             </div>
                         </dl>
                     </div>
@@ -91,16 +95,16 @@ const HomeScreen = () =>{
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-3 gap-x-10 text-center lg:grid-cols-4 items-center">
                             <div key={1} className="mx-auto flex max-w-xs flex-col gap-y-2 md:col-span-1 col-span-full">
-                                <dt className="text-base leading-7 text-gray-600">Weight</dt>
+                                <dt className="text-base leading-7 text-gray-600">{t("language_homescreen_weight_title")}</dt>
                                 <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                                     <div className="flex items-center">
-                                        {<FaWeightScale size={35}/>} <div className="ml-2">{weight} kg</div>
+                                        {<FaWeightScale size={35}/>} <div className="ml-2">{weight} {t("language_homescreen_weight_unit")}</div>
                                     </div>
 
                                 </dd>
                             </div>
                             <div className="w-full h-[350px] md:col-span-2 col-span-full">
-                                <ProgressChart values={weightProgress} labels={ftpPerKGLabels} title={"Your Weight Progress"} color={'rbga(255,255,255)'}/>
+                                <ProgressChart values={weightProgress} labels={ftpPerKGLabels} title={t("language_homescreen_weight_chart_title")} color={'rbga(255,255,255)'}/>
                             </div>
                         </dl>
                     </div>
@@ -113,15 +117,15 @@ const HomeScreen = () =>{
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-3 gap-x-10 text-center lg:grid-cols-4 items-center">
                             <div key={1} className="mx-auto flex max-w-xs flex-col gap-y-4 md:col-span-1 col-span-full">
-                                <dt className="text-base leading-7 text-gray-600">Resting Heart Rate</dt>
+                                <dt className="text-base leading-7 text-gray-600">{t("language_homescreen_resting_heartrate_title")}</dt>
                                 <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                                     <div className="flex items-center">
-                                        {<FaHeartbeat size={35}/>} <div className="ml-2">{restingHeartRate} bpm</div>
+                                        {<FaHeartbeat size={35}/>} <div className="ml-2">{restingHeartRate} {t("language_homescreen_resting_heartrate_unit")}</div>
                                     </div>
                                 </dd>
                             </div>
                             <div className="w-full h-[350px] md:col-span-2 col-span-full">
-                                <ProgressChart values={restingHeartRateProgress} labels={ftpPerKGLabels} title={"Your Resting Heart Rate Progress"} color={'rgba(0,0,255)'}/>
+                                <ProgressChart values={restingHeartRateProgress} labels={ftpPerKGLabels} title={t("language_homescreen_resting_heartrate_chart_title")} color={'rgba(0,0,255)'}/>
                             </div>
                         </dl>
                     </div>
@@ -133,15 +137,15 @@ const HomeScreen = () =>{
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <dl className="grid grid-cols-3 gap-x-10 text-center lg:grid-cols-4 items-center">
                             <div key={1} className="mx-auto flex max-w-xs flex-col gap-y-4 md:col-span-1 col-span-full">
-                                <dt className="text-base leading-7 text-gray-600">Max Heart Rate</dt>
+                                <dt className="text-base leading-7 text-gray-600">{t("language_homescreen_max_heartrate_title")}</dt>
                                 <dd className="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
                                     <div className="flex items-center">
-                                        {<GiHeartBeats size={35}/>} <div className="ml-2">{maxHeartRate} bpm</div>
+                                        {<GiHeartBeats size={35}/>} <div className="ml-2">{maxHeartRate} {t("language_homescreen_max_heartrate_unit")}</div>
                                     </div>
                                 </dd>
                             </div>
                             <div className="w-full h-[350px] md:col-span-2 col-span-full">
-                                <ProgressChart values={maxHeartRateProgress} labels={ftpPerKGLabels} title={"Your Max Heart Rate Progress"} color={'rgba(0,255,0)'}/>
+                                <ProgressChart values={maxHeartRateProgress} labels={ftpPerKGLabels} title={t("language_homescreen_max_heartrate_chart_title")} color={'rgba(0,255,0)'}/>
                             </div>
                         </dl>
                     </div>

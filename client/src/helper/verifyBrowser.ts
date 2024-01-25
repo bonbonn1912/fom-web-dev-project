@@ -9,7 +9,8 @@ const verifiyBrowser = () => {
         return false;
     } else if (navigator.userAgent.indexOf("Firefox") != -1) {
         return true;
-    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode == true)) // für edgecases
+        // @ts-ignore
+    } else if ((navigator.userAgent.indexOf("MSIE") != -1) || (!!document.documentMode)) // für edgecases
     {
         return false;
     } else {

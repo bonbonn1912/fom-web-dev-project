@@ -13,8 +13,7 @@ import {insertActivityStreamData} from "../../handlers/database/activityStreamSc
 import logJsonBody from "../../logging/bodyLogger";
 import {updateEquipmentDistance} from "../../handlers/database/postgres";
 
-const addWorkout = async (req: Request, res: Response) => {
-  //  logJsonBody(req.body, "stravaAddWorkout")
+const addWorkout = async (req: Request) => {
     logger.log('info', 'workout', `Adding workout for user ${req.body.owner_id}`)
     const { owner_id, object_type, object_id, aspect_type, event_time, updates } = req.body as IWorkoutPost;
     try{
@@ -26,7 +25,6 @@ const addWorkout = async (req: Request, res: Response) => {
             await updateStravaTokenForOwnerId(owner_id, access_token, expires_at, refresh_token);
         }
         let activity = await getStravaActivity(object_id.toString(), access_token) as any;
-       // logJsonBody(activity, "stravaActivity")
         if(activity.type === "VirtualRide" || activity.type === "Ride"){
             let activityStream = await getStravaActivityStream(object_id.toString(), access_token) as any;
             const { id, success } = await insertBasicActivityData(activity, accountId);
@@ -37,11 +35,10 @@ const addWorkout = async (req: Request, res: Response) => {
             }else{
                 logger.log('info', 'workout', `Inserted activity with id ${id} for user ${owner_id}`)
             }
-            res.status(200).send()
 
         }else{
             logger.log('info', 'workout', `Activity with id ${object_id} is not a ride or virtual ride`)
-            res.status(200).send()
+            return;
         }
     }catch (e: any){
         console.log(e.toString());
