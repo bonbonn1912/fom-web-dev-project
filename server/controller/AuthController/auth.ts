@@ -45,7 +45,7 @@ export const registerUser = async (req: Request, res: Response) => {
       if (account !== null) {
           const mailConfirmationCode = crpyto.randomUUID();
             const mailConfirmation = await insertMailConfirmation( mailConfirmationCode).then((data) => {
-                sendEmail(mail, username,mailConfirmationCode);
+               // sendEmail(mail, username,mailConfirmationCode);
                 logger.log('info', 'register', `User ${req.body.username} registered`)
                 return res.redirect("/");
             }).catch((err) => {
