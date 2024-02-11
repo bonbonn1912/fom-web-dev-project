@@ -153,9 +153,7 @@ const HomeScreen = () =>{
             </div>
             <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300 col-span-full"/>
             <div className="md:col-span-1 col-span-full h-fit">
-                <div className="w-full h-[350px] flex justify-center items-center bg-amber-50">
-                    Material Placeholder
-                </div>
+
             </div>
         </div>
     )

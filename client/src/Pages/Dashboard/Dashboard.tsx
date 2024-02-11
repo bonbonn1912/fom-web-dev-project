@@ -9,7 +9,6 @@ import {
   CalendarIcon,
   // @ts-ignore
   ChartPieIcon,
-  DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
   UsersIcon,
@@ -68,7 +67,7 @@ const Dashboard = () => {
     { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
     { name: "Start Training", href: '/dashboard/training', icon: PlayIcon, current: location.pathname.startsWith('/dashboard/training')},
     { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
-    { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
+  //  { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
     { name: t("language_dashboard_profile"), href: '/dashboard/profile/account', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
     
     ])
@@ -78,7 +77,7 @@ const Dashboard = () => {
     { name: t("language_dashboard_root"), href: '/dashboard', icon: HomeIcon, current: location.pathname === '/dashboard'},
     { name: t("language_dashboard_workout"), href: '/dashboard/workouts', icon: UsersIcon, current: location.pathname.startsWith('/dashboard/workouts')},
     { name: t("language_dashboard_equipment"), href: '/dashboard/equip', icon: CalendarIcon, current: false },
-    { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
+ //   { name: t("language_dashboard_ai"), href: '/dashboard/ai', icon: DocumentDuplicateIcon, current: false },
     { name: t("language_dashboard_profile"), href: '/dashboard/profile/account', icon: FolderIcon, current: location.pathname.startsWith('/dashboard/profile')},
   
   ]);

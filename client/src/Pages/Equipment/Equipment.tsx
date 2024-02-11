@@ -1,14 +1,18 @@
 import PartsInput from "./PartsInput.tsx";
 import {useEffect, useState} from "react";
 import { IParts} from "../../Types/Parts.tsx";
-import {BarsArrowUpIcon, ChevronDownIcon, MagnifyingGlassIcon} from "@heroicons/react/20/solid";
+
 import ListItem from "./ListItem.tsx";
 import LoadingSpinner from "../../components/LoadingSpinner.tsx";
 import {authenticate} from "../Auth/authContext.tsx";
+import {useTranslation} from "react-i18next";
+import { initLanguage } from '../../helper/i18n';
+import {MagnifyingGlassIcon} from "@heroicons/react/20/solid";
 
 
 
 const Equipment = () => {
+    const { t, i18n } = useTranslation();
     const [ parts, setParts] = useState<IParts[]>([]);
 
     const [ displayParts, setDisplayParts] = useState<IParts[]>(parts);
@@ -35,6 +39,7 @@ const Equipment = () => {
 
     useEffect(() => {
         authenticate().then(() => {
+            initLanguage(i18n);
             getParts();
         });
     }, []);
@@ -93,7 +98,7 @@ const Equipment = () => {
         <div className="border-b border-gray-200 bg-white py-5">
             <div className="flex flex-wrap items-center justify-between sm:flex-nowrap">
                 <div className="w-full md:w-fit">
-                    <h3 className="text-base font-semibold leading-6 text-gray-900">Equipment</h3>
+                    <h3 className="text-base font-semibold leading-6 text-gray-900">{t("language_equipment_page_title")}</h3>
                 </div>
                 <div className="flex items-center mt-2 md:mt-0 w-full md:w-fit justify-between">
                 <div className="">
@@ -122,17 +127,10 @@ const Equipment = () => {
                                 onChange={(e) => filterParts(parts, e.target.value)}
                                 id="desktop-search-parts"
                                 className="hidden w-full rounded-none rounded-l-md border-0 py-1.5 pl-10 text-sm leading-6 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:block"
-                                placeholder="Search Parts"
+                                placeholder={t("language_equipment_page_equipment_search")}
                             />
                         </div>
-                        <button
-                            type="button"
-                            className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                        >
-                            <BarsArrowUpIcon className="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-                            Sort
-                            <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
-                        </button>
+
                     </div>
                 </div>
                 <div className="ml-2 flex-shrink-0">
@@ -140,7 +138,7 @@ const Equipment = () => {
                         type="button"
                         className="flex sm:w-grow relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                        Add
+                        {t("language_equipment_page_add_equipment")}
                     </button>
                 </div>
                 </div>

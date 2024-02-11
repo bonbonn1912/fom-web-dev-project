@@ -2,11 +2,13 @@ import {useUser} from "../../Context/UserContext.tsx";
 import {useEffect, useState} from "react";
 import LoadingSpinner from "../../components/LoadingSpinner.tsx";
 import {authenticate} from "../Auth/authContext.tsx";
-
+import {useTranslation} from "react-i18next";
+import {initLanguage} from "../../helper/i18n.ts";
 
 const errorFeedbacks = ["Your new Password doesnt match", "Your current password is incorrect"]
 
 const Settings = () => {
+  const { t, i18n } = useTranslation();
   const {user} = useUser();
   const [ isLoading, setIsLoading ] = useState(true)
   const [disabled] = useState(false)
@@ -85,6 +87,7 @@ const Settings = () => {
 
   useEffect(() => {
     authenticate().then(() => {
+        initLanguage(i18n);
         fetchUserData();
     })
   }, []);
@@ -118,11 +121,10 @@ if (response.status === 200) {
           <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
               <h2 className="text-base font-semibold leading-7 text-gray">
-                Personal Information
+                {t("language_account_personal_information")}
               </h2>
               <p className="mt-1 text-sm leading-6 text-gray-400">
-                If you want to change more then one field, please update them together. The Progress Charts on the dashboard will all have the same
-                timestamps
+                {t("language_account_personal_informatiion_desc")}
               </p>
             </div>
 
@@ -157,7 +159,7 @@ if (response.status === 200) {
                       htmlFor="first-name"
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    First name
+                    {t("language_account_first_name")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -176,7 +178,7 @@ if (response.status === 200) {
                       htmlFor="last-name"
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    Last name
+                    {t("language_account_last_name")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -195,7 +197,7 @@ if (response.status === 200) {
                   <label
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    Weight
+                    {t("language_account_weight")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -214,7 +216,7 @@ if (response.status === 200) {
                   <label
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    FTP
+                    {t("language_account_ftp")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -233,7 +235,7 @@ if (response.status === 200) {
                   <label
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    Resting Heart Rate
+                    {t("language_account_resting_heartrate")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -252,7 +254,7 @@ if (response.status === 200) {
                   <label
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    Max Heart Rate
+                    {t("language_account_max_heartrate")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -275,9 +277,9 @@ if (response.status === 200) {
                 <button
                     type="submit"
                     disabled={disabled}
-                    className={`p-2 w-full sm:w-[90px] text-white ${disabled ? "bg-blue-500 opacity-40" : "bg-blue-500 hover:bg-blue-600"}  rounded-md`}
+                    className={`p-2 w-full sm:w-[158px] text-white ${disabled ? "bg-blue-500 opacity-40" : "bg-blue-500 hover:bg-blue-600"}  rounded-md`}
                 >
-                  Update
+                    {t("language_account_save_changes")}
                 </button>
               </div>
             </form>
@@ -286,10 +288,10 @@ if (response.status === 200) {
           <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
               <h2 className="text-base font-semibold leading-7 text-gray">
-                Change password
+                {t("language_account_change_password")}
               </h2>
               <p className="mt-1 text-sm leading-6 text-gray-400">
-                Update your password associated with your account.
+                {t("language_account_change_password_desc")}
               </p>
             </div>
 
@@ -300,7 +302,7 @@ if (response.status === 200) {
                       htmlFor="current-password"
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    Current password
+                    {t("language_account_current_password")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -319,7 +321,7 @@ if (response.status === 200) {
                       htmlFor="new-password"
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    New password
+                    {t("language_account_new_password")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -338,7 +340,7 @@ if (response.status === 200) {
                       htmlFor="confirm-password"
                       className="block text-sm font-medium leading-6 text-gray"
                   >
-                    Confirm password
+                    {t("language_account_confirm_new_password")}
                   </label>
                   <div className="mt-2">
                     <input
@@ -362,7 +364,7 @@ if (response.status === 200) {
                     type="submit"
                     className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-gray shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 >
-                  Change password
+                    {t("language_account_change_password")}
                 </button>
               </div>
             </form>
@@ -373,12 +375,10 @@ if (response.status === 200) {
           <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
             <div>
               <h2 className="text-base font-semibold leading-7 text-gray">
-                Delete account
+                {t("language_account_delete_account")}
               </h2>
               <p className="mt-1 text-sm leading-6 text-gray-400">
-                No longer want to use our service? You can delete your
-                account here. This action is not reversible. All information
-                related to this account will be deleted permanently.
+                {t("language_account_delete_account_desc")}
               </p>
             </div>
 
@@ -388,7 +388,7 @@ if (response.status === 200) {
                   type="submit"
                   className="rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-gray shadow-sm hover:bg-red-400"
               >
-                Yes, delete my account
+                {t("language_account_delete_account_button")}
               </button>
             </form>
           </div>
