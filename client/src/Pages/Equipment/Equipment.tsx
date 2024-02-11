@@ -53,6 +53,7 @@ const Equipment = () => {
             const newPartsArray = [...parts, newParts];
             setDisplayParts(newPartsArray);
             setParts(newPartsArray)
+            getParts();
         }else{
             console.log('cancel');
         }
@@ -60,7 +61,7 @@ const Equipment = () => {
     }
 
     const deletePart = async (equipmentId: number,listIndex: number) => {
-
+        console.log("Deleting Part : ", equipmentId, listIndex, parts[listIndex].isActive);
         const res = await fetch(`/api/equipment?equipmentId=${equipmentId}`, {
             method: 'DELETE',
         })
@@ -71,7 +72,7 @@ const Equipment = () => {
         setParts(newPartsArray);
     }
     const updatePart = async (equipmentId: number,listIndex: number) => {
-
+        console.log("Updating Part : ", equipmentId, listIndex, parts[listIndex].isActive);
         const res = await fetch(`/api/equipment/status`, {
             method: 'POST',
             headers: {

@@ -1,10 +1,10 @@
-import {useState, ChangeEvent} from "react";
+import {useState, ChangeEvent, useEffect} from "react";
 import defaultProfileIcon from "../../assets/defaultProfileIcon.png";
 
 const SetupUser = () => {
     const [disabled, setDisabled] = useState(true)
     const [selectedImage, setSelectedImage] = useState(defaultProfileIcon);
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>();
     const [formData, setFormData] = useState({
         gender: "",
         firstName: "",
@@ -24,9 +24,9 @@ const SetupUser = () => {
         let ftpValid = formData.ftp !== "" && parseInt(formData.ftp) > 0 && parseInt(formData.ftp) < 500;
         let restingHeartRateValid = formData.restingHeartRate !== "" && parseInt(formData.restingHeartRate) > 20 && parseInt(formData.restingHeartRate) < 100;
         let maxHeartRateValid = formData.maxHeartRate !== "" && parseInt(formData.maxHeartRate) > 130 && parseInt(formData.maxHeartRate) < 220;
-        let fileValid = file !== null;
+      //  let fileValid = file !== null;
 
-        if (firstNameValid && lastNameValid && ageValid && weightValid && ftpValid && restingHeartRateValid && maxHeartRateValid && fileValid) {
+        if (firstNameValid && lastNameValid && ageValid && weightValid && ftpValid && restingHeartRateValid && maxHeartRateValid) {
             setDisabled(false);
         }
     }
@@ -58,7 +58,7 @@ const SetupUser = () => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const data = new FormData();
-        if (file) {
+        if (file != null) {
             data.append('profilePicture', file);
         }
         for (const [key, value] of Object.entries(formData)) {
@@ -76,6 +76,23 @@ const SetupUser = () => {
         }
 
     };
+
+    useEffect(() => {
+        const fetchDefaultImage = async () => {
+            try {
+                const response = await fetch(defaultProfileIcon);
+                const blob = await response.blob();
+                const defaultFile = new File([blob], 'defaultImage.png', { type: 'image/png' });
+                setFile(defaultFile);
+
+            } catch (error) {
+                console.error('Fehler beim Laden des Standardbilds:', error);
+            }
+        };
+
+        fetchDefaultImage();
+    }, []);
+
 //TODO Add switch to use default profile picture
     return (
         <div className="flex items-center justify-center w-full h-screen">

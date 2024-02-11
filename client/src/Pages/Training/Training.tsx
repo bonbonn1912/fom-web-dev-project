@@ -135,10 +135,6 @@ const Trainig = () =>{
                     // @ts-ignore
                     const data = event.target.value as DataView;
 
-                    /* NB: speed is only based on the rotation of the smart trainer's resistance unit, meaning that it is easier to get a higher speed
-                     *  when using less resistance. If we really want to use speed, we should do a do some trickery using the power, either calculating
-                     *  the speed solely on power or some hybrid using the smart trainer speed weighted with the power. I think 100% power based speed
-                     *  would be best. */
                     const speed = (data.getUint8(2) + (data.getUint8(3) << 8)) / 100;
                     const cadence = (data.getUint8(4) + (data.getUint8(5) << 8)) / 2;
                     const power = data.getUint8(6) + (data.getUint8(7) << 8);

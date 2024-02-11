@@ -50,7 +50,6 @@ const ListItem =({part, deleteHandler,listIndex, changeStatusHandler} : ListItem
             <div className="flex justify-end col-span-2">
                 <PartsMenu listIndex={listIndex} equiptmentId={part.equipmentId} changeStatusHandler={changeStatusHandler} deleteHandler={deleteHandler} itemStatus={part.isActive}/>
             </div>
-
         </div>
     </>
 

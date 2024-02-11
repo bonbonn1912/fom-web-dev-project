@@ -5,6 +5,7 @@ import Strava from "../../components/fields/Strava";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { initLanguage } from "../../helper/i18n";
+import CookieConsent from "react-cookie-consent";
 //TODO Forget Password
 const Login = () => {
 const { t, i18n } = useTranslation();
@@ -132,6 +133,12 @@ useEffect(() => {
               </div>
             </div>
           </div>
+            <div className="absolute flex content-center mt-[900px] ">
+              <a href={"/impressum"}>
+                Impressum
+              </a>
+
+            </div>
         </div>
         <div className="relative flex-1 hidden w-0 lg:block">
           <img
@@ -141,6 +148,22 @@ useEffect(() => {
           />
         </div>
       </div>
+      <CookieConsent
+          location="bottom"
+          buttonText="Akzeptieren"
+          cookieName="acceptsCookies"
+          style={{ background: "#232003" }}
+          buttonStyle={{ color: "#232003", backgroundColor: "#FFFFFF", fontSize: "13px",borderRadius: "8px"  }}
+          declineButtonStyle={{ color: "#232003", backgroundColor: "#FFFFFF",fontSize: "13px",borderRadius: "8px" }}
+          expires={150}
+          enableDeclineButton
+          declineButtonText="Ablehnen"
+          onDecline={() => {
+            alert("Um die Login-Funktion zu nutzen, müssen Sie Cookies akzeptieren. Löschen Sie den Cookie in Ihrem Browser, um diese Meldung erneut anzuzeigen.");
+          }}
+      >
+        Wir verwenden einen Session-Cookie, um Ihre Anmeldung sicher zu speichern und eine nahtlose Navigation auf unserer Website zu ermöglichen. Ein Session-Cookie ist eine vorübergehende Datei, die beim Schließen Ihres Browsers automatisch gelöscht wird. Durch die Nutzung unserer Website stimmen Sie der Verwendung von Session-Cookies zu.{" "}
+      </CookieConsent>
     </>
   );
 }

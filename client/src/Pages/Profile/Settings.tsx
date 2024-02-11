@@ -73,7 +73,15 @@ const Settings = () => {
       setErrorFeedback(errorFeedbacks[1]);
     }
   }
-
+    const deleteAccount = async (e: any) => {
+        e.preventDefault();
+        let response = await fetch("/api/account/delete", {
+        method: "DELETE",
+        });
+        if (response.status === 200) {
+        window.location.reload();
+        }
+    }
 
   useEffect(() => {
     authenticate().then(() => {
@@ -104,6 +112,7 @@ if (response.status === 200) {
   }
   if(isLoading) return <LoadingSpinner callFrom={"Settings"} width={500} height={500}/>
   else{
+    // @ts-ignore
     return (
         <div className="divide-y divide-gray/5">
           <div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
@@ -126,7 +135,9 @@ if (response.status === 200) {
                       className="h-24 w-24 flex-none rounded-lg bg-gray-800 object-cover"
                   />
                   <div>
-                    <button
+                    {/* <div className="flex items-center">
+
+                      <button
                         type="button"
                         className="rounded-md bg-gray/10 px-3 py-2 text-sm font-semibold text-gray shadow-sm hover:bg-gray/20"
                     >
@@ -135,6 +146,9 @@ if (response.status === 200) {
                     <p className="mt-2 text-xs leading-5 text-gray-400">
                       JPG, GIF or PNG. 1MB max.
                     </p>
+                     */}
+
+
                   </div>
                 </div>
 
@@ -370,6 +384,7 @@ if (response.status === 200) {
 
             <form className="flex items-start md:col-span-2">
               <button
+                  onClick={deleteAccount}
                   type="submit"
                   className="rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-gray shadow-sm hover:bg-red-400"
               >

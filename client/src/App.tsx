@@ -14,7 +14,7 @@ import { AuthProvider } from "./Pages/Auth/authContext";
 import { UserProvider} from "./Context/UserContext.tsx";
 import { QueryClient, QueryClientProvider} from "react-query";
 import ProtectedWrapper from "./Pages/Auth/ProtectedRoute";
-
+import Impressum from "./Pages/Impressum/Impressum.tsx";
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -26,6 +26,7 @@ const App = () => {
       <Router>
         <Suspense fallback={<div>Loading...</div>}>
         <Routes>
+            <Route path="/impressum" element={<Impressum/>}></Route>
           <Route
             path="/"
             element={

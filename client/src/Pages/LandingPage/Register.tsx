@@ -25,7 +25,6 @@ useEffect(() => {
     if(validateInput(e, key, username, mail)) return; 
     if (value === "") return;
     // check if new value is other then old value
-
     if (key === "mail") {
       setMail(value);
     }
