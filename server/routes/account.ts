@@ -3,6 +3,7 @@ import multer from "multer";
 
 import { initialUserSetup} from "../controller/AccountController/setup";
 import {updateAccountInformation, updatePassword} from "../controller/AccountController/update";
+import { deleteAccount} from "../controller/AccountController/delete";
 
 const setupRouter = Router();
 
@@ -18,6 +19,7 @@ setupRouter.get("/status", (req, res) => {
 setupRouter.post("/api/account/setup",initialUserSetup );
 setupRouter.post("/api/account/update", updateAccountInformation)
 setupRouter.post("/api/account/update-password", updatePassword)
+setupRouter.delete("/api/account/delete", deleteAccount)
 
 
 export default setupRouter;

@@ -25,6 +25,7 @@ const getEquipmentForUser = async (req: Request, res: Response) => {
 }
 
 const deleteEquipmentForUser = async (req: Request, res: Response) => {
+    console.log("deleteEquipmentForUser")
     const { equipmentId } = req.query as any;
     try {
         const equipment = await deleteEquipment(parseInt(equipmentId));

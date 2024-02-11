@@ -18,6 +18,41 @@ export const getStravaTokenForOwnerId = (ownerId: number) => {
     });
 }
 
+export const removeAccountFromPostgres = async (accountId: number) => {
+    try {
+
+
+        await prisma.equipment.deleteMany({
+            where: {
+                accountId: accountId
+            }
+        });
+
+        // Lösche Daten aus der Tabelle "Strava"
+        await prisma.strava.deleteMany({
+            where: {
+                accountId: accountId
+            }
+        });
+
+        await prisma.credentials.deleteMany({
+            where: {
+                accountId: accountId
+            }
+        });
+
+        await prisma.account.delete({
+            where: {
+                accountId: accountId
+            }
+        });
+    } catch (error) {
+        console.error("Something went wrong deleting user", error);
+    }
+
+}
+
+
 export const updateStravaTokenForOwnerId = (ownerId: number, accessToken: string, expiresAt: number, refreshToken: string) => {
     return new Promise(async (resolve, reject) => {
         try {

@@ -49,6 +49,13 @@ const getBasicActivityStreamDataForActivityId = async (accountId: number, activi
         return null;
     }
 }
+export const deleteAllStreamEntriesForAccount = async (accountId: number) => {
+    try{
+        return await ActivityStreamModel.deleteMany({accountId: accountId});
+    }catch(e){
+        return null;
+    }
+}
 
 export {
     insertActivityStreamData,

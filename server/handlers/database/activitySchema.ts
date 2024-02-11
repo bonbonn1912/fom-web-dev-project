@@ -79,6 +79,18 @@ export const getBasicActivityData = async (accountId: number) => {
     }
 }
 
+export const deleteAllBasicEntriesForAccount = async (accountId: number) => {
+    try{
+        return await BasicActivityModel.deleteMany({accountId: accountId});
+    }catch(e){
+        return null;
+    }
+
+}
+
+
+
+
 export const getOneActivityData = async ( activityId: number) => {
     try{
         return await BasicActivityModel.findOne({activity: activityId});

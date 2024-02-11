@@ -56,7 +56,6 @@ const updateAccountInformation = async (req: Request, res: Response) =>{
 
 const updatePassword = async (req: Request, res: Response) =>{
     const { id } = req.user as any;
-    console.log(req.user);
     const { new_password, current_password  } = req.body as any;
     const { credentials } = await getCredentialsById(id) as any;
     bcrypt.compare(current_password, credentials.password, async (err, result) => {
@@ -68,8 +67,9 @@ const updatePassword = async (req: Request, res: Response) =>{
             res.sendStatus(401);
         }
     });
-
 }
+
+
 
 
 export {
