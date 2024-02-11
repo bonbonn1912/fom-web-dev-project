@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {GiHeartBeats} from "react-icons/gi";
 import {SiSmartthings} from "react-icons/si";
-import {useTranslation} from "react-i18next";
 
 interface IConnectProps {
     deviceHandler: (device: Map<string, BluetoothDevice> | null, characteristic: Map<string, BluetoothRemoteGATTCharacteristic> | null) => void;
