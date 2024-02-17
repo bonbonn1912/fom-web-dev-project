@@ -73,7 +73,8 @@ export const insertBasicActivityData = async (activity: any, accountId: number) 
 
 export const getBasicActivityData = async (accountId: number) => {
     try{
-        return await BasicActivityModel.find({accountId: accountId}).reverse();
+        const activities = await BasicActivityModel.find({accountId: accountId})
+        return activities.reverse();
     }catch(e){
         return null;
     }
